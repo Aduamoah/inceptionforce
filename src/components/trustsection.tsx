@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  CheckCircle,
-  Shield,
-  Zap,
-  Star,
-  Link as LinkIcon,
-  Package,
-} from "lucide-react";
+import { Zap, Star } from "lucide-react";
 
 const trustItems = [
   {

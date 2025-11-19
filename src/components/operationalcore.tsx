@@ -1,13 +1,6 @@
 import React from "react";
-import {
-  ArrowRight,
-  Cog,
-  ShoppingCart,
-  Tags,
-  Truck,
-  Building2,
-} from "lucide-react";
-import Features from "./features";
+import { ArrowRight, Cog } from "lucide-react";
+// import Features from "./features";
 import frame from "../assets/Frame 1000002927.png";
 
 const OperationalCore: React.FC = () => {

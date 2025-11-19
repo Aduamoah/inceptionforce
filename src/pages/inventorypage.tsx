@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../components/navbar2";
 import InventoryCore from "../components/inventorysection";
-import Footer from "../components/footer2";
+// import Footer from "../components/footer2";
 
 const InventoryPage: React.FC = () => {
   return (
