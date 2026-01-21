@@ -12,6 +12,11 @@ import ResetPasswordMessage from "../pages/resetpasswordmessage";
 import ResetSuccess from "../pages/resetsuccess";
 import LandingPage from "../pages/landingpage";
 import InventoryPage from "../pages/inventorypage";
+import SolutionPage from "../pages/solutionspage";
+import RetailPage from "../pages/retailpage";
+import ConstructionPage from "../pages/constructionpage";
+import AgriculturePage from "../pages/agriculturepage";
+import RestaurantPage from "../pages/restaurantpage";
 import { ROUTE_PATHS } from "../types";
 
 const AppRoutes = () => {
@@ -21,6 +26,11 @@ const AppRoutes = () => {
         <Route index element={<LandingPage />} />
         {/* <Route path={ROUTE_PATHS.HOME} element={<LandingPage />}> */}
         <Route path={ROUTE_PATHS.INVENTORY} element={<InventoryPage />} />
+        <Route path={ROUTE_PATHS.SOLUTIONS} element={<SolutionPage />} />
+        <Route path={ROUTE_PATHS.RETAIL} element={<RetailPage />} />
+        <Route path={ROUTE_PATHS.CONSTRUCTION} element={<ConstructionPage />} />
+        <Route path={ROUTE_PATHS.AGRICULTURE} element={<AgriculturePage />} />
+        <Route path={ROUTE_PATHS.RESTAURANT} element={<RestaurantPage />} />
         <Route path={ROUTE_PATHS.SIGNIN} element={<Signin />} />
         <Route path={ROUTE_PATHS.SIGNUP} element={<Signup />} />
         <Route path={ROUTE_PATHS.VERIFY} element={<SuccessVerify />} />

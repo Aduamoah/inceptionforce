@@ -1,16 +1,16 @@
 import React from "react";
 import Navbar from "../components/navbar2";
-import InventoryCore from "../components/inventorysection";
 import Footer from "../components/footer2";
+import RetailCore from "../components/retailcore";
 
-const InventoryPage: React.FC = () => {
+const RetailPage: React.FC = () => {
   return (
     <div className="w-full min-h-screen bg-[#FFFFFF]">
       <Navbar />
-      <InventoryCore />
+      <RetailCore />
       <Footer />
     </div>
   );
 };
 
-export default InventoryPage;
+export default RetailPage;

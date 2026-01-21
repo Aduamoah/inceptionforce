@@ -1,16 +1,16 @@
 import React from "react";
 import Navbar from "../components/navbar2";
-import InventoryCore from "../components/inventorysection";
 import Footer from "../components/footer2";
+import RestaurantCore from "../components/restaurantcore";
 
-const InventoryPage: React.FC = () => {
+const RestaurantPage: React.FC = () => {
   return (
     <div className="w-full min-h-screen bg-[#FFFFFF]">
       <Navbar />
-      <InventoryCore />
+      <RestaurantCore />
       <Footer />
     </div>
   );
 };
 
-export default InventoryPage;
+export default RestaurantPage;

@@ -10,6 +10,11 @@ export const ROUTE_PATHS = {
   RESETMESSAGE: "/resetmessage",
   RESETSUCCESS: "/resetsuccess",
   INVENTORY: "/inventory",
+  SOLUTIONS: "/solutions",
+  RETAIL: "/retail",
+  CONSTRUCTION: "/construction",
+  AGRICULTURE: "/agriculture",
+  RESTAURANT: "/restaurant",
 } as const;
 
 export type ROUTE_PATHS = (typeof ROUTE_PATHS)[keyof typeof ROUTE_PATHS];

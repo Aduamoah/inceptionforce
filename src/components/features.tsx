@@ -4,7 +4,7 @@ const Features: React.FC = () => {
   return (
     <section className="py-5 px-0 md:px-0 flex items-center justify-center min-h-screen">
       <div className="relative w-[875px] h-[162px] flex flex-col items-center justify-center gap-4">
-        <div className="absolute -top-6 w-[116px] h-[36px] py-2 px-3 flex flex-row gap-2 rounded-[99px] border border-gray-200 bg-white shadow-[0_2px_6px_0_#1018280F]  items-center justify-center">
+        <div className="absolute top-[6px] w-[116px] h-[36px] py-2 px-3 flex flex-row gap-2 rounded-[99px] border border-gray-200 bg-white shadow-[0_2px_6px_0_#1018280F]  items-center justify-center">
           <div className="w-5 h-5">
             <svg
               width="16"
@@ -21,7 +21,7 @@ const Features: React.FC = () => {
           </div>
           <div className="w-16 h-5">
             <p
-              className="font-medium text-base leading-5 tracking-[-0.02em] text-[#16B365]"
+              className="w-16 h-5 font-medium text-base leading-5 tracking-[-0.02em] text-[#16B365]"
               style={{ fontFamily: "General Sans" }}
             >
               Features

@@ -1,16 +1,16 @@
 import React from "react";
 import Navbar from "../components/navbar2";
-import InventoryCore from "../components/inventorysection";
 import Footer from "../components/footer2";
+import AgricultureCore from "../components/agriculturecore";
 
-const InventoryPage: React.FC = () => {
+const AgriculturePage: React.FC = () => {
   return (
     <div className="w-full min-h-screen bg-[#FFFFFF]">
       <Navbar />
-      <InventoryCore />
+      <AgricultureCore />
       <Footer />
     </div>
   );
 };
 
-export default InventoryPage;
+export default AgriculturePage;

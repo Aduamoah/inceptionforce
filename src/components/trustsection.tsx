@@ -154,10 +154,10 @@ const trustItems = [
 
 const TrustSection: React.FC = () => {
   return (
-    <section className="py-24 px-8 md:px-20 text-center">
-      <div className="relative flex justify-center mb-12">
-        <div className="absolute -top-7 w-[130px] h-[40px] py-2 px-4 flex flex-row gap-2 rounded-[99px] border border-gray-200 bg-white shadow-[0_2px_6px_0_#1018280F] items-center justify-center">
-          <div className="w-6 h-6 flex items-center justify-center rounded-full bg-green-600">
+    <div className="w-full h-auto gap-[40px]">
+      <div className="flex justify-center mb-12">
+        <div className="py-2 px-4 flex flex-row gap-2 rounded-[99px] border border-gray-200 bg-white shadow-[0_2px_6px_0_#1018280F] items-center justify-center">
+          <div className="flex items-center justify-center rounded-full bg-green-600">
             <svg
               width="14"
               height="14"
@@ -180,11 +180,11 @@ const TrustSection: React.FC = () => {
           </p>
         </div>
       </div>
-
-      <h2 className="text-4xl font-semibold mb-16">
-        Real Results. Real Security. Real Businesses.
-      </h2>
-
+      <div className="flex items-center justify-center">
+        <h2 className="text-xl  lg:text-4xl font-semibold mb-16 ">
+          Real Results. Real Security. Real Businesses.
+        </h2>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16">
         {trustItems.map((item, index) => (
           <div key={index} className="flex flex-col items-center text-center">
@@ -194,7 +194,7 @@ const TrustSection: React.FC = () => {
           </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 };
 
