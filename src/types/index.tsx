@@ -15,6 +15,9 @@ export const ROUTE_PATHS = {
   CONSTRUCTION: "/construction",
   AGRICULTURE: "/agriculture",
   RESTAURANT: "/restaurant",
+  FORCE: "/force",
+  FLEXIBLE: "/flexible",
+  ABOUT: "/about",
 } as const;
 
 export type ROUTE_PATHS = (typeof ROUTE_PATHS)[keyof typeof ROUTE_PATHS];

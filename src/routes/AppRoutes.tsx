@@ -17,6 +17,9 @@ import RetailPage from "../pages/retailpage";
 import ConstructionPage from "../pages/constructionpage";
 import AgriculturePage from "../pages/agriculturepage";
 import RestaurantPage from "../pages/restaurantpage";
+import ForcePage from "../pages/forcepage";
+import FlexiblePage from "../pages/flexiblepage";
+import AboutPage from "../pages/aboutus";
 import { ROUTE_PATHS } from "../types";
 
 const AppRoutes = () => {
@@ -31,6 +34,9 @@ const AppRoutes = () => {
         <Route path={ROUTE_PATHS.CONSTRUCTION} element={<ConstructionPage />} />
         <Route path={ROUTE_PATHS.AGRICULTURE} element={<AgriculturePage />} />
         <Route path={ROUTE_PATHS.RESTAURANT} element={<RestaurantPage />} />
+        <Route path={ROUTE_PATHS.FORCE} element={<ForcePage />} />
+        <Route path={ROUTE_PATHS.FLEXIBLE} element={<FlexiblePage />} />
+        <Route path={ROUTE_PATHS.ABOUT} element={<AboutPage />} />
         <Route path={ROUTE_PATHS.SIGNIN} element={<Signin />} />
         <Route path={ROUTE_PATHS.SIGNUP} element={<Signup />} />
         <Route path={ROUTE_PATHS.VERIFY} element={<SuccessVerify />} />
