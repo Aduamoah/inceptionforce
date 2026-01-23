@@ -20,6 +20,7 @@ import RestaurantPage from "../pages/restaurantpage";
 import ForcePage from "../pages/forcepage";
 import FlexiblePage from "../pages/flexiblepage";
 import AboutPage from "../pages/aboutus";
+import PremisePage from "../pages/onpremise";
 import { ROUTE_PATHS } from "../types";
 
 const AppRoutes = () => {
@@ -37,6 +38,7 @@ const AppRoutes = () => {
         <Route path={ROUTE_PATHS.FORCE} element={<ForcePage />} />
         <Route path={ROUTE_PATHS.FLEXIBLE} element={<FlexiblePage />} />
         <Route path={ROUTE_PATHS.ABOUT} element={<AboutPage />} />
+        <Route path={ROUTE_PATHS.PREMISE} element={<PremisePage />} />
         <Route path={ROUTE_PATHS.SIGNIN} element={<Signin />} />
         <Route path={ROUTE_PATHS.SIGNUP} element={<Signup />} />
         <Route path={ROUTE_PATHS.VERIFY} element={<SuccessVerify />} />
