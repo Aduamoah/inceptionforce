@@ -1,6 +1,6 @@
 import React from "react";
 import { Zap, Star } from "lucide-react";
-
+import { motion } from "framer-motion";
 const trustItems = [
   {
     icon: (
@@ -154,47 +154,56 @@ const trustItems = [
 
 const TrustSection: React.FC = () => {
   return (
-    <div className="w-full h-auto gap-[40px]">
-      <div className="flex justify-center mb-12">
-        <div className="py-2 px-4 flex flex-row gap-2 rounded-[99px] border border-gray-200 bg-white shadow-[0_2px_6px_0_#1018280F] items-center justify-center">
-          <div className="flex items-center justify-center rounded-full bg-green-600">
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 14 14"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M7.333 12L3 8l1.4-1.4 2.933 2.947L11.6 4 13 5.4 7.333 12z"
-                fill="white"
-              />
-            </svg>
-          </div>
+    <motion.div
+      initial={{ y: "100%", opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: "100%", opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="w-full h-auto gap-[40px]">
+        <div className="flex justify-center mb-12">
+          <div className="py-2 px-4 flex flex-row gap-2 rounded-[99px] border border-gray-200 bg-white shadow-[0_2px_6px_0_#1018280F] items-center justify-center">
+            <div className="flex items-center justify-center rounded-full bg-green-600">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M7.333 12L3 8l1.4-1.4 2.933 2.947L11.6 4 13 5.4 7.333 12z"
+                  fill="white"
+                />
+              </svg>
+            </div>
 
-          <p
-            className="font-medium text-base leading-5 tracking-[-0.02em] text-green-600"
-            style={{ fontFamily: "General Sans" }}
-          >
-            Trust
-          </p>
+            <p
+              className="font-medium text-base leading-5 tracking-[-0.02em] text-green-600"
+              style={{ fontFamily: "General Sans" }}
+            >
+              Trust
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center justify-center">
+          <h2 className="text-xl  lg:text-4xl font-semibold mb-16 ">
+            Real Results. Real Security. Real Businesses.
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16">
+          {trustItems.map((item, index) => (
+            <div key={index} className="flex flex-col items-center text-center">
+              <div className="p-6 bg-green-50 rounded-full mb-4">
+                {item.icon}
+              </div>
+              <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
+              <p className="text-gray-600 max-w-xs">{item.text}</p>
+            </div>
+          ))}
         </div>
       </div>
-      <div className="flex items-center justify-center">
-        <h2 className="text-xl  lg:text-4xl font-semibold mb-16 ">
-          Real Results. Real Security. Real Businesses.
-        </h2>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16">
-        {trustItems.map((item, index) => (
-          <div key={index} className="flex flex-col items-center text-center">
-            <div className="p-6 bg-green-50 rounded-full mb-4">{item.icon}</div>
-            <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
-            <p className="text-gray-600 max-w-xs">{item.text}</p>
-          </div>
-        ))}
-      </div>
-    </div>
+    </motion.div>
   );
 };
 

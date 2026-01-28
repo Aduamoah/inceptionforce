@@ -34,7 +34,7 @@ const PremiseCore: React.FC = () => {
   return (
     <>
       <div className="w-full ">
-        <div className="w-full  flex flex-row  py-20 bg-[#051910]">
+        <div className="w-full flex flex-row  py-20 bg-[#051910]">
           <div className="flex flex-col flex-[2] gap-[24px] items-center justify-center">
             <div className="flex flex-col gap-[16px] items-center justify-center  ">
               <h2

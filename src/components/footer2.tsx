@@ -5,7 +5,7 @@ const Footer: React.FC = () => {
     <div className="w-full h-auto py-[80px] flex flex-col justify-between px-6 md:px-12 lg:px-[120px]  bg-[#0D673B]">
       {/* h-[161px] */}
       <div className="w-full flex flex-row items-start justify-between">
-        <div className="w-[353.294px] h-auto">
+        <div className=" w-full max-w-[353.294px] h-auto">
           <div className="flex items-start gap-4">
             <div className=" h-auto">
               <svg

@@ -45,7 +45,7 @@ const Hero: React.FC = () => {
           </div>
 
           {/* RIGHT IMAGE */}
-          <div className="relative">
+          <div className="relative flex  items-center justify-center">
             <img
               src={analytics}
               alt="Dashboard Preview"

@@ -7,11 +7,11 @@ import "./App.css";
 
 function App() {
   return (
-    <>
+    <div className="w-screen overflow-hidden ">
       <BrowserRouter>
         <AppRoutes />
       </BrowserRouter>
-    </>
+    </div>
   );
 }
 
