@@ -19,6 +19,24 @@ import microscope from "../assets/microscope.png";
 import configure from "../assets/configure.png";
 import checkmark from "../assets/checkmark.png";
 // import GetStarted from "./getstarted";
+
+import { motion } from "framer-motion";
+import type { Variants } from "framer-motion";
+
+const fadeUp: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 32,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut",
+    },
+  },
+};
 const AboutCore: React.FC = () => {
   return (
     <>
@@ -92,206 +110,227 @@ const AboutCore: React.FC = () => {
           </div>
         </div>
 
-        <div className="w-full bg-[#FFFFFF]">
-          <div className="grid grid-cols-2 bg-[#EDFFF6] p-10 gap-8 ">
-            <div>
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+        >
+          <div className="w-full bg-[#FFFFFF]">
+            <div className="grid grid-cols-2 bg-[#EDFFF6] p-10 gap-8 ">
+              <div>
+                {" "}
+                <img src={symbol} />
+              </div>
+
+              <div className="flex flex-col gap-9">
+                <h4 className="font-medium text-[39px] leading-[100%] tracking-normal text-[#000000] ">
+                  Our Mission
+                </h4>
+                <p className="font-normal text-[20px] leading-[100%] tracking-normal text-[#000000] ">
+                  To simplify and transform business processes into <br />{" "}
+                  seamless, paperless workflows.
+                </p>
+                <h4 className="font-medium text-[39px] leading-[100%] tracking-normal text-[#000000] ">
+                  Our Vision
+                </h4>
+                <p className="font-normal text-[20px] leading-[100%] tracking-normal text-[#000000] ">
+                  To address the challenges faced by businesses in agriculture,
+                  construction, healthcare, and retail through innovative
+                  digital operations technology.
+                </p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+        >
+          <div className="w-full bg-[#F2FDF5] flex p-5 gap-8">
+            <div className="w-full flex flex-col gap-3">
+              <h3 className="font-medium text-[49px] leading-[100%] tracking-normal text-[#000000] ">
+                Our Core Values
+              </h3>
+              <p className="font-normal text-[20px] leading-[100%] tracking-normal text-[#000000] ">
+                Our growth and success are rooted in principles <br /> that
+                ensure we build with integrity, innovate with <br /> purpose,
+                and remain relentless in creating tools <br /> that truly make a
+                difference.
+              </p>
+            </div>
+            <div className="flex">
+              <div className="grid grid-cols-2">
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-3">
+                    <div className="flex gap-2">
+                      <img src={newstar} className="w-4 h-4" />
+                      <p className="font-semibold text-[20px] leading-[100%] tracking-normal text-[#000000] ">
+                        Customer First
+                      </p>
+                    </div>
+                    <p className="font-normal text-[16px] leading-[100%] tracking-normal text-[#000000] ">
+                      We place our customers at the center of everything,
+                      ensuring every feature solves real challenges and delivers
+                      measurable value.
+                    </p>
+                  </div>
+                  <img src={linee} className="w-1/2" />
+
+                  <div className="flex flex-col gap-3">
+                    <div className="flex gap-2">
+                      <img src={compass} className="w-4 h-4" />
+                      <p className="font-semibold text-[20px] leading-[100%] tracking-normal text-[#000000] ">
+                        Authenticity
+                      </p>
+                    </div>
+                    <p className="font-normal text-[16px] leading-[100%] tracking-normal text-[#000000] ">
+                      We stay true to our purpose and vision, building <br />{" "}
+                      technology that genuinely reflects our mission <br /> to
+                      simplify business operations.
+                    </p>
+                  </div>
+                  <img src={linee} className="w-1/2" />
+                  <div className="flex flex-col gap-3">
+                    <div className="flex gap-2">
+                      <img src={locked} className="w-4 h-4" />
+                      <p className="font-semibold text-[20px] leading-[100%] tracking-normal text-[#000000] ">
+                        Trust & Integrity
+                      </p>
+                    </div>
+                    <p className="font-normal text-[16px] leading-[100%] tracking-normal text-[#000000] ">
+                      We operate with honesty and transparency,
+                      <br /> building long-term relationships grounded in <br />{" "}
+                      reliability.
+                    </p>
+                  </div>
+                  <img src={linee} className="w-1/2" />
+                  <div className="flex flex-col gap-3">
+                    <div className="flex gap-2">
+                      <img src={people} className="w-4 h-4" />
+                      <p className="font-semibold text-[20px] leading-[100%] tracking-normal text-[#000000] ">
+                        Empowered People
+                      </p>
+                    </div>
+                    <p className="font-normal text-[16px] leading-[100%] tracking-normal text-[#000000] ">
+                      We invest in our team, fostering growth and <br />{" "}
+                      creativity to deliver solutions that make a <br />
+                      difference.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-3">
+                    <div className="flex gap-2">
+                      <img src={target} className="w-4 h-4" />
+                      <p className="font-semibold text-[20px] leading-[100%] tracking-normal text-[#000000] ">
+                        Results Driven
+                      </p>
+                    </div>
+                    <p className="font-normal text-[16px] leading-[100%] tracking-normal text-[#000000] ">
+                      We measure success by impact, not effort — <br />
+                      ensuring businesses see clear, tangible <br /> outcomes.
+                    </p>
+                  </div>
+                  <img src={linee} className="w-1/2" />
+                  <div className="flex flex-col gap-3">
+                    <div className="flex gap-2">
+                      <img src={bulb} className="w-4 h-4" />
+                      <p className="font-semibold text-[20px] leading-[100%] tracking-normal text-[#000000] ">
+                        Open Innovation
+                      </p>
+                    </div>
+                    <p className="font-normal text-[16px] leading-[100%] tracking-normal text-[#000000] ">
+                      We welcome ideas from everywhere,
+                      <br /> believing collaboration sparks the best <br />{" "}
+                      solutions.
+                    </p>
+                  </div>
+                  <img src={linee} className="w-1/2" />
+                  <div className="flex flex-col gap-3">
+                    <div className="flex gap-2">
+                      <img src={microscope} className="w-4 h-4" />
+                      <p className="font-semibold text-[20px] leading-[100%] tracking-normal text-[#000000] ">
+                        Relentless R&D
+                      </p>
+                    </div>
+                    <p className="font-normal text-[16px] leading-[100%] tracking-normal text-[#000000] ">
+                      We continually improve our technology, <br /> researching
+                      and testing to stay ahead of <br /> industry needs.
+                    </p>
+                  </div>
+                  <img src={linee} className="w-1/2" />
+                  <div className="flex flex-col gap-3">
+                    <div className="flex gap-2">
+                      <img src={configure} className="w-4 h-4" />
+                      <p className="font-semibold text-[20px] leading-[100%] tracking-normal text-[#000000] ">
+                        Excellence in Tools
+                      </p>
+                    </div>
+                    <p className="font-normal text-[16px] leading-[100%] tracking-normal text-[#000000] ">
+                      We strive to build the world’s best operational <br />{" "}
+                      solutions, combining performance with <br />
+                      simplicity.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+        >
+          <div className="w-full bg-[#0D673B] flex p-20 ">
+            <div className=" w-full">
               {" "}
-              <img src={symbol} />
+              <h3 className="font-medium text-[49px] leading-[100%] tracking-normal text-[#FFFFFF] ">
+                Our Story
+              </h3>
             </div>
 
-            <div className="flex flex-col gap-9">
-              <h4 className="font-medium text-[39px] leading-[100%] tracking-normal text-[#000000] ">
-                Our Mission
-              </h4>
-              <p className="font-normal text-[20px] leading-[100%] tracking-normal text-[#000000] ">
-                To simplify and transform business processes into <br />{" "}
-                seamless, paperless workflows.
-              </p>
-              <h4 className="font-medium text-[39px] leading-[100%] tracking-normal text-[#000000] ">
-                Our Vision
-              </h4>
-              <p className="font-normal text-[20px] leading-[100%] tracking-normal text-[#000000] ">
-                To address the challenges faced by businesses in agriculture,
-                construction, healthcare, and retail through innovative digital
-                operations technology.
-              </p>
-            </div>
-          </div>
-        </div>
+            <div className="w-full flex flex-col gap-3">
+              <div className="flex gap-2">
+                <div className="flex items-center justify-center">
+                  <img src={checkmark} className="w-4 h-4" />
+                </div>
 
-        <div className="w-full bg-[#F2FDF5] flex p-5 gap-8">
-          <div className="w-full flex flex-col gap-3">
-            <h3 className="font-medium text-[49px] leading-[100%] tracking-normal text-[#000000] ">
-              Our Core Values
-            </h3>
-            <p className="font-normal text-[20px] leading-[100%] tracking-normal text-[#000000] ">
-              Our growth and success are rooted in principles <br /> that ensure
-              we build with integrity, innovate with <br /> purpose, and remain
-              relentless in creating tools <br /> that truly make a difference.
-            </p>
-          </div>
-          <div className="flex">
-            <div className="grid grid-cols-2">
-              <div className="flex flex-col gap-4">
-                <div className="flex flex-col gap-3">
-                  <div className="flex gap-2">
-                    <img src={newstar} className="w-4 h-4" />
-                    <p className="font-semibold text-[20px] leading-[100%] tracking-normal text-[#000000] ">
-                      Customer First
-                    </p>
-                  </div>
-                  <p className="font-normal text-[16px] leading-[100%] tracking-normal text-[#000000] ">
-                    We place our customers at the center of everything, ensuring
-                    every feature solves real challenges and delivers measurable
-                    value.
-                  </p>
-                </div>
-                <img src={linee} className="w-1/2" />
-
-                <div className="flex flex-col gap-3">
-                  <div className="flex gap-2">
-                    <img src={compass} className="w-4 h-4" />
-                    <p className="font-semibold text-[20px] leading-[100%] tracking-normal text-[#000000] ">
-                      Authenticity
-                    </p>
-                  </div>
-                  <p className="font-normal text-[16px] leading-[100%] tracking-normal text-[#000000] ">
-                    We stay true to our purpose and vision, building <br />{" "}
-                    technology that genuinely reflects our mission <br /> to
-                    simplify business operations.
-                  </p>
-                </div>
-                <img src={linee} className="w-1/2" />
-                <div className="flex flex-col gap-3">
-                  <div className="flex gap-2">
-                    <img src={locked} className="w-4 h-4" />
-                    <p className="font-semibold text-[20px] leading-[100%] tracking-normal text-[#000000] ">
-                      Trust & Integrity
-                    </p>
-                  </div>
-                  <p className="font-normal text-[16px] leading-[100%] tracking-normal text-[#000000] ">
-                    We operate with honesty and transparency,
-                    <br /> building long-term relationships grounded in <br />{" "}
-                    reliability.
-                  </p>
-                </div>
-                <img src={linee} className="w-1/2" />
-                <div className="flex flex-col gap-3">
-                  <div className="flex gap-2">
-                    <img src={people} className="w-4 h-4" />
-                    <p className="font-semibold text-[20px] leading-[100%] tracking-normal text-[#000000] ">
-                      Empowered People
-                    </p>
-                  </div>
-                  <p className="font-normal text-[16px] leading-[100%] tracking-normal text-[#000000] ">
-                    We invest in our team, fostering growth and <br />{" "}
-                    creativity to deliver solutions that make a <br />
-                    difference.
-                  </p>
-                </div>
+                <p className="font-normal text-[20px] leading-[100%] tracking-normal text-[#FFFFFF] ">
+                  InceptionForce was born from the need to eliminate the
+                  inefficiencies of paper- <br />
+                  heavy processes holding businesses back.
+                </p>
               </div>
-
-              <div className="flex flex-col gap-4">
-                <div className="flex flex-col gap-3">
-                  <div className="flex gap-2">
-                    <img src={target} className="w-4 h-4" />
-                    <p className="font-semibold text-[20px] leading-[100%] tracking-normal text-[#000000] ">
-                      Results Driven
-                    </p>
-                  </div>
-                  <p className="font-normal text-[16px] leading-[100%] tracking-normal text-[#000000] ">
-                    We measure success by impact, not effort — <br />
-                    ensuring businesses see clear, tangible <br /> outcomes.
-                  </p>
+              <div className="flex gap-2">
+                <div className="flex items-center justify-center">
+                  <img src={checkmark} className="w-4 h-4" />
                 </div>
-                <img src={linee} className="w-1/2" />
-                <div className="flex flex-col gap-3">
-                  <div className="flex gap-2">
-                    <img src={bulb} className="w-4 h-4" />
-                    <p className="font-semibold text-[20px] leading-[100%] tracking-normal text-[#000000] ">
-                      Open Innovation
-                    </p>
-                  </div>
-                  <p className="font-normal text-[16px] leading-[100%] tracking-normal text-[#000000] ">
-                    We welcome ideas from everywhere,
-                    <br /> believing collaboration sparks the best <br />{" "}
-                    solutions.
-                  </p>
+                <p className="font-normal text-[20px] leading-[100%] tracking-normal text-[#FFFFFF] ">
+                  We design digital solutions that adapt to real-world workflows
+                  in industries like <br /> agriculture, construction, retail,
+                  and healthcare.
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <div className="flex items-center justify-center">
+                  <img src={checkmark} className="w-4 h-4" />
                 </div>
-                <img src={linee} className="w-1/2" />
-                <div className="flex flex-col gap-3">
-                  <div className="flex gap-2">
-                    <img src={microscope} className="w-4 h-4" />
-                    <p className="font-semibold text-[20px] leading-[100%] tracking-normal text-[#000000] ">
-                      Relentless R&D
-                    </p>
-                  </div>
-                  <p className="font-normal text-[16px] leading-[100%] tracking-normal text-[#000000] ">
-                    We continually improve our technology, <br /> researching
-                    and testing to stay ahead of <br /> industry needs.
-                  </p>
-                </div>
-                <img src={linee} className="w-1/2" />
-                <div className="flex flex-col gap-3">
-                  <div className="flex gap-2">
-                    <img src={configure} className="w-4 h-4" />
-                    <p className="font-semibold text-[20px] leading-[100%] tracking-normal text-[#000000] ">
-                      Excellence in Tools
-                    </p>
-                  </div>
-                  <p className="font-normal text-[16px] leading-[100%] tracking-normal text-[#000000] ">
-                    We strive to build the world’s best operational <br />{" "}
-                    solutions, combining performance with <br />
-                    simplicity.
-                  </p>
-                </div>
+                <p className="font-normal text-[20px] leading-[100%] tracking-normal text-[#FFFFFF] ">
+                  Today, we empower businesses to work smarter, faster, and with
+                  greater clarity— <br />
+                  while constantly innovating for the future.
+                </p>
               </div>
             </div>
           </div>
-        </div>
-
-        <div className="w-full bg-[#0D673B] flex p-20 ">
-          <div className=" w-full">
-            {" "}
-            <h3 className="font-medium text-[49px] leading-[100%] tracking-normal text-[#FFFFFF] ">
-              Our Story
-            </h3>
-          </div>
-
-          <div className="w-full flex flex-col gap-3">
-            <div className="flex gap-2">
-              <div className="flex items-center justify-center">
-                <img src={checkmark} className="w-4 h-4" />
-              </div>
-
-              <p className="font-normal text-[20px] leading-[100%] tracking-normal text-[#FFFFFF] ">
-                InceptionForce was born from the need to eliminate the
-                inefficiencies of paper- <br />
-                heavy processes holding businesses back.
-              </p>
-            </div>
-            <div className="flex gap-2">
-              <div className="flex items-center justify-center">
-                <img src={checkmark} className="w-4 h-4" />
-              </div>
-              <p className="font-normal text-[20px] leading-[100%] tracking-normal text-[#FFFFFF] ">
-                We design digital solutions that adapt to real-world workflows
-                in industries like <br /> agriculture, construction, retail, and
-                healthcare.
-              </p>
-            </div>
-            <div className="flex gap-2">
-              <div className="flex items-center justify-center">
-                <img src={checkmark} className="w-4 h-4" />
-              </div>
-              <p className="font-normal text-[20px] leading-[100%] tracking-normal text-[#FFFFFF] ">
-                Today, we empower businesses to work smarter, faster, and with
-                greater clarity— <br />
-                while constantly innovating for the future.
-              </p>
-            </div>
-          </div>
-        </div>
+        </motion.div>
 
         {/* <div className="w-full bg-[#FFFFFF] flex p-17  gap-8">
           <GetStarted />

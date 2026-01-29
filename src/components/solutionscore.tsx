@@ -12,6 +12,23 @@ import greens from "../assets/greens.png";
 import natural from "../assets/natural-food.png";
 import dish from "../assets/dish-02.png";
 import meeting from "../assets/meeting.png";
+import { motion } from "framer-motion";
+import type { Variants } from "framer-motion";
+
+const fadeUp: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 32,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut",
+    },
+  },
+};
 
 const SolutionCore: React.FC = () => {
   return (
@@ -42,118 +59,156 @@ const SolutionCore: React.FC = () => {
         </div>
 
         <div className="w-full h-auto p-4">
-          <h4 className="font-semibold text-center text-2xl md:text-4xl mb-6">
-            Choose Your Industry
-          </h4>
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+          >
+            <h4 className="font-semibold text-center text-2xl md:text-4xl mb-6">
+              Choose Your Industry
+            </h4>
+          </motion.div>
           <div className="flex flex-col gap-10">
-            <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 bg-white pl-6 rounded-3xl shadow-xl">
-              <div className="space-y-4 flex flex-col justify-center">
-                <div className="flex items-center gap-3">
-                  <img src={wrench} width={30} height={30} alt="wrench icon" />
-                  <h6 className="font-semibold text-xl md:text-2xl text-[#2E323B]">
-                    Construction
-                  </h6>
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+            >
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 bg-white pl-6 rounded-3xl shadow-xl">
+                <div className="space-y-4 flex flex-col justify-center">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={wrench}
+                      width={30}
+                      height={30}
+                      alt="wrench icon"
+                    />
+                    <h6 className="font-semibold text-xl md:text-2xl text-[#2E323B]">
+                      Construction
+                    </h6>
+                  </div>
+
+                  <p className="font-normal text-base md:text-lg text-[#2E323B]">
+                    From Sketch to Invoice, manage projects effortlessly.
+                  </p>
+
+                  <button className="inline-flex w-fit items-center justify-center md:justify-start gap-2 px-6 py-3 bg-green-500 text-black rounded hover:bg-green-600  md:w-fit">
+                    Explore Construction Solutions
+                    <ArrowRight size={18} />
+                  </button>
                 </div>
 
-                <p className="font-normal text-base md:text-lg text-[#2E323B]">
-                  From Sketch to Invoice, manage projects effortlessly.
-                </p>
-
-                <button className="inline-flex w-fit items-center justify-center md:justify-start gap-2 px-6 py-3 bg-green-500 text-black rounded hover:bg-green-600  md:w-fit">
-                  Explore Construction Solutions
-                  <ArrowRight size={18} />
-                </button>
+                <img
+                  src={worker}
+                  className="w-full h-auto object-cover rounded-tr-2xl rounded-br-2xl"
+                  alt="worker"
+                />
               </div>
+            </motion.div>
 
-              <img
-                src={worker}
-                className="w-full h-auto object-cover rounded-tr-2xl rounded-br-2xl"
-                alt="worker"
-              />
-            </div>
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+            >
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 bg-white pr-6 rounded-3xl shadow-xl">
+                <img
+                  src={retail}
+                  className="w-full h-auto object-cover rounded-tl-2xl rounded-bl-2xl"
+                  alt="retail"
+                />
 
-            <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 bg-white pr-6 rounded-3xl shadow-xl">
-              <img
-                src={retail}
-                className="w-full h-auto object-cover rounded-tl-2xl rounded-bl-2xl"
-                alt="retail"
-              />
+                <div className="space-y-4 flex flex-col justify-center">
+                  <div className="flex items-center gap-3">
+                    <img src={bag} width={30} height={30} alt="bag icon" />
+                    <h6 className="font-semibold text-xl md:text-2xl text-[#2E323B]">
+                      Retail
+                    </h6>
+                  </div>
 
-              <div className="space-y-4 flex flex-col justify-center">
-                <div className="flex items-center gap-3">
-                  <img src={bag} width={30} height={30} alt="bag icon" />
-                  <h6 className="font-semibold text-xl md:text-2xl text-[#2E323B]">
-                    Retail
-                  </h6>
+                  <p className="font-normal text-base md:text-lg text-[#2E323B]">
+                    Smart POS & stock tracking for modern stores.
+                  </p>
+
+                  <button className="inline-flex w-fit items-center justify-center md:justify-start gap-2 px-6 py-3 bg-green-500 text-black rounded hover:bg-green-600  md:w-fit">
+                    Explore Retail Solutions
+                    <ArrowRight size={18} />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+            >
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 bg-white pl-6 rounded-3xl shadow-xl">
+                <div className="space-y-4 flex flex-col justify-center">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={natural}
+                      width={30}
+                      height={30}
+                      alt="natural icon"
+                    />
+                    <h6 className="font-semibold text-xl md:text-2xl text-[#2E323B]">
+                      Agriculture
+                    </h6>
+                  </div>
+
+                  <p className="font-normal text-base md:text-lg text-[#2E323B]">
+                    Track inputs, harvests, and sales with ease.
+                  </p>
+
+                  <button className="inline-flex w-fit items-center justify-center md:justify-start gap-2 px-6 py-3 bg-green-500 text-black rounded hover:bg-green-600  md:w-fit">
+                    Explore Agriculture Solutions
+                    <ArrowRight size={18} />
+                  </button>
                 </div>
 
-                <p className="font-normal text-base md:text-lg text-[#2E323B]">
-                  Smart POS & stock tracking for modern stores.
-                </p>
-
-                <button className="inline-flex w-fit items-center justify-center md:justify-start gap-2 px-6 py-3 bg-green-500 text-black rounded hover:bg-green-600  md:w-fit">
-                  Explore Retail Solutions
-                  <ArrowRight size={18} />
-                </button>
+                <img
+                  src={greens}
+                  className="w-full h-auto object-cover rounded-tr-2xl rounded-br-2xl"
+                  alt="greens"
+                />
               </div>
-            </div>
+            </motion.div>
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+            >
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 bg-white pr-6 rounded-3xl shadow-xl">
+                <img
+                  src={meeting}
+                  className="w-full  h-auto object-cover rounded-tl-2xl rounded-bl-2xl"
+                  alt="meeting"
+                />
 
-            <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 bg-white pl-6 rounded-3xl shadow-xl">
-              <div className="space-y-4 flex flex-col justify-center">
-                <div className="flex items-center gap-3">
-                  <img
-                    src={natural}
-                    width={30}
-                    height={30}
-                    alt="natural icon"
-                  />
-                  <h6 className="font-semibold text-xl md:text-2xl text-[#2E323B]">
-                    Agriculture
-                  </h6>
+                <div className="space-y-4 flex flex-col justify-center">
+                  <div className="flex items-center gap-3">
+                    <img src={dish} width={30} height={30} alt="bag icon" />
+                    <h6 className="font-semibold text-xl md:text-2xl text-[#2E323B]">
+                      Restaurant
+                    </h6>
+                  </div>
+
+                  <p className="font-normal text-base md:text-lg text-[#2E323B]">
+                    AI-driven menus & inventory at your fingertips.
+                  </p>
+
+                  <button className="inline-flex w-fit items-center justify-center md:justify-start gap-2 px-6 py-3 bg-green-500 text-black rounded hover:bg-green-600  md:w-fit">
+                    Explore Restaurant Solutions
+                    <ArrowRight size={18} />
+                  </button>
                 </div>
-
-                <p className="font-normal text-base md:text-lg text-[#2E323B]">
-                  Track inputs, harvests, and sales with ease.
-                </p>
-
-                <button className="inline-flex w-fit items-center justify-center md:justify-start gap-2 px-6 py-3 bg-green-500 text-black rounded hover:bg-green-600  md:w-fit">
-                  Explore Agriculture Solutions
-                  <ArrowRight size={18} />
-                </button>
               </div>
-
-              <img
-                src={greens}
-                className="w-full h-auto object-cover rounded-tr-2xl rounded-br-2xl"
-                alt="greens"
-              />
-            </div>
-
-            <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 bg-white pr-6 rounded-3xl shadow-xl">
-              <img
-                src={meeting}
-                className="w-full  h-auto object-cover rounded-tl-2xl rounded-bl-2xl"
-                alt="meeting"
-              />
-
-              <div className="space-y-4 flex flex-col justify-center">
-                <div className="flex items-center gap-3">
-                  <img src={dish} width={30} height={30} alt="bag icon" />
-                  <h6 className="font-semibold text-xl md:text-2xl text-[#2E323B]">
-                    Restaurant
-                  </h6>
-                </div>
-
-                <p className="font-normal text-base md:text-lg text-[#2E323B]">
-                  AI-driven menus & inventory at your fingertips.
-                </p>
-
-                <button className="inline-flex w-fit items-center justify-center md:justify-start gap-2 px-6 py-3 bg-green-500 text-black rounded hover:bg-green-600  md:w-fit">
-                  Explore Restaurant Solutions
-                  <ArrowRight size={18} />
-                </button>
-              </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
