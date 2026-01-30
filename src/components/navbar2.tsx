@@ -1,7 +1,11 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
+  const [productsOpen, setProductsOpen] = useState(false);
+  const dropdownItem =
+    "text-sm text-black px-3 py-2 rounded hover:bg-gray-100 text-center";
 
   return (
     <div className="w-full py-2 px-4 md:px-12 lg:px-[120px] flex items-center justify-between bg-white border-b border-[#EDEDED]">
@@ -18,47 +22,79 @@ const Navbar: React.FC = () => {
             fill="#0F9662"
           />
         </svg>
-        <span className="text-[#051911] text-lg font-medium leading-none">
-          Inception Force
-        </span>
+        <Link to="/">
+          <span className="text-[#051911] text-lg font-medium leading-none">
+            Inception Force
+          </span>
+        </Link>
       </div>
 
       <div className="hidden lg:flex min-h-[38px] items-center gap-6">
-        <div className="flex items-center gap-2 cursor-pointer">
-          <p className="text-[16px] text-[#000000] whitespace-nowrap">
-            Products
-          </p>
-          <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
-            <path
-              d="M0.75 0.75L4.04289 4.04289C4.37623 4.37623 4.54289 4.54289 4.75 4.54289C4.95711 4.54289 5.12377 4.37623 5.45711 4.04289L8.75 0.75"
-              stroke="#141B34"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+        {/* PRODUCTS */}
+        <div className="relative group">
+          <div className="flex items-center gap-2 cursor-pointer">
+            <p className="text-[16px] text-black">Products</p>
+            <svg width="10" height="6" viewBox="0 0 10 6">
+              <path
+                d="M0.75 0.75L4.75 4.75L8.75 0.75"
+                stroke="#141B34"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+            </svg>
+          </div>
+
+          <div
+            className="absolute top-full left-0 mt-3 w-[420px]
+            bg-white border border-[#EDEDED] rounded shadow-lg
+            opacity-0 invisible group-hover:opacity-100 group-hover:visible
+            transition-all"
+          >
+            <div className="grid grid-cols-3 gap-2 p-4">
+              <Link to="/inventory" className={dropdownItem}>
+                Inventory
+              </Link>
+              <Link to="/retail" className={dropdownItem}>
+                Retail
+              </Link>
+              <Link to="/construction" className={dropdownItem}>
+                Construction
+              </Link>
+              <Link to="/agriculture" className={dropdownItem}>
+                Agriculture
+              </Link>
+              <Link to="/restaurant" className={dropdownItem}>
+                Restaurant
+              </Link>
+              <Link to="/flexible" className={dropdownItem}>
+                Flexible
+              </Link>
+            </div>
+          </div>
         </div>
 
         <div className="flex items-center gap-2 cursor-pointer">
-          <p className="text-[16px] text-[#000000] whitespace-nowrap">
-            Solutions
-          </p>
-          <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
-            <path
-              d="M0.75 0.75L4.04289 4.04289C4.37623 4.37623 4.54289 4.54289 4.75 4.54289C4.95711 4.54289 5.12377 4.37623 5.45711 4.04289L8.75 0.75"
-              stroke="#141B34"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <Link to="/solutions">
+            <p className="text-[16px] text-[#000000] whitespace-nowrap">
+              Solutions
+            </p>
+          </Link>
         </div>
-
-        <p className="text-[16px] text-[#000000] whitespace-nowrap">
-          Customs & On-Premise
-        </p>
-        <p className="text-[16px] text-[#000000] whitespace-nowrap">Pricing</p>
-        <p className="text-[16px] text-[#000000] whitespace-nowrap">About Us</p>
+        <Link to="/premise">
+          <p className="text-[16px] text-[#000000] whitespace-nowrap">
+            Customs & On-Premise
+          </p>
+        </Link>
+        <Link to="/force">
+          <p className="text-[16px] text-[#000000] whitespace-nowrap">
+            Pricing
+          </p>
+        </Link>
+        <Link to="/about">
+          <p className="text-[16px] text-[#000000] whitespace-nowrap">
+            About Us
+          </p>
+        </Link>
       </div>
 
       <div className="hidden lg:flex min-h-[38px] gap-2.5 items-center">
@@ -81,11 +117,54 @@ const Navbar: React.FC = () => {
 
       {open && (
         <div className="absolute top-[64px] left-0 w-full bg-white border-t border-[#EDEDED] px-4 py-4 flex flex-col gap-4 lg:hidden">
-          <p className="text-[16px]">Products</p>
-          <p className="text-[16px]">Solutions</p>
-          <p className="text-[16px]">Customs & On-Premise</p>
-          <p className="text-[16px]">Pricing</p>
-          <p className="text-[16px]">About Us</p>
+          {/* PRODUCTS ACCORDION */}
+          <button
+            onClick={() => setProductsOpen(!productsOpen)}
+            className="flex justify-between items-center text-[16px]"
+          >
+            Products
+            <span
+              className={`transition-transform ${productsOpen ? "rotate-180" : ""}`}
+            >
+              ▾
+            </span>
+          </button>
+
+          {productsOpen && (
+            <div className="grid grid-cols-3 gap-2 pl-2">
+              <Link to="/inventory" className={dropdownItem}>
+                Inventory
+              </Link>
+              <Link to="/retail" className={dropdownItem}>
+                Retail
+              </Link>
+              <Link to="/construction" className={dropdownItem}>
+                Construction
+              </Link>
+              <Link to="/agriculture" className={dropdownItem}>
+                Agriculture
+              </Link>
+              <Link to="/restaurant" className={dropdownItem}>
+                Restaurant
+              </Link>
+              <Link to="/flexible" className={dropdownItem}>
+                Flexible
+              </Link>
+            </div>
+          )}
+          <Link to="/solutions">
+            {" "}
+            <p className="text-[16px]">Solutions</p>
+          </Link>
+          <Link to="/premise">
+            <p className="text-[16px]">Customs & On-Premise</p>
+          </Link>
+          <Link to="/force">
+            <p className="text-[16px]">Pricing</p>
+          </Link>
+          <Link to="/about">
+            <p className="text-[16px]">About Us</p>
+          </Link>
 
           <button className="mt-2 min-h-[38px] px-4 py-2 rounded border border-[#16B365] text-[#16B365]">
             Sign In
