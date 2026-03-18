@@ -19,6 +19,10 @@ export const ROUTE_PATHS = {
   FLEXIBLE: "/flexible",
   ABOUT: "/about",
   PREMISE: "/premise",
+  DASHBOARD: "/dashboard",
+  DASHBOARDONE: "/dashboardone",
+  DASHBOARDTWO: "/dashboardtwo",
+  DASHBOARDTHREE: "/dashboardthree",
 } as const;
 
 export type ROUTE_PATHS = (typeof ROUTE_PATHS)[keyof typeof ROUTE_PATHS];

@@ -21,6 +21,10 @@ import ForcePage from "../pages/forcepage";
 import FlexiblePage from "../pages/flexiblepage";
 import AboutPage from "../pages/aboutus";
 import PremisePage from "../pages/onpremise";
+import DashboardPage from "../pages/Client/dashboard";
+import DashboardPageOne from "../pages/Client/dashboardone";
+import DashboardPageTwo from "../pages/Client/dashboardtwo";
+import DashboardPageThree from "../pages/Client/dashboardthree";
 import { ROUTE_PATHS } from "../types";
 
 const AppRoutes = () => {
@@ -46,6 +50,13 @@ const AppRoutes = () => {
         <Route path={ROUTE_PATHS.RESET} element={<ResetPassword />} />
         <Route path={ROUTE_PATHS.FINISH} element={<FinishSetup />} />
         <Route path={ROUTE_PATHS.EMAILVERIFY} element={<EmailVerify />} />
+        <Route path={ROUTE_PATHS.DASHBOARD} element={<DashboardPage />} />
+        <Route path={ROUTE_PATHS.DASHBOARDONE} element={<DashboardPageOne />} />
+        <Route path={ROUTE_PATHS.DASHBOARDTWO} element={<DashboardPageTwo />} />
+        <Route
+          path={ROUTE_PATHS.DASHBOARDTHREE}
+          element={<DashboardPageThree />}
+        />
         <Route
           path={ROUTE_PATHS.RESETMESSAGE}
           element={<ResetPasswordMessage />}
