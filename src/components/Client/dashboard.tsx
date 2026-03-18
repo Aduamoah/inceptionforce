@@ -31,7 +31,7 @@ import {
 
 import user from "../../assets/user.png";
 import n1 from "../../assets/n1.png";
-import n2 from "../../assets/n2.png";
+import n2 from "../../assets/guybook.png";
 import n3 from "../../assets/n3.png";
 import n4 from "../../assets/n4.png";
 import n5 from "../../assets/n5.png";
@@ -41,6 +41,10 @@ import clients from "../../assets/clients.png";
 import companies from "../../assets/companies.png";
 import vendors from "../../assets/vendors.png";
 import reports from "../../assets/reports.png";
+import greenman from "../../assets/greenman.png";
+import bluecompany from "../../assets/bluecompany.png";
+import bluevendor from "../../assets/bluevendor.png";
+import orangehourglass from "../../assets/orangehourglass.png";
 
 const GridLayout = Responsive;
 
@@ -61,17 +65,33 @@ const menuConfig = {
   },
 
   n2: {
-    title: "CONTACT MANAGEMENT",
+    title: "CONTACTS",
     items: [
       {
         label: "Dashboard",
         key: "dashboard",
-        icon: <img src={greendashboard} />,
+        icon: <img src={greendashboard} className="w-5 h-5" />,
       },
-      { label: "Clients", key: "clients", icon: <img src={clients} /> },
-      { label: "Companies", key: "companies", icon: <img src={companies} /> },
-      { label: "Vendors", key: "vendors", icon: <img src={vendors} /> },
-      { label: "Reports", key: "reports", icon: <img src={reports} /> },
+      {
+        label: "Clients",
+        key: "clients",
+        icon: <img src={clients} className="w-5 h-5" />,
+      },
+      {
+        label: "Companies",
+        key: "companies",
+        icon: <img src={companies} className="w-5 h-5" />,
+      },
+      {
+        label: "Vendors",
+        key: "vendors",
+        icon: <img src={vendors} className="w-5 h-5" />,
+      },
+      {
+        label: "Reports",
+        key: "reports",
+        icon: <img src={reports} className="w-5 h-5" />,
+      },
     ],
   },
 
@@ -143,44 +163,125 @@ export default function Dashboard() {
   const dashboardContent = (
     <div className="space-y-6">
       {/* TOP STATS */}
+      <div className="bg-white p-6 shadow">
+        <h3 className="font-semibold">Dashboard</h3>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+        {/* Card 1 */}
         <div className="bg-white p-5 rounded-xl shadow">
-          <p className="text-gray-500">Total Clients</p>
-          <h2 className="text-3xl font-bold">320</h2>
-          <div className="flex justify-between mt-4 text-sm">
-            <span>275 Active</span>
-            <span>45 Inactive</span>
+          <div className="flex justify-between items-center mb-2">
+            <div className="flex items-center gap-2">
+              <img src={greenman} className="w-5 h-5" />
+              {/* <span className="text-green-500">👥</span> */}
+              <p className="text-gray-600 font-medium">Total Clients</p>
+            </div>
+          </div>
+          <div className="flex justify-between">
+            <h2 className="text-3xl font-bold">320</h2>
+            <div>
+              <span className="text-green-500 text-sm">↑ 0%</span>
+              <p className="text-xs text-gray-400">vs. Last period</p>
+            </div>
+          </div>
+          <div className="mt-4 border rounded-xl p-3 flex justify-between text-sm bg-white">
+            <div className="text-center w-1/2">
+              <p className="font-semibold">275</p>
+              <p className="text-gray-500 text-xs">Active</p>
+            </div>
+            <div className="text-center w-1/2">
+              <p className="font-semibold">45</p>
+              <p className="text-gray-500 text-xs">Inactive</p>
+            </div>
           </div>
         </div>
 
+        {/* Card 2 */}
         <div className="bg-white p-5 rounded-xl shadow">
-          <p className="text-gray-500">Total Companies</p>
-          <h2 className="text-3xl font-bold">100</h2>
-          <div className="flex justify-between mt-4 text-sm">
-            <span>60 Active</span>
-            <span>40 Inactive</span>
+          <div className="flex justify-between items-center mb-2">
+            <div className="flex items-center gap-2">
+              <img src={bluecompany} className="w-5 h-5" />
+              {/* <span className="text-blue-500">🏢</span> */}
+              <p className="text-gray-600 font-medium">Total Companies</p>
+            </div>
+          </div>
+          <div className="flex justify-between">
+            <h2 className="text-3xl font-bold">100</h2>
+            <div>
+              <span className="text-green-500 text-sm">↑ 0%</span>
+              <p className="text-xs text-gray-400">vs. Last period</p>
+            </div>
+          </div>
+
+          <div className="mt-4 border rounded-xl p-3 flex justify-between text-sm bg-white">
+            <div className="text-center w-1/2">
+              <p className="font-semibold">60</p>
+              <p className="text-gray-500 text-xs">Active</p>
+            </div>
+            <div className="text-center w-1/2">
+              <p className="font-semibold">40</p>
+              <p className="text-gray-500 text-xs">Inactive</p>
+            </div>
           </div>
         </div>
 
+        {/* Card 3 */}
         <div className="bg-white p-5 rounded-xl shadow">
-          <p className="text-gray-500">Total Vendors</p>
-          <h2 className="text-3xl font-bold">25</h2>
-          <div className="flex justify-between mt-4 text-sm">
-            <span>20 Active</span>
-            <span>5 Inactive</span>
+          <div className="flex justify-between items-center mb-2">
+            <div className="flex items-center gap-2">
+              <img src={bluevendor} className="w-5 h-5" />
+              {/* <span className="text-indigo-500">🏪</span> */}
+              <p className="text-gray-600 font-medium">Total Vendors</p>
+            </div>
+          </div>
+          <div className="flex justify-between">
+            <h2 className="text-3xl font-bold">25</h2>
+            <div>
+              <span className="text-green-500 text-sm">↑ 0%</span>
+              <p className="text-xs text-gray-400">vs. Last period</p>
+            </div>
+          </div>
+
+          <div className="mt-4 border rounded-xl p-3 flex justify-between text-sm bg-white">
+            <div className="text-center w-1/2">
+              <p className="font-semibold">20</p>
+              <p className="text-gray-500 text-xs">Active</p>
+            </div>
+            <div className="text-center w-1/2">
+              <p className="font-semibold">5</p>
+              <p className="text-gray-500 text-xs">Inactive</p>
+            </div>
           </div>
         </div>
 
+        {/* Card 4 */}
         <div className="bg-white p-5 rounded-xl shadow">
-          <p className="text-gray-500">Pending Approvals</p>
-          <h2 className="text-3xl font-bold">20</h2>
-          <div className="flex justify-between mt-4 text-sm">
-            <span>12 Estimates</span>
-            <span>6 Inactive</span>
+          <div className="flex justify-between items-center mb-2">
+            <div className="flex items-center gap-2">
+              <img src={orangehourglass} className="w-5 h-5" />
+              {/* <span className="text-orange-500">⏳</span> */}
+              <p className="text-gray-600 font-medium">Pending Approvals</p>
+            </div>
+          </div>
+          <div className="flex justify-between">
+            <h2 className="text-3xl font-bold">20</h2>
+            <div>
+              <span className="text-green-500 text-sm">↑ 0%</span>
+              <p className="text-xs text-gray-400">vs. Last period</p>
+            </div>
+          </div>
+
+          <div className="mt-4 border rounded-xl p-3 flex justify-between text-sm bg-white">
+            <div className="text-center w-1/2">
+              <p className="font-semibold">12</p>
+              <p className="text-gray-500 text-xs">Estimates</p>
+            </div>
+            <div className="text-center w-1/2">
+              <p className="font-semibold">6</p>
+              <p className="text-gray-500 text-xs">Other</p>
+            </div>
           </div>
         </div>
       </div>
-
       {/* REVENUE + INVOICE */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         <div className="bg-white p-5 rounded-xl shadow">
@@ -205,7 +306,6 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-
       {/* ESTIMATE SUMMARY + PAYMENT RATE */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-xl shadow xl:col-span-2">
@@ -243,7 +343,6 @@ export default function Dashboard() {
           <span className="text-2xl font-bold -mt-28">47%</span>
         </div>
       </div>
-
       {/* REVENUE + CLIENT CHARTS */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-xl shadow">
@@ -277,7 +376,6 @@ export default function Dashboard() {
           </ResponsiveContainer>
         </div>
       </div>
-
       {/* CONVERSION RATE */}
       <div className="bg-white p-6 rounded-xl shadow">
         <h3 className="font-semibold mb-6">
@@ -332,9 +430,9 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="flex h-screen gap-2 bg-gray-100">
+    <div className="flex h-screen  bg-gray-100">
       {/* FIRST SIDEBAR */}
-      <div className="flex flex-col h-screen bg-gray-100">
+      <div className="flex flex-col  bg-gray-100">
         <div className="bg-white shadow flex flex-col justify-between h-full p-2">
           {/* TOP ICONS */}
           <div className="flex flex-col gap-4 mt-20">
@@ -345,7 +443,9 @@ export default function Dashboard() {
                   key={key}
                   src={icon}
                   className={`w-10 h-10 cursor-pointer ${
-                    activeMain === key ? "border-2 border-blue-500 rounded" : ""
+                    activeMain === key
+                      ? "border-2 border-green-200 rounded"
+                      : ""
                   }`}
                   onClick={() => {
                     setActiveMain(key);
@@ -379,8 +479,8 @@ export default function Dashboard() {
       </div>
 
       {/* SECOND SIDEBAR */}
-      <div className="flex flex-col w-auto h-fit gap-4 mt-14 bg-white shadow">
-        <div className="p-4 font-bold text-base text-gray-200">
+      <div className="flex flex-col w-60  gap-4  bg-white shadow">
+        <div className="p-4 font-medium text-base text-gray-100">
           {menuConfig[activeMain].title}
         </div>
 
@@ -391,7 +491,7 @@ export default function Dashboard() {
               icon={item.icon}
               onClick={() => setActivePage(item.key)}
               className={
-                activePage === item.key ? "bg-blue-600 text-white" : ""
+                activePage === item.key ? "bg-green-200 text-white" : ""
               }
             >
               {item.label}
