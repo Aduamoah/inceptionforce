@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
 import {
   FaTachometerAlt,
@@ -13,7 +13,14 @@ import {
 import { Responsive } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
-import { FaSearch, FaChevronDown, FaEllipsisH, FaPlus } from "react-icons/fa";
+import {
+  FaSearch,
+  FaChevronDown,
+  FaEllipsisH,
+  FaPlus,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
 
 import {
   XAxis,
@@ -28,6 +35,7 @@ import {
   Bar,
   Cell,
 } from "recharts";
+import { Pencil } from "lucide-react";
 
 import user from "../../assets/user.png";
 import n1 from "../../assets/n1.png";
@@ -45,12 +53,27 @@ import greenman from "../../assets/greenman.png";
 import bluecompany from "../../assets/bluecompany.png";
 import bluevendor from "../../assets/bluevendor.png";
 import orangehourglass from "../../assets/orangehourglass.png";
+import money from "../../assets/money.png";
+import invoietroll from "../../assets/invoicetroll.png";
+import useradd from "../../assets/useradd.png";
+import addplus from "../../assets/addplus.png";
+import userplus from "../../assets/userplus.png";
+import usersub from "../../assets/usersub.png";
 
 const GridLayout = Responsive;
 
 /* =========================
    MENU CONFIGURATION
 ========================= */
+
+const mainMenuLabels = {
+  n1: "Marketplace",
+  n2: "Contacts",
+  n3: "Business",
+  n4: "Users & Roles",
+  n5: "Settings",
+  n6: "Logout",
+};
 
 const menuConfig = {
   n1: {
@@ -125,7 +148,9 @@ const menuConfig = {
 
 export default function Dashboard() {
   const [activeMain, setActiveMain] = useState("n1");
-  const [activePage, setActivePage] = useState("dashboard");
+  const [activePage, setActivePage] = useState("list1");
+  const [isMainExpanded, setIsMainExpanded] = useState(true);
+  const [isSubExpanded, setIsSubExpanded] = useState(true);
 
   /* =========================
      DASHBOARD GRID CONTENT
@@ -264,10 +289,10 @@ export default function Dashboard() {
           </div>
           <div className="flex justify-between">
             <h2 className="text-3xl font-bold">20</h2>
-            <div>
+            {/* <div>
               <span className="text-green-500 text-sm">↑ 0%</span>
               <p className="text-xs text-gray-400">vs. Last period</p>
-            </div>
+            </div> */}
           </div>
 
           <div className="mt-4 border rounded-xl p-3 flex justify-between text-sm bg-white">
@@ -283,26 +308,60 @@ export default function Dashboard() {
         </div>
       </div>
       {/* REVENUE + INVOICE */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <div className="bg-white p-5 rounded-xl shadow">
-          <p className="text-gray-500">Total Revenue YTD</p>
-          <h2 className="text-3xl font-bold">₵50K</h2>
+      <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
+        {/* LEFT CARD */}
+        <div className="bg-white p-5 rounded-xl shadow col-span-1 flex flex-col justify-between">
+          <div className="flex items-center gap-2 mb-3">
+            <img src={money} className="w-5 h-5" />
+            <p className="text-gray-600 font-medium">Total Revenue YTD</p>
+          </div>
+
+          <div className="flex justify-between items-end">
+            <h2 className="text-3xl font-bold">₵50K</h2>
+
+            <div className="flex flex-col items-end">
+              <span className="text-green-500 text-sm">↑ 0.05%</span>
+              <p className="text-xs text-gray-400">vs. Last month: ₵45K</p>
+            </div>
+          </div>
         </div>
 
-        <div className="bg-white p-5 rounded-xl shadow grid grid-cols-3 text-center">
-          <div>
-            <h2 className="text-3xl font-bold">320</h2>
-            <p className="text-green-500">Issued</p>
+        {/* RIGHT CARD */}
+        <div className="bg-white p-5 rounded-xl shadow col-span-3">
+          {/* Header */}
+          <div className="flex items-center gap-2 mb-4">
+            <img src={invoietroll} className="w-5 h-5" />
+            <p className="text-gray-600 font-medium">Total Invoices</p>
           </div>
 
-          <div>
-            <h2 className="text-3xl font-bold">75</h2>
-            <p className="text-orange-500">Outstanding</p>
-          </div>
+          {/* 3 Equal Sections */}
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-x divide-gray-200">
+            {/* Issued */}
+            <div className="px-4 flex flex-col gap-2">
+              <h2 className="text-3xl font-bold">320</h2>
+              <div className="flex justify-between items-center">
+                <p className="text-green-500">Issued</p>
+                <p className="text-xs text-gray-400">Total Amount: ₵50K</p>
+              </div>
+            </div>
 
-          <div>
-            <h2 className="text-3xl font-bold">10</h2>
-            <p className="text-red-500">Overdue</p>
+            {/* Outstanding */}
+            <div className="px-4 flex flex-col gap-2">
+              <h2 className="text-3xl font-bold">75</h2>
+              <div className="flex justify-between items-center">
+                <p className="text-orange-500">Outstanding</p>
+                <p className="text-xs text-gray-400">Total Amount: ₵50K</p>
+              </div>
+            </div>
+
+            {/* Overdue */}
+            <div className="px-4 flex flex-col gap-2">
+              <h2 className="text-3xl font-bold">10</h2>
+              <div className="flex justify-between items-center">
+                <p className="text-red-500">Overdue</p>
+                <p className="text-xs text-gray-400">Total Amount: ₵50K</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -430,28 +489,48 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="flex h-screen  bg-gray-100">
+    <div className="flex h-screen bg-gray-100">
       {/* FIRST SIDEBAR */}
-      <div className="flex flex-col  bg-gray-100">
+      <div
+        className={`relative group flex flex-col bg-gray-100 transition-all duration-300 ${
+          isMainExpanded ? "w-48" : "w-16"
+        }`}
+      >
+        {/* TOGGLE BUTTON */}
+        <button
+          onClick={() => setIsMainExpanded(!isMainExpanded)}
+          className="absolute -right-3 top-1/2 -translate-y-1/2 z-50 bg-white border rounded-full shadow p-1 opacity-0 group-hover:opacity-100 transition"
+        >
+          {isMainExpanded ? <FaChevronLeft /> : <FaChevronRight />}
+        </button>
+
         <div className="bg-white shadow flex flex-col justify-between h-full p-2">
           {/* TOP ICONS */}
           <div className="flex flex-col gap-4 mt-20">
             {[n1, n2, n3, n4].map((icon, index) => {
               const key = `n${index + 1}`;
               return (
-                <img
+                <div
                   key={key}
-                  src={icon}
-                  className={`w-10 h-10 cursor-pointer ${
-                    activeMain === key
-                      ? "border-2 border-green-200 rounded"
-                      : ""
+                  className={`flex items-center gap-3 cursor-pointer p-2 rounded ${
+                    activeMain === key ? "bg-green-600 text-[#0D673B]" : ""
                   }`}
                   onClick={() => {
                     setActiveMain(key);
                     setActivePage(menuConfig[key].items[0].key);
                   }}
-                />
+                >
+                  <img src={icon} className="w-8 h-8" />
+                  {isMainExpanded && (
+                    <span
+                      className={`text-sm ${
+                        activeMain === key ? "text-[#0D673B]" : "text-gray-700"
+                      }`}
+                    >
+                      {mainMenuLabels[key]}
+                    </span>
+                  )}
+                </div>
               );
             })}
           </div>
@@ -461,17 +540,28 @@ export default function Dashboard() {
             {[n5, n6].map((icon, index) => {
               const key = `n${index + 5}`;
               return (
-                <img
+                <div
                   key={key}
-                  src={icon}
-                  className={`w-10 h-10 cursor-pointer ${
-                    activeMain === key ? "border-2 border-blue-500 rounded" : ""
+                  className={`flex items-center gap-3 cursor-pointer p-2 rounded ${
+                    activeMain === key ? "bg-green-600 text-[#0D673B]" : ""
                   }`}
                   onClick={() => {
                     setActiveMain(key);
                     setActivePage(menuConfig[key].items[0].key);
                   }}
-                />
+                >
+                  <img src={icon} className="w-8 h-8" />
+
+                  {isMainExpanded && (
+                    <span
+                      className={`text-sm ${
+                        activeMain === key ? "text-[#0D673B]" : "text-gray-700"
+                      }`}
+                    >
+                      {mainMenuLabels[key]}
+                    </span>
+                  )}
+                </div>
               );
             })}
           </div>
@@ -479,25 +569,35 @@ export default function Dashboard() {
       </div>
 
       {/* SECOND SIDEBAR */}
-      <div className="flex flex-col w-60  gap-4  bg-white shadow">
-        <div className="p-4 font-medium text-base text-gray-100">
-          {menuConfig[activeMain].title}
-        </div>
+      <div className="relative group">
+        {/* TOGGLE BUTTON */}
+        <button
+          onClick={() => setIsSubExpanded(!isSubExpanded)}
+          className="absolute -right-3 top-60 z-50 bg-white border rounded-full shadow p-1 opacity-0 group-hover:opacity-100 transition"
+        >
+          {isSubExpanded ? <FaChevronLeft /> : <FaChevronRight />}
+        </button>
 
-        <Menu>
-          {menuConfig[activeMain].items.map((item) => (
-            <MenuItem
-              key={item.key}
-              icon={item.icon}
-              onClick={() => setActivePage(item.key)}
-              className={
-                activePage === item.key ? "bg-green-200 text-white" : ""
-              }
-            >
-              {item.label}
-            </MenuItem>
-          ))}
-        </Menu>
+        <div className="flex flex-col gap-4 bg-white shadow transition-all duration-300">
+          <div className="p-4 font-medium text-base text-gray-100">
+            {menuConfig[activeMain].title}
+          </div>
+
+          <Menu>
+            {menuConfig[activeMain].items.map((item) => (
+              <MenuItem
+                key={item.key}
+                icon={item.icon}
+                onClick={() => setActivePage(item.key)}
+                className={`${
+                  activePage === item.key ? "bg-green-200 text-white" : ""
+                }`}
+              >
+                {isSubExpanded && item.label}
+              </MenuItem>
+            ))}
+          </Menu>
+        </div>
       </div>
 
       {/* MAIN CONTENT */}
@@ -514,7 +614,33 @@ export default function Dashboard() {
 ========================= */
 function ClientsTable() {
   const [search, setSearch] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [step, setStep] = useState(0);
 
+  const [image, setImage] = useState(null);
+  const fileInputRef = useRef(null);
+
+  const handleClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setImage(imageUrl);
+    }
+  };
+
+  const steps = [
+    "General Information",
+    "Representative Details",
+    "Additional Information",
+    "Communication Options",
+    "Shipping Address",
+    "Billing Address",
+    "Description",
+  ];
   const clients = Array.from({ length: 20 }, (_, i) => ({
     id: i + 1,
     name: ["John Carter", "Eva Thompson", "Tony Stark", "Jane Doe"][i % 4],
@@ -525,15 +651,24 @@ function ClientsTable() {
     manager: "Admin",
     avatar: `https://i.pravatar.cc/40?img=${i + 10}`,
   }));
+  const nextStep = () => {
+    if (step < steps.length - 1) setStep(step + 1);
+  };
 
+  const prevStep = () => {
+    if (step > 0) setStep(step - 1);
+  };
   return (
     <div className="bg-white text-gray-800 p-6 rounded-xl shadow">
       {/* HEADER */}
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-sm text-gray-600">100 Clients</h2>
+        <h2 className="text-xl text-black">Clients</h2>
 
-        <button className="flex items-center gap-2 bg-green-500 hover:bg-green-600 px-4 py-2 rounded-md text-white font-semibold">
-          <FaPlus /> Add Client
+        <button
+          onClick={() => setShowModal(true)}
+          className="flex items-center gap-2 bg-green-500 hover:bg-green-600 px-4 py-2 rounded-md text-black font-normal"
+        >
+          <img src={useradd} className="w-5 h-5" /> Add Client
         </button>
       </div>
 
@@ -542,30 +677,47 @@ function ClientsTable() {
       {/* FILTER BAR */}
       <div className="flex gap-4 mb-6 flex-wrap">
         {/* SEARCH */}
-        <div className="flex items-center border border-gray-300 rounded px-3 py-2 w-80 bg-white">
-          <FaSearch className="mr-2 text-gray-400" />
+        <div className="flex items-center border border-gray-300 rounded-xl px-3 py-2 w-60 bg-white">
           <input
             className="outline-none w-full text-sm"
-            placeholder="Search for a name, email or phone number"
+            placeholder="Search for client name"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
+          <FaSearch className="mr-2 text-gray-400" />
         </div>
 
         {/* FILTER DROPDOWNS */}
-        {[1, 2, 3].map((f) => (
-          <div
-            key={f}
-            className="flex items-center border border-gray-300 rounded px-4 py-2 w-44 justify-between text-sm bg-white cursor-pointer"
-          >
-            Filter
-            <FaChevronDown />
-          </div>
-        ))}
+        {/* {[1, 2, 3].map((f) => ( */}
+        <div
+          // key={opt}
+          className="flex items-center border border-gray-300 rounded-xl px-4 py-2 w-40 justify-between text-sm bg-white cursor-pointer"
+        >
+          All Statuses
+          <FaChevronDown />
+        </div>
+        <p>Sort By:</p>
+        <div
+          // key={opt}
+          className="flex items-center border border-gray-300 rounded-xl px-4 py-2 w-40 justify-between text-sm bg-white cursor-pointer"
+        >
+          Newest
+          <FaChevronDown />
+        </div>
+
+        <p>Show:</p>
+        <div
+          // key={opt}
+          className="flex items-center border border-gray-300 rounded-xl px-4 py-2 w-40 justify-between text-sm bg-white cursor-pointer"
+        >
+          20
+          <FaChevronDown />
+        </div>
+        {/* ))} */}
 
         {/* OPTIONS BUTTON */}
-        <button className="border border-gray-300 p-3 rounded hover:bg-gray-100">
-          <FaEllipsisH />
+        <button className="border border-green-300 p-3 rounded hover:bg-green-100">
+          <FaEllipsisH className="text-green-500" />
         </button>
       </div>
 
@@ -632,6 +784,463 @@ function ClientsTable() {
           </button>
         </div>
       </div>
+      {showModal && (
+        <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center">
+          <div className="bg-white w-[90%] max-w-6xl h-[90vh] rounded-2xl p-6 flex flex-col">
+            {/* HEADER */}
+            <div className="flex justify-between items-center mb-6">
+              <div className="flex items-center gap-1">
+                {/* <div className="bg-green-100 p-3 rounded-full"> */}
+                {/* <span className="text-green-600 text-xl">+</span> */}
+                <img src={addplus} className="w-10 h-10" />
+                {/* </div> */}
+                <h2 className="text-xl font-semibold">Add Client</h2>
+              </div>
+
+              <button
+                onClick={() => setShowModal(false)}
+                className="border rounded-full w-8 h-8 flex items-center justify-center"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* BODY */}
+            <div className="flex flex-1 overflow-hidden">
+              {/* SIDEBAR */}
+              <div className="w-1/4 border-r pr-6">
+                <div className="flex flex-col items-center mb-6">
+                  <div className="relative w-24 h-24">
+                    {/* Image */}
+                    <img
+                      src={image || userplus}
+                      alt="profile"
+                      className="w-24 h-24 rounded-full object-cover"
+                    />
+
+                    {/* Button */}
+                    <button
+                      onClick={handleClick}
+                      className="absolute bottom-0 right-0 bg-green-500 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-md"
+                    >
+                      {image ? <Pencil size={16} /> : "+"}
+                    </button>
+
+                    {/* Hidden File Input */}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      ref={fileInputRef}
+                      onChange={handleImageChange}
+                      className="hidden"
+                    />
+                  </div>
+                </div>
+                {/* <div className="flex flex-col items-center mb-6">
+                  <div className="relative w-24 h-24">
+                    <img
+                      src={userplus}
+                      className="w-24 h-24 rounded-full object-cover"
+                    />
+
+                    <button className="absolute bottom-0 right-0 bg-green-500 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-md">
+                      +
+                    </button>
+                  </div>
+                </div> */}
+
+                <div className="space-y-2 text-sm">
+                  {steps.map((s, index) => (
+                    <p
+                      key={index}
+                      onClick={() => setStep(index)}
+                      className={`px-3 py-1 rounded-full cursor-pointer ${
+                        step === index
+                          ? "bg-green-100 text-green-700"
+                          : "text-gray-500 hover:bg-gray-100"
+                      }`}
+                    >
+                      {s}
+                    </p>
+                  ))}
+                </div>
+              </div>
+
+              {/* FORM AREA */}
+              <div className="flex-1 pl-8 overflow-y-auto">
+                <h3 className="text-lg font-medium mb-6">{steps[step]}</h3>
+
+                {/* STEP CONTENT SWITCH */}
+                {step === 0 && (
+                  <div className="grid grid-cols-2 gap-6">
+                    <div className="flex flex-col">
+                      <label>First Name</label>
+                      <input
+                        className="border p-2 rounded-lg"
+                        placeholder="First Name"
+                      />
+                    </div>
+
+                    <div className="flex flex-col">
+                      <label>Last Name</label>
+                      <input
+                        className="border p-2 rounded-lg"
+                        placeholder="Last Name"
+                      />
+                    </div>
+
+                    <div className="flex flex-col">
+                      <label>Primary Phone Number</label>
+                      <input
+                        className="border p-2 rounded-lg"
+                        placeholder="Primary Phone Number"
+                      />
+                    </div>
+
+                    <div className="flex flex-col">
+                      <label>Secondary Phone Number</label>
+                      <input
+                        className="border p-2 rounded-lg"
+                        placeholder="Secondary Phone Number"
+                      />
+                    </div>
+
+                    <div className="flex flex-col">
+                      <label>WhatsApp Number</label>
+                      <input
+                        className="border p-2 rounded-lg"
+                        placeholder="WhatsApp Number"
+                      />
+                    </div>
+
+                    <div className="flex flex-col">
+                      <label>Primary Email</label>
+                      <input
+                        className="border p-2 rounded-lg"
+                        placeholder="Primary Email"
+                      />
+                    </div>
+
+                    <div className="flex flex-col">
+                      <label>Secondary Email</label>
+                      <input
+                        className="border p-2 rounded-lg"
+                        placeholder="Secondary Email"
+                      />
+                    </div>
+
+                    <div className="flex flex-col">
+                      <label>Fax</label>
+                      <input
+                        className="border p-2 rounded-lg"
+                        placeholder="Fax"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {step === 1 && (
+                  <div className="grid grid-cols-1 gap-6">
+                    <div className="flex flex-col">
+                      <label>Client Representative</label>
+                      <input
+                        className="border p-2 rounded-lg"
+                        placeholder="Full Name"
+                      />
+                    </div>
+
+                    <div className="flex flex-col">
+                      <label>Representative Phone Number</label>
+                      <input
+                        className="border p-2 rounded-lg"
+                        placeholder="Phone Number"
+                      />
+                    </div>
+                  </div>
+                )}
+                {step === 2 && (
+                  <div className="grid grid-cols-2 gap-6">
+                    <div className="flex flex-col">
+                      <label>Vendor Name</label>
+                      <input
+                        className="border p-2 rounded-lg"
+                        placeholder="Full Name"
+                      />
+                    </div>
+
+                    <div className="flex flex-col">
+                      <label>Lead Source</label>
+                      <select
+                        id=""
+                        name=""
+                        className="w-full p-2 border rounded-md"
+                      >
+                        <option value="">Select a lead source</option>
+                      </select>
+                      {/* <input
+                        className="border p-2 rounded-lg"
+                        placeholder="Last Name"
+                      /> */}
+                    </div>
+
+                    <div className="flex flex-col">
+                      <label>Country</label>
+                      <select
+                        id=""
+                        name=""
+                        className="w-full p-2 border rounded-md"
+                      >
+                        <option value="">Select a country</option>
+                      </select>
+                      {/* <input
+                        className="border p-2 rounded-lg"
+                        placeholder="Last Name"
+                      /> */}
+                    </div>
+
+                    <div className="flex flex-col">
+                      <label>Client Manager</label>
+                      <select
+                        id=""
+                        name=""
+                        className="w-full p-2 border rounded-md"
+                      >
+                        <option value="">Select a client manager</option>
+                      </select>
+                      {/* <input
+                        className="border p-2 rounded-lg"
+                        placeholder="Last Name"
+                      /> */}
+                    </div>
+                  </div>
+                )}
+                {step === 3 && (
+                  <>
+                    <p className="text-gray-500">
+                      Selected preferred communication options.
+                    </p>
+                    <div className="flex gap-2">
+                      <input type="checkbox" />
+                      <p className="text-gray-500">Email</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <input type="checkbox" />
+                      <p className="text-gray-500">Whatsapp</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <input type="checkbox" />
+                      <p className="text-gray-500">SMS</p>
+                    </div>
+                  </>
+                )}
+                {step === 4 && (
+                  <>
+                    <div className="grid grid-cols-2 gap-6">
+                      <div className="flex flex-col">
+                        <label>Name</label>
+                        <input
+                          className="border p-2 rounded-lg"
+                          placeholder="Full Name"
+                        />
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label>Phone Number</label>
+                        <input
+                          className="border p-2 rounded-lg"
+                          placeholder="Phone Number"
+                        />
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label>Company Name</label>
+                        <input
+                          className="border p-2 rounded-lg"
+                          placeholder="Company Name"
+                        />
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label>Address Line1</label>
+                        <input
+                          className="border p-2 rounded-lg"
+                          placeholder="Address Line1"
+                        />
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label>Address Line2</label>
+                        <input
+                          className="border p-2 rounded-lg"
+                          placeholder="Address Line2"
+                        />
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label>ZIP/Postal Code</label>
+                        <input
+                          className="border p-2 rounded-lg"
+                          placeholder="ZIP/Postal Code"
+                        />
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label>Country</label>
+                        <select
+                          id=""
+                          name=""
+                          className="w-full p-2 border rounded-md"
+                        >
+                          <option value="">Select a country</option>
+                        </select>
+                        {/* <input
+                        className="border p-2 rounded-lg"
+                        placeholder="Last Name"
+                      /> */}
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label>City/Town</label>
+                        <input
+                          className="border p-2 rounded-lg"
+                          placeholder="City/Town"
+                        />
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label>State/Province</label>
+                        <input
+                          className="border p-2 rounded-lg"
+                          placeholder="State/Province"
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
+                {step === 5 && (
+                  <>
+                    <div className="flex gap-2">
+                      <input type="checkbox" />
+                      <p className="text-gray-500">
+                        Use Shipping Address as Billing Address
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-6">
+                      <div className="flex flex-col">
+                        <label>Name</label>
+                        <input
+                          className="border p-2 rounded-lg"
+                          placeholder="Full Name"
+                        />
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label>Phone Number</label>
+                        <input
+                          className="border p-2 rounded-lg"
+                          placeholder="Phone Number"
+                        />
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label>Company Name</label>
+                        <input
+                          className="border p-2 rounded-lg"
+                          placeholder="Company Name"
+                        />
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label>Address Line1</label>
+                        <input
+                          className="border p-2 rounded-lg"
+                          placeholder="Address Line1"
+                        />
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label>Address Line2</label>
+                        <input
+                          className="border p-2 rounded-lg"
+                          placeholder="Address Line2"
+                        />
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label>ZIP/Postal Code</label>
+                        <input
+                          className="border p-2 rounded-lg"
+                          placeholder="ZIP/Postal Code"
+                        />
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label>Country</label>
+                        <select
+                          id=""
+                          name=""
+                          className="w-full p-2 border rounded-md"
+                        >
+                          <option value="">Select a country</option>
+                        </select>
+                        {/* <input
+                        className="border p-2 rounded-lg"
+                        placeholder="Last Name"
+                      /> */}
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label>City/Town</label>
+                        <input
+                          className="border p-2 rounded-lg"
+                          placeholder="City/Town"
+                        />
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label>State/Province</label>
+                        <input
+                          className="border p-2 rounded-lg"
+                          placeholder="State/Province"
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
+                {step === 6 && (
+                  <textarea
+                    placeholder="Description"
+                    className="border border-gray-400 w-full h-2/3 text-gray-700 p-2"
+                  />
+                )}
+              </div>
+            </div>
+
+            {/* FOOTER */}
+            <div className="flex justify-end mt-6">
+              {/* PREVIOUS */}
+              {step > 0 && (
+                <button
+                  onClick={prevStep}
+                  className={`px-5 py-2 rounded-lg border 
+                    "hover:bg-green-300"`}
+                >
+                  Previous
+                </button>
+              )}
+
+              {/* NEXT */}
+              <button
+                onClick={nextStep}
+                className="bg-green-500 text-white px-6 py-2 rounded-lg"
+              >
+                {step === steps.length - 1 ? "Finish" : "Next"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
