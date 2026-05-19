@@ -35,7 +35,17 @@ import {
   CartesianGrid,
   Legend,
 } from "recharts";
-import { Pencil, X, ChevronDown, ChevronUp } from "lucide-react";
+import {
+  Pencil,
+  X,
+  ChevronDown,
+  ChevronUp,
+  Plus,
+  Upload,
+  Trash2,
+  Download,
+  FileText,
+} from "lucide-react";
 
 import user from "../../assets/user.png";
 import n1 from "../../assets/n1.png";
@@ -109,6 +119,7 @@ import stockstat from "../../assets/stockstat.png";
 import trends from "../../assets/trends.png";
 import historytime from "../../assets/historytime.png";
 import dotgreen from "../../assets/dotgreen.png";
+import list from "../../assets/list.png";
 const GridLayout = Responsive;
 
 /* =========================
@@ -677,6 +688,10 @@ export default function Dashboard() {
         return <ItemsTable />;
       case "groupservice":
         return <GroupTable />;
+      case "adjust":
+        return <StockTable />;
+      case "transferitems":
+        return <TransferTable />;
       default:
         return (
           <div className="bg-white p-4 rounded shadow">{activePage} Page</div>
@@ -5199,6 +5214,225 @@ function VendorsTable() {
   );
 }
 
+const Newitemss = [
+  {
+    id: 1,
+    name: "Steel",
+    detail: "Detail",
+    description: "Description",
+    available: "50pcs",
+    increase: "100pcs",
+    decrease: "50",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    brand: "Brand",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    email: "info@apexglobal.com",
+    website: "apexglobal.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    status: "Active",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "Ghana",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+  },
+  {
+    id: 2,
+    name: "Steel",
+    detail: "Detail",
+    description: "Description",
+    available: "50pcs",
+    increase: "100pcs",
+    decrease: "50",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    brand: "Brand",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    email: "info@apexglobal.com",
+    website: "apexglobal.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    status: "Active",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "Ghana",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+  },
+  {
+    id: 3,
+    name: "Steel",
+    detail: "Detail",
+    description: "Description",
+    available: "50pcs",
+    increase: "100pcs",
+    decrease: "50",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    brand: "Brand",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    email: "info@apexglobal.com",
+    website: "apexglobal.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    status: "Active",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "Ghana",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+  },
+  {
+    id: 4,
+    name: "Steel",
+    detail: "Detail",
+    description: "Description",
+    available: "50pcs",
+    increase: "100pcs",
+    decrease: "50",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    brand: "Brand",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    email: "info@apexglobal.com",
+    website: "apexglobal.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    status: "Active",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "Ghana",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+  },
+];
+
 const Newitems = [
   {
     id: 1,
@@ -6748,6 +6982,9 @@ const Newgroup = [
     inventorychart: "Inventory Chart",
     saleschart: "Sales Chart",
     purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
     email: "info@apexglobal.com",
     website: "apexglobal.com",
     phone: "+233 20 123 4567",
@@ -6780,7 +7017,11 @@ const Newgroup = [
   },
   {
     id: 2,
-    name: "Steel Rod",
+    name: "General Repairs",
+    identify: "G001",
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
     sku: "ST-1001",
     stocklevel: "500pcs",
     openingstock: "600pcs",
@@ -6804,6 +7045,9 @@ const Newgroup = [
     inventorychart: "Inventory Chart",
     saleschart: "Sales Chart",
     purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
     email: "info@apexglobal.com",
     website: "apexglobal.com",
     phone: "+233 20 123 4567",
@@ -6836,11 +7080,15 @@ const Newgroup = [
   },
   {
     id: 3,
-    name: "Steel Rod",
+    name: "General Repairs",
+    identify: "G001",
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
     sku: "ST-1001",
-    stocklevel: "50pcs",
-    openingstock: "200pcs",
-    reorderlevel: "75pcs",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
     sales: "50 pcs/mo",
     manufacturer: "Manufacturer",
     manupartnumber: "Part Number",
@@ -6860,6 +7108,9 @@ const Newgroup = [
     inventorychart: "Inventory Chart",
     saleschart: "Sales Chart",
     purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
     email: "info@apexglobal.com",
     website: "apexglobal.com",
     phone: "+233 20 123 4567",
@@ -6892,7 +7143,11 @@ const Newgroup = [
   },
   {
     id: 4,
-    name: "Steel Rod",
+    name: "General Repairs",
+    identify: "G001",
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
     sku: "ST-1001",
     stocklevel: "500pcs",
     openingstock: "600pcs",
@@ -6916,6 +7171,9 @@ const Newgroup = [
     inventorychart: "Inventory Chart",
     saleschart: "Sales Chart",
     purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
     email: "info@apexglobal.com",
     website: "apexglobal.com",
     phone: "+233 20 123 4567",
@@ -6953,6 +7211,7 @@ function GroupTable() {
   ========================= */
 
   const [profiles, setProfiles] = useState(Newgroup);
+  const [profilest, setProfilest] = useState(Newitems);
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -6983,6 +7242,15 @@ function GroupTable() {
       p.displayname.toLowerCase().includes(search.toLowerCase()) ||
       p.access.toLowerCase().includes(search.toLowerCase()) ||
       p.businessprofile.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  const filteredt = profilest.filter(
+    (p) =>
+      p.name.toLowerCase().includes(search.toLowerCase()) ||
+      p.stocklevel.toLowerCase().includes(search.toLowerCase()) ||
+      p.sku.toLowerCase().includes(search.toLowerCase()) ||
+      p.openingstock.toLowerCase().includes(search.toLowerCase()) ||
+      p.reorderlevel.toLowerCase().includes(search.toLowerCase()),
   );
 
   const salesUsageData = [
@@ -7632,6 +7900,13 @@ function GroupTable() {
     "Service Level Settings",
   ];
 
+  const stepss = [
+    "Basic Details",
+    "Attributes",
+    "Pricing & Stock",
+    "Options & Controls",
+  ];
+
   /* =========================
      HANDLERS
   ========================= */
@@ -7762,7 +8037,7 @@ function GroupTable() {
               }`}
             >
               <FaInfoCircle size={12} />
-              Details
+              Group information
             </button>
 
             <button
@@ -7773,8 +8048,8 @@ function GroupTable() {
                   : "border-transparent text-gray-500 hover:text-gray-700"
               }`}
             >
-              <img src={trends} className="w-5 h-5" />
-              Trends
+              <img src={list} className="w-5 h-5" />
+              Items
             </button>
 
             <button
@@ -7812,18 +8087,9 @@ function GroupTable() {
 
                   <div className="grid grid-cols-2 gap-y-6 gap-x-6">
                     {[
-                      ["Item Name", selectedProfile.name],
-                      ["Stock keeping Unit", selectedProfile.sku],
-                      ["Manufacturer", selectedProfile.manufacturer],
-                      [
-                        "Manufacturer Part Number",
-                        selectedProfile.manupartnumber,
-                      ],
-                      ["Barcode", selectedProfile.barcode],
-                      [
-                        "Universal Product Code",
-                        selectedProfile.uniproductcode,
-                      ],
+                      ["Group Name", selectedProfile.name],
+                      ["Display Name", selectedProfile.displayname],
+                      ["Accessible by Branch", selectedProfile.access],
                     ].map(([label, value]) => (
                       <div key={label}>
                         <p className="text-xs text-gray-400 mb-1 font-medium">
@@ -7839,7 +8105,7 @@ function GroupTable() {
                 <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 w-screen">
                   <div className="flex justify-between items-center mb-6">
                     <h2 className="font-semibold text-gray-800 text-base">
-                      Attributes
+                      Tax & Financial Details
                     </h2>
 
                     <button
@@ -7851,16 +8117,18 @@ function GroupTable() {
                     </button>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-y-6 gap-x-6">
+                  <div className="grid grid-cols-1 gap-y-6 gap-x-6">
                     {[
-                      ["Length", selectedProfile.lengths],
-                      ["Width", selectedProfile.width],
-                      ["Height", selectedProfile.height],
-                      ["Thickness", selectedProfile.thickness],
-                      ["Brand", selectedProfile.brand],
-                      ["Unit", selectedProfile.unit],
-                      ["Color Tag", selectedProfile.colortag],
-                      ["Size Tag", selectedProfile.sizetag],
+                      ["Tax Rate", selectedProfile.taxrate],
+                      [
+                        "Inventory Chart of Accounts",
+                        selectedProfile.inventorychart,
+                      ],
+                      ["Sales Chart of Accounts", selectedProfile.saleschart],
+                      [
+                        "Purchase Chart of Accounts",
+                        selectedProfile.purchasecart,
+                      ],
                     ].map(([label, value]) => (
                       <div key={label}>
                         <p className="text-xs text-gray-400 mb-1 font-medium">
@@ -7878,7 +8146,7 @@ function GroupTable() {
                 <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 w-screen">
                   <div className="flex justify-between items-center mb-6">
                     <h2 className="font-semibold text-gray-800 text-base">
-                      Pricing & Stock
+                      Additional Information
                     </h2>
 
                     <button
@@ -7892,20 +8160,9 @@ function GroupTable() {
 
                   <div className="grid grid-cols-2 gap-y-6 gap-x-6">
                     {[
-                      ["Item Cost", selectedProfile.itemcost],
-                      ["Selling Price", selectedProfile.sellingprice],
-                      ["Opening Stock", selectedProfile.openingstock],
-                      ["Reorder Level", selectedProfile.reorderlevel],
-                      ["Tax Rate", selectedProfile.taxrate],
-                      [
-                        "Inventory Chart of Accounts",
-                        selectedProfile.inventorychart,
-                      ],
-                      ["Sales Chart of Accounts", selectedProfile.saleschart],
-                      [
-                        "Purchase Chart of Accounts",
-                        selectedProfile.purchasecart,
-                      ],
+                      ["Warranty Note", selectedProfile.warranty],
+                      ["Terms and Conditions", selectedProfile.terms],
+                      ["Description", selectedProfile.describe],
                     ].map(([label, value]) => (
                       <div key={label}>
                         <p className="text-xs text-gray-400 mb-1 font-medium">
@@ -7933,42 +8190,53 @@ function GroupTable() {
                     </button>
                   </div>
 
-                  <div className="space-y-3">
-                    {[
-                      "Is Returnable",
-                      "Track Inventory",
-                      "Discount Applicable",
-                      "Markup Applicable",
-                      "Show Item on Printout",
-                      "Set Expiration Date",
-                      "Allow Selling Price to be editable in Estimates & Invoices",
-                      "Auto-Compute Quantity for Associated Items",
-                    ].map((item) => (
-                      <div key={item}>
-                        <div className="flex gap-2">
-                          <input
-                            type="checkbox"
-                            onChange={(e) => {
-                              if (item === "Set Expiration Date") {
-                                setShowExpirationDate(e.target.checked);
-                              }
-                            }}
-                          />
+                  <div className="space-y-4">
+                    {/* Tax Rate Applied */}
+                    <div>
+                      <label className="block mb-2 font-medium text-gray-700">
+                        Tax Rate Applied:
+                      </label>
 
-                          <p className="text-gray-500">{item}</p>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="radio"
+                            name="taxRateApplied"
+                            value="item-level"
+                          />
+                          <p className="text-gray-500">Item-level Tax Rate</p>
                         </div>
 
-                        {item === "Set Expiration Date" &&
-                          showExpirationDate && (
-                            <div className="mt-3 ml-6">
-                              <input
-                                type="date"
-                                className="border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none"
-                              />
-                            </div>
-                          )}
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="radio"
+                            name="taxRateApplied"
+                            value="group-level"
+                          />
+                          <p className="text-gray-500">
+                            Group/service level Tax Rate
+                          </p>
+                        </div>
                       </div>
-                    ))}
+                    </div>
+
+                    {/* Checkboxes */}
+                    <div className="space-y-3">
+                      {[
+                        "Shows Applicable Tax on Estimates, Invoices, etc",
+                        "Apply Group/Service-Level Labour to Estimates, Invoices, etc.",
+                        "Apply Group/Service-Level Warranty to Estimates, Invoices, etc.",
+                        "Apply Group/Service-Level Terms & Conditions to Estimates, Invoices, etc.",
+                      ].map((item) => (
+                        <div key={item}>
+                          <div className="flex gap-2">
+                            <input type="checkbox" />
+
+                            <p className="text-gray-500">{item}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -7978,89 +8246,142 @@ function GroupTable() {
           {/* INVOICE TAB */}
           {activeTab === "trend" && (
             <>
-              <div className="space-y-8">
-                {/* SALES VS USAGE */}
-                <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
-                  <h2 className="text-2xl font-semibold mb-6">
-                    Sales vs. Usage
-                  </h2>
+              <div className="bg-white text-gray-800 p-6 rounded-xl shadow">
+                {/* HEADER */}
 
-                  <ResponsiveContainer width="100%" height={350}>
-                    <AreaChart data={salesUsageData}>
-                      <CartesianGrid strokeDasharray="4 4" stroke="#d1d5db" />
+                <div className="flex justify-between items-center mb-4">
+                  <div className="flex-col">
+                    <h2 className="text-xl text-black">Items</h2>
+                  </div>
 
-                      <XAxis dataKey="month" />
-                      <YAxis domain={[0, 500]} />
-
-                      <Tooltip />
-
-                      <Legend
-                        verticalAlign="bottom"
-                        align="left"
-                        iconType="circle"
-                      />
-
-                      <Area
-                        type="monotone"
-                        dataKey="sales"
-                        stroke="#1E90FF"
-                        fill="#1E90FF"
-                        fillOpacity={0.2}
-                        strokeWidth={3}
-                        name="Sales"
-                      />
-
-                      <Line
-                        type="monotone"
-                        dataKey="usage"
-                        stroke="#F4A300"
-                        strokeWidth={3}
-                        dot={false}
-                        name="Usage"
-                      />
-                    </AreaChart>
-                  </ResponsiveContainer>
+                  <button
+                    onClick={() => setShowModal(true)}
+                    className="flex items-center gap-2 bg-green-500 hover:bg-green-600 px-4 py-2 rounded-md text-black font-normal"
+                  >
+                    Add Item
+                  </button>
                 </div>
 
-                {/* STOCK TRENDS VS SALES */}
-                <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
-                  <h2 className="text-2xl font-semibold mb-6">
-                    Stock Trends vs. Sales
-                  </h2>
+                <hr className="border-gray-200 mb-6" />
 
-                  <ResponsiveContainer width="100%" height={350}>
-                    <BarChart data={stockSalesData} barGap={12}>
-                      <CartesianGrid strokeDasharray="4 4" stroke="#d1d5db" />
-
-                      <XAxis dataKey="month" />
-                      <YAxis domain={[0, 500]} />
-
-                      <Tooltip />
-
-                      <Legend
-                        verticalAlign="bottom"
-                        align="left"
-                        iconType="circle"
-                      />
-
-                      <Bar
-                        dataKey="stock"
-                        fill="#1E90FF"
-                        radius={[10, 10, 0, 0]}
-                        name="Stock Trends"
-                        barSize={22}
-                      />
-
-                      <Bar
-                        dataKey="sales"
-                        fill="#16C172"
-                        radius={[10, 10, 0, 0]}
-                        name="Sales"
-                        barSize={22}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
+                {/* FILTER BAR */}
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-xl px-3 py-2 text-sm w-80">
+                    <FaSearch className="text-gray-400" />
+                    <input
+                      className="outline-none w-full placeholder-gray-400"
+                      placeholder="Search for an item"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </div>
+                  <div className="ml-auto flex items-center gap-2">
+                    <button className="flex items-center gap-2 border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white text-gray-600 hover:bg-gray-50">
+                      5 <FaChevronDown size={10} />
+                    </button>
+                    <button className="border border-green-400 text-green-600 rounded-xl px-3 py-2 hover:bg-green-50">
+                      <FaEllipsisH size={14} />
+                    </button>
+                  </div>
                 </div>
+
+                {/* TABLE */}
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        <th className="p-3 w-10">
+                          <input type="checkbox" />
+                        </th>
+
+                        <th className="text-left p-3">Item Name</th>
+                        <th className="text-left p-3">SKU</th>
+                        <th className="text-left p-3">Stock Level</th>
+                        <th className="text-left p-3">Opening Stock</th>
+                        <th className="text-left p-3">Reorder Level</th>
+                        <th className="text-left p-3">Sales</th>
+                        <th className="text-left p-3">Stock</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {filteredt.map((c, i) => (
+                        <tr
+                          key={c.id}
+                          className="border-b hover:bg-gray-50 transition cursor-pointer"
+                          onClick={() => openProfile(c, i)}
+                        >
+                          <td className="p-3">
+                            <input type="checkbox" />
+                          </td>
+
+                          <td className="p-3 flex items-center gap-3">
+                            <img
+                              src={c.avatar}
+                              className="w-8 h-8 rounded-full"
+                            />
+
+                            {c.name}
+                          </td>
+                          <td className="p-3">{c.sku}</td>
+                          <td className="p-3">
+                            <span
+                              className={`inline-block px-3 py-1 text-sm font-medium bg-white
+      ${c.stocklevel === "500pcs" ? "text-green-500" : "text-orange-500"}`}
+                            >
+                              {c.stocklevel}
+                            </span>
+                          </td>
+                          <td className="p-3">{c.openingstock}</td>
+                          <td className="p-3">{c.reorderlevel}</td>
+                          <td className="p-3">{c.sales}</td>
+                          <td className="p-3 flex items-center gap-3">
+                            <img
+                              src={stockstat}
+                              className="w-8 h-8 rounded-full"
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* PAGINATION */}
+                <div className="flex justify-between items-center mt-6 text-sm text-gray-500">
+                  <p>Showing 20 of 100</p>
+
+                  <div className="flex gap-2">
+                    {[1, 2, 3, 4].map((page) => (
+                      <button
+                        key={page}
+                        className={`border border-gray-300 w-8 h-8 rounded flex items-center justify-center ${
+                          page === 1
+                            ? "bg-green-100 text-green-700"
+                            : "hover:bg-gray-100"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {showModal && (
+                  <ItemModal
+                    title="Add Item"
+                    image={image}
+                    step={step}
+                    setStep={setStep}
+                    steps={stepss}
+                    nextStep={nextStep}
+                    prevStep={prevStep}
+                    handleClick={handleClick}
+                    handleImageChange={handleImageChange}
+                    fileInputRef={fileInputRef}
+                    setShowModal={setShowModal}
+                  />
+                )}
               </div>
             </>
           )}
@@ -8071,7 +8392,7 @@ function GroupTable() {
               <h2>Today</h2>
               <div className="flex gap-3">
                 <img src={dotgreen} className="w-6 h-6 " />
-                <p>Item Cost changed to GHC 400</p>{" "}
+                <p>Groups/Service-Level Tax Rate applied</p>{" "}
                 <img src={dot} className="w-3 h-3" />
                 <p>12:00 PM - December 09, 2024</p>
               </div>
@@ -8221,6 +8542,3584 @@ function GroupTable() {
           fileInputRef={fileInputRef}
           setShowModal={setShowModal}
         />
+      )}
+    </div>
+  );
+}
+
+function StockModal({ title, setShowModal }) {
+  const fileInputRef = useRef(null);
+
+  const [rows, setRows] = useState([
+    {
+      item: "",
+      detail: "",
+      description: "",
+      availableQty: "",
+      increaseQty: "",
+      decreaseQty: "",
+    },
+  ]);
+
+  const [attachments, setAttachments] = useState([]);
+
+  // ADD ROW
+  const addRow = () => {
+    setRows([
+      ...rows,
+      {
+        item: "",
+        detail: "",
+        description: "",
+        availableQty: "",
+        increaseQty: "",
+        decreaseQty: "",
+      },
+    ]);
+  };
+
+  // REMOVE ROW
+  const removeRow = (index) => {
+    const updated = rows.filter((_, i) => i !== index);
+    setRows(updated);
+  };
+
+  // HANDLE INPUT CHANGE
+  const handleRowChange = (index, field, value) => {
+    const updated = [...rows];
+    updated[index][field] = value;
+    setRows(updated);
+  };
+
+  // OPEN FILE INPUT
+  const handleUploadClick = () => {
+    fileInputRef.current.click();
+  };
+
+  // HANDLE FILE UPLOAD
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    setAttachments([...attachments, ...files]);
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center p-4">
+      <div className="bg-white w-[95%] max-w-7xl h-[90vh] rounded-2xl p-6 flex flex-col overflow-hidden">
+        {/* HEADER */}
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+              <Plus className="text-green-500" size={20} />
+            </div>
+
+            <h2 className="text-2xl font-semibold">{title}</h2>
+          </div>
+
+          <button
+            onClick={() => setShowModal(false)}
+            className="border rounded-full w-8 h-8 flex items-center justify-center"
+          >
+            <X size={16} />
+          </button>
+        </div>
+
+        {/* BODY */}
+        <div className="flex-1 overflow-y-auto pr-2">
+          {/* TOP FORM */}
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+            <InputField label="Reference Number" />
+
+            <SelectField label="Warehouse" />
+
+            <SelectField label="Reason" />
+
+            <SelectField label="Adjustment Chart of Accounts" />
+          </div>
+
+          {/* TABLE */}
+          <div className="mt-10">
+            <h3 className="text-lg font-semibold mb-4">Item Details Table</h3>
+
+            <div className="overflow-x-auto border rounded-xl">
+              {/* HEADER */}
+              <div className="min-w-[1100px] grid grid-cols-7 gap-3 bg-gray-100 p-4 text-sm font-semibold">
+                <p>Item</p>
+                <p>Detail</p>
+                <p>Description</p>
+                <p>Available Quantity</p>
+                <p>Increase Quantity</p>
+                <p>Decrease Quantity</p>
+                <p>Action</p>
+              </div>
+
+              {/* ROWS */}
+              {rows.map((row, index) => (
+                <div
+                  key={index}
+                  className="min-w-[1100px] grid grid-cols-7 gap-3 p-4 border-t"
+                >
+                  <select
+                    value={row.item}
+                    onChange={(e) =>
+                      handleRowChange(index, "item", e.target.value)
+                    }
+                    className="border rounded-lg px-3 h-11 outline-none"
+                  >
+                    <option value="">Select Item</option>
+                    <option value="Item 1">Item 1</option>
+                    <option value="Item 2">Item 2</option>
+                  </select>
+
+                  <input
+                    type="text"
+                    placeholder="Detail"
+                    value={row.detail}
+                    onChange={(e) =>
+                      handleRowChange(index, "detail", e.target.value)
+                    }
+                    className="border rounded-lg px-3 h-11 outline-none"
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="Description"
+                    value={row.description}
+                    onChange={(e) =>
+                      handleRowChange(index, "description", e.target.value)
+                    }
+                    className="border rounded-lg px-3 h-11 outline-none"
+                  />
+
+                  <input
+                    type="number"
+                    placeholder="Qty"
+                    value={row.availableQty}
+                    onChange={(e) =>
+                      handleRowChange(index, "availableQty", e.target.value)
+                    }
+                    className="border rounded-lg px-3 h-11 outline-none"
+                  />
+
+                  <input
+                    type="number"
+                    placeholder="Qty"
+                    value={row.increaseQty}
+                    onChange={(e) =>
+                      handleRowChange(index, "increaseQty", e.target.value)
+                    }
+                    className="border rounded-lg px-3 h-11 outline-none"
+                  />
+
+                  <input
+                    type="number"
+                    placeholder="Qty"
+                    value={row.decreaseQty}
+                    onChange={(e) =>
+                      handleRowChange(index, "decreaseQty", e.target.value)
+                    }
+                    className="border rounded-lg px-3 h-11 outline-none"
+                  />
+
+                  <button
+                    onClick={() => removeRow(index)}
+                    className="border rounded-lg flex items-center justify-center hover:bg-red-50"
+                  >
+                    <Trash2 size={18} className="text-red-500" />
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {/* ACTIONS */}
+            <div className="flex flex-wrap items-center gap-5 mt-5">
+              <button
+                onClick={addRow}
+                className="border border-green-500 text-green-500 px-5 py-2 rounded-lg flex items-center gap-2 hover:bg-green-50"
+              >
+                <Plus size={18} />
+                Add New Row
+              </button>
+
+              <button
+                onClick={handleUploadClick}
+                className="text-green-500 flex items-center gap-2"
+              >
+                <Upload size={18} />
+                Upload an attachment
+              </button>
+
+              <input
+                type="file"
+                multiple
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                className="hidden"
+              />
+            </div>
+
+            {/* ATTACHMENTS */}
+            {attachments.length > 0 && (
+              <div className="mt-4 space-y-2">
+                {attachments.map((file, index) => (
+                  <div
+                    key={index}
+                    className="border rounded-lg px-3 py-2 text-sm"
+                  >
+                    {file.name}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* DESCRIPTION */}
+          <div className="mt-10">
+            <label className="block mb-2 font-medium">Description</label>
+
+            <textarea
+              rows={5}
+              placeholder="Description"
+              className="border border-gray-300 w-full max-w-2xl rounded-xl p-3 outline-none"
+            />
+          </div>
+        </div>
+
+        {/* FOOTER */}
+        <div className="flex justify-end mt-6 gap-3">
+          <button
+            onClick={() => setShowModal(false)}
+            className="px-5 py-2 border rounded-lg"
+          >
+            Cancel
+          </button>
+
+          <button className="bg-green-500 text-white px-6 py-2 rounded-lg">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TransferModal({ title, setShowModal }) {
+  const fileInputRef = useRef(null);
+
+  const [rows, setRows] = useState([
+    {
+      item: "",
+      detail: "",
+      description: "",
+      availableQty: "",
+      transferQty: "",
+    },
+  ]);
+
+  const [attachments, setAttachments] = useState([]);
+
+  // ADD ROW
+  const addRow = () => {
+    setRows([
+      ...rows,
+      {
+        item: "",
+        detail: "",
+        description: "",
+        availableQty: "",
+        transferQty: "",
+      },
+    ]);
+  };
+
+  // REMOVE ROW
+  const removeRow = (index) => {
+    const updated = rows.filter((_, i) => i !== index);
+    setRows(updated);
+  };
+
+  // HANDLE INPUT CHANGE
+  const handleRowChange = (index, field, value) => {
+    const updated = [...rows];
+    updated[index][field] = value;
+    setRows(updated);
+  };
+
+  // OPEN FILE INPUT
+  const handleUploadClick = () => {
+    fileInputRef.current.click();
+  };
+
+  // HANDLE FILE UPLOAD
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    setAttachments([...attachments, ...files]);
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center p-4">
+      <div className="bg-white w-[95%] max-w-7xl h-[90vh] rounded-2xl p-6 flex flex-col overflow-hidden">
+        {/* HEADER */}
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+              <Plus className="text-green-500" size={20} />
+            </div>
+
+            <h2 className="text-2xl font-semibold">{title}</h2>
+          </div>
+
+          <button
+            onClick={() => setShowModal(false)}
+            className="border rounded-full w-8 h-8 flex items-center justify-center"
+          >
+            <X size={16} />
+          </button>
+        </div>
+
+        {/* BODY */}
+        <div className="flex-1 overflow-y-auto pr-2">
+          {/* TOP FORM */}
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+            <SelectField label="Source Warehouse" />
+
+            <SelectField label="Destination Warehouse" />
+
+            <SelectField label="Reason" />
+
+            <SelectField label="Transfer Type" />
+          </div>
+
+          {/* TABLE */}
+          <div className="mt-10">
+            <h3 className="text-lg font-semibold mb-4">Item Details Table</h3>
+
+            <div className="overflow-x-auto border rounded-xl">
+              {/* HEADER */}
+              <div className="min-w-[1100px] grid grid-cols-7 gap-3 bg-gray-100 p-4 text-sm font-semibold">
+                <p>Item</p>
+                <p>Detail</p>
+                <p>Description</p>
+                <p>SRC/DST Available Quantity</p>
+                <p>Quantity to Transfer</p>
+                <p>Action</p>
+              </div>
+
+              {/* ROWS */}
+              {rows.map((row, index) => (
+                <div
+                  key={index}
+                  className="min-w-[1100px] grid grid-cols-7 gap-3 p-4 border-t"
+                >
+                  <select
+                    value={row.item}
+                    onChange={(e) =>
+                      handleRowChange(index, "item", e.target.value)
+                    }
+                    className="border rounded-lg px-3 h-11 outline-none"
+                  >
+                    <option value="">Select Item</option>
+                    <option value="Item 1">Item 1</option>
+                    <option value="Item 2">Item 2</option>
+                  </select>
+
+                  <input
+                    type="text"
+                    placeholder="Detail"
+                    value={row.detail}
+                    onChange={(e) =>
+                      handleRowChange(index, "detail", e.target.value)
+                    }
+                    className="border rounded-lg px-3 h-11 outline-none"
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="Description"
+                    value={row.description}
+                    onChange={(e) =>
+                      handleRowChange(index, "description", e.target.value)
+                    }
+                    className="border rounded-lg px-3 h-11 outline-none"
+                  />
+
+                  <input
+                    type="number"
+                    placeholder="Qty"
+                    value={row.availableQty}
+                    onChange={(e) =>
+                      handleRowChange(index, "availableQty", e.target.value)
+                    }
+                    className="border rounded-lg px-3 h-11 outline-none"
+                  />
+
+                  <input
+                    type="number"
+                    placeholder="Qty"
+                    value={row.transferQty}
+                    onChange={(e) =>
+                      handleRowChange(index, "transferQty", e.target.value)
+                    }
+                    className="border rounded-lg px-3 h-11 outline-none"
+                  />
+
+                  <button
+                    onClick={() => removeRow(index)}
+                    className="border rounded-lg flex items-center justify-center hover:bg-red-50"
+                  >
+                    <Trash2 size={18} className="text-red-500" />
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {/* ACTIONS */}
+            <div className="flex flex-wrap items-center gap-5 mt-5">
+              <button
+                onClick={addRow}
+                className="border border-green-500 text-green-500 px-5 py-2 rounded-lg flex items-center gap-2 hover:bg-green-50"
+              >
+                <Plus size={18} />
+                Add New Row
+              </button>
+
+              <button
+                onClick={handleUploadClick}
+                className="text-green-500 flex items-center gap-2"
+              >
+                <Upload size={18} />
+                Upload an attachment
+              </button>
+
+              <input
+                type="file"
+                multiple
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                className="hidden"
+              />
+            </div>
+
+            {/* ATTACHMENTS */}
+            {attachments.length > 0 && (
+              <div className="mt-4 space-y-2">
+                {attachments.map((file, index) => (
+                  <div
+                    key={index}
+                    className="border rounded-lg px-3 py-2 text-sm"
+                  >
+                    {file.name}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* DESCRIPTION */}
+          <div className="mt-10">
+            <label className="block mb-2 font-medium">Description</label>
+
+            <textarea
+              rows={5}
+              placeholder="Description"
+              className="border border-gray-300 w-full max-w-2xl rounded-xl p-3 outline-none"
+            />
+          </div>
+        </div>
+
+        {/* FOOTER */}
+        <div className="flex justify-end mt-6 gap-3">
+          <button
+            onClick={() => setShowModal(false)}
+            className="px-5 py-2 border rounded-lg"
+          >
+            Cancel
+          </button>
+
+          <button className="bg-green-500 text-white px-6 py-2 rounded-lg">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+// export default GroupModal;
+
+/* INPUT FIELD */
+// function InputField({ label }) {
+//   return (
+//     <div>
+//       <label className="block mb-2 text-sm font-medium">{label}</label>
+
+//       <input
+//         type="text"
+//         placeholder={label}
+//         className="border border-gray-300 w-full h-11 rounded-lg px-3 outline-none"
+//       />
+//     </div>
+//   );
+// }
+
+/* SELECT FIELD */
+function SelectField({ label }) {
+  return (
+    <div>
+      <label className="block mb-2 text-sm font-medium">{label}</label>
+
+      <select className="border border-gray-300 w-full h-11 rounded-lg px-3 outline-none text-gray-500">
+        <option>Select from list</option>
+      </select>
+    </div>
+  );
+}
+
+const Newstock = [
+  {
+    id: 1,
+    referencenumber: "SA-20240201",
+    warehouse: "Main Warehouse",
+    destination: "Regional Depot",
+    reason: "Damaged Goods",
+    status: "Initiated",
+    name: "General Repairs",
+    identify: "G001",
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    brand: "Brand",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "apexglobal.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "Ghana",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description: " Items damaged in transit",
+  },
+  {
+    id: 2,
+    referencenumber: "SA-20240201",
+    warehouse: "Main Warehouse",
+    destination: "Regional Depot",
+    reason: "Damaged Goods",
+    status: "Initiated",
+    name: "General Repairs",
+    identify: "G001",
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    brand: "Brand",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "apexglobal.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "Ghana",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description:
+      " is a longstanding client specializing in consultancy services for small and medium-sized enterprises. Known for consistent and timely payments, Jane relies on her client manager to facilitate communication and ensure seamless service delivery. Her preferred communication channels include email for official correspondence and WhatsApp for quick updates.",
+  },
+  {
+    id: 3,
+    referencenumber: "SA-20240201",
+    warehouse: "Main Warehouse",
+    destination: "Regional Depot",
+    reason: "Damaged Goods",
+    status: "Initiated",
+    name: "General Repairs",
+    identify: "G001",
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    brand: "Brand",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "apexglobal.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "Ghana",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description:
+      " is a longstanding client specializing in consultancy services for small and medium-sized enterprises. Known for consistent and timely payments, Jane relies on her client manager to facilitate communication and ensure seamless service delivery. Her preferred communication channels include email for official correspondence and WhatsApp for quick updates.",
+  },
+  {
+    id: 4,
+    referencenumber: "SA-20240201",
+    warehouse: "Main Warehouse",
+    destination: "Regional Depot",
+    reason: "Damaged Goods",
+    status: "Initiated",
+    name: "General Repairs",
+    identify: "G001",
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    brand: "Brand",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "apexglobal.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "Ghana",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description:
+      " is a longstanding client specializing in consultancy services for small and medium-sized enterprises. Known for consistent and timely payments, Jane relies on her client manager to facilitate communication and ensure seamless service delivery. Her preferred communication channels include email for official correspondence and WhatsApp for quick updates.",
+  },
+];
+function StockTable() {
+  /* =========================
+     STATES
+  ========================= */
+
+  const [profiles, setProfiles] = useState(Newstock);
+  const [profilest, setProfilest] = useState(Newitemss);
+  const [selectedProfile, setSelectedProfile] = useState(null);
+  const [search, setSearch] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
+  const [step, setStep] = useState(0);
+  const [activeTab, setActiveTab] = useState("details");
+
+  const [activeSettingsSection, setActiveSettingsSection] =
+    useState("Upload Logo");
+
+  const [profileIndex, setProfileIndex] = useState(0);
+
+  const [logoPreview, setLogoPreview] = useState(null);
+
+  const [image, setImage] = useState(null);
+
+  const fileInputRef = useRef(null);
+  const [showExpirationDate, setShowExpirationDate] = useState(false);
+
+  // const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const file = {
+    name: "Document.pdf",
+    type: "PDF",
+    size: "1.5 MB",
+    url: "/sample.pdf", // replace with actual file URL
+  };
+
+  const handleDownload = () => {
+    const link = document.createElement("a");
+    link.href = file.url;
+    link.download = file.name;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleDeleten = () => {
+    alert("File deleted");
+    // Add your delete logic here
+  };
+
+  /* =========================
+     FILTERED DATA
+  ========================= */
+
+  const filtered = profiles.filter(
+    (p) =>
+      p.referencenumber?.toLowerCase().includes(search.toLowerCase()) ||
+      p.warehouse?.toLowerCase().includes(search.toLowerCase()) ||
+      p.reason?.toLowerCase().includes(search.toLowerCase()) ||
+      p.description.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  const filteredt = profilest.filter(
+    (p) =>
+      p.name.toLowerCase().includes(search.toLowerCase()) ||
+      p.detail.toLowerCase().includes(search.toLowerCase()) ||
+      p.description.toLowerCase().includes(search.toLowerCase()) ||
+      p.available.toLowerCase().includes(search.toLowerCase()) ||
+      p.increase.toLowerCase().includes(search.toLowerCase()) ||
+      p.decrease.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  const salesUsageData = [
+    { month: "January", sales: 320, usage: 50 },
+    { month: "February", sales: 220, usage: 210 },
+    { month: "March", sales: 430, usage: 70 },
+    { month: "April", sales: 100, usage: 180 },
+    { month: "May", sales: 140, usage: 230 },
+    { month: "June", sales: 410, usage: 130 },
+    { month: "July", sales: 380, usage: 160 },
+    { month: "August", sales: 90, usage: 180 },
+    { month: "September", sales: 370, usage: 60 },
+    { month: "October", sales: 420, usage: 120 },
+    { month: "November", sales: 180, usage: 200 },
+    { month: "December", sales: 250, usage: 110 },
+  ];
+
+  const stockSalesData = [
+    { month: "January", stock: 40, sales: 150 },
+    { month: "February", stock: 330, sales: 30 },
+    { month: "March", stock: 240, sales: 460 },
+    { month: "April", stock: 150, sales: 260 },
+    { month: "May", stock: 500, sales: 310 },
+    { month: "June", stock: 340, sales: 90 },
+    { month: "July", stock: 310, sales: 230 },
+    { month: "August", stock: 80, sales: 150 },
+    { month: "September", stock: 85, sales: 220 },
+    { month: "October", stock: 430, sales: 460 },
+    { month: "November", stock: 160, sales: 300 },
+    { month: "December", stock: 200, sales: 110 },
+  ];
+
+  // Dummy Invoice Data
+  const invoices = [
+    {
+      id: "INV-1001",
+      dateIssued: "2025-08-01",
+      dueDate: "2025-08-10",
+      amount: 2500,
+      status: "Paid",
+    },
+    {
+      id: "INV-1002",
+      dateIssued: "2025-08-03",
+      dueDate: "2025-08-12",
+      amount: 1200,
+      status: "Unpaid",
+    },
+    {
+      id: "INV-1003",
+      dateIssued: "2025-08-05",
+      dueDate: "2025-08-15",
+      amount: 4000,
+      status: "Overdue",
+    },
+    {
+      id: "INV-1004",
+      dateIssued: "2025-08-07",
+      dueDate: "2025-08-17",
+      amount: 950,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+  ];
+
+  // Dynamic Stats
+  const totalInvoices = invoices.length;
+
+  const paidCount = invoices.filter(
+    (invoice) => invoice.status === "Paid",
+  ).length;
+
+  const unpaidCount = invoices.filter(
+    (invoice) => invoice.status === "Unpaid",
+  ).length;
+
+  const overdueCount = invoices.filter(
+    (invoice) => invoice.status === "Overdue",
+  ).length;
+
+  const revenue = invoices
+    .filter((invoice) => invoice.status === "Paid")
+    .reduce((acc, invoice) => acc + invoice.amount, 0);
+
+  const outstandingAmount = invoices
+    .filter(
+      (invoice) => invoice.status === "Unpaid" || invoice.status === "Overdue",
+    )
+    .reduce((acc, invoice) => acc + invoice.amount, 0);
+
+  const estimation = [
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Declined",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Pending",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+  ];
+
+  const totalestimate = estimation.length;
+
+  const approvedCount = estimation.filter(
+    (esteem) => esteem.status === "Approved",
+  ).length;
+
+  const declinedCount = estimation.filter(
+    (esteem) => esteem.status === "Declined",
+  ).length;
+
+  const pendingCount = estimation.filter(
+    (esteem) => esteem.status === "Pending",
+  ).length;
+
+  const finalEstimate = estimation
+    .filter((esteem) => esteem.status === "Approved")
+    .reduce((acc, esteem) => acc + esteem.amount, 0);
+
+  const payments = [
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+  ];
+
+  const totalpayments = payments.length;
+
+  const attachments = [
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+  ];
+
+  const totalattachments = attachments.length;
+
+  /* =========================
+     STEPS
+  ========================= */
+
+  const steps = [
+    "Basic Details",
+    "Tax & Financial Details",
+    "Additional Information",
+    "Service Level Settings",
+  ];
+
+  const stepss = [
+    "Basic Details",
+    "Attributes",
+    "Pricing & Stock",
+    "Options & Controls",
+  ];
+
+  /* =========================
+     HANDLERS
+  ========================= */
+
+  const openProfile = (profile, index) => {
+    setSelectedProfile(profile);
+    setProfileIndex(index);
+    setActiveTab("details");
+    setActiveSettingsSection("Upload Logo");
+    setLogoPreview(null);
+  };
+
+  const nextStep = () => {
+    if (step < steps.length - 1) {
+      setStep(step + 1);
+    }
+  };
+
+  const prevStep = () => {
+    if (step > 0) {
+      setStep(step - 1);
+    }
+  };
+
+  const handleClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setImage(imageUrl);
+    }
+  };
+
+  const handleNavProfile = (direction) => {
+    const newIndex = profileIndex + direction;
+
+    if (newIndex >= 0 && newIndex < filtered.length) {
+      setProfileIndex(newIndex);
+      setSelectedProfile(filtered[newIndex]);
+    }
+  };
+
+  const handleDelete = (id) => {
+    setProfiles((prev) => prev.filter((item) => item.id !== id));
+    setSelectedProfile(null);
+  };
+
+  /* =========================
+     DETAIL VIEW
+  ========================= */
+
+  if (selectedProfile) {
+    return (
+      <div className="min-h-full bg-gray-50">
+        {/* TOP NAV */}
+        <div className="bg-white border-b border-gray-200 px-6 py-3 flex items-center gap-3 text-sm">
+          <button
+            onClick={() => setSelectedProfile(null)}
+            className="flex items-center gap-1.5 text-green-600 hover:text-green-700 font-medium"
+          >
+            <FaArrowLeft size={11} />
+            Back to Stock Adjustments
+          </button>
+
+          <div className="w-px h-4 bg-gray-300" />
+
+          <div className="flex items-center gap-1 text-gray-500">
+            <button
+              onClick={() => handleNavProfile(-1)}
+              disabled={profileIndex === 0}
+              className="p-1 hover:bg-gray-100 rounded disabled:opacity-30 transition"
+            >
+              <ChevronUp size={13} />
+            </button>
+
+            <button
+              onClick={() => handleNavProfile(1)}
+              disabled={profileIndex === filtered.length - 1}
+              className="p-1 hover:bg-gray-100 rounded disabled:opacity-30 transition"
+            >
+              <ChevronDown size={13} />
+            </button>
+
+            <span className="text-xs">
+              {profileIndex + 1} of {filtered.length}
+            </span>
+          </div>
+        </div>
+
+        {/* CONTENT */}
+        <div className="px-6 pt-5 pb-10 max-w-5xl">
+          {/* PROFILE HEADER */}
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-4">
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  {selectedProfile.referencenumber}
+                </h1>
+              </div>
+            </div>
+
+            <button
+              onClick={() => handleDelete(selectedProfile.id)}
+              className="flex items-center gap-2 border border-red-300 text-red-500 hover:bg-red-50 px-4 py-2 rounded-lg text-sm font-medium transition"
+            >
+              <FaTrash size={11} />
+              Delete Stock Adjustment
+            </button>
+          </div>
+
+          {/* TABS */}
+          <div className="flex gap-0 border-b border-gray-200 mb-5">
+            <button
+              onClick={() => setActiveTab("details")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "details"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <FaInfoCircle size={12} />
+              Stock Adjustment information
+            </button>
+
+            <button
+              onClick={() => setActiveTab("trend")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "trend"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={list} className="w-5 h-5" />
+              Items
+            </button>
+
+            <button
+              onClick={() => setActiveTab("attach")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "attach"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={attachment} className="w-5 h-5" />
+              Attachments
+            </button>
+
+            <button
+              onClick={() => setActiveTab("historian")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${activeTab === "historian" ? "border-green-500 text-green-600" : "border-transparent text-gray-500 hover:text-gray-700"}`}
+            >
+              <img src={historytime} className="w-5 h-5" /> History
+            </button>
+          </div>
+
+          {/* DETAILS TAB */}
+          {activeTab === "details" && (
+            <>
+              <div className="flex gap-3">
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 w-screen">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="font-semibold text-gray-800 text-base">
+                      Basic Details
+                    </h2>
+
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="flex items-center gap-1.5 border border-gray-300 text-gray-600 hover:bg-gray-50 px-3 py-1.5 rounded-lg text-sm transition"
+                    >
+                      <Pencil size={12} />
+                      Edit
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-y-6 gap-x-6">
+                    {[
+                      ["Reference Number", selectedProfile.referencenumber],
+                      ["Warehouse", selectedProfile.warehouse],
+                      ["Reason Transfer", selectedProfile.reason],
+                      ["Adjustment Chart of Accounts", ""],
+                      ["Description", selectedProfile.description],
+                    ].map(([label, value]) => (
+                      <div key={label}>
+                        <p className="text-xs text-gray-400 mb-1 font-medium">
+                          {label}
+                        </p>
+
+                        <p className="text-sm text-gray-800">{value}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* INVOICE TAB */}
+          {activeTab === "trend" && (
+            <>
+              <div className="bg-white text-gray-800 p-6 rounded-xl shadow">
+                {/* HEADER */}
+
+                <div className="flex justify-between items-center mb-4">
+                  <div className="flex-col">
+                    <h2 className="text-xl text-black">Items</h2>
+                  </div>
+
+                  {/* <button
+                    onClick={() => setShowModal(true)}
+                    className="flex items-center gap-2 bg-green-500 hover:bg-green-600 px-4 py-2 rounded-md text-black font-normal"
+                  >
+                    Add Item
+                  </button> */}
+                </div>
+
+                {/* FILTER BAR */}
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-xl px-3 py-2 text-sm w-80">
+                    <FaSearch className="text-gray-400" />
+                    <input
+                      className="outline-none w-full placeholder-gray-400"
+                      placeholder="Search for an item"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </div>
+                  <div className="ml-auto flex items-center gap-2">
+                    <button className="flex items-center gap-2 border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white text-gray-600 hover:bg-gray-50">
+                      5 <FaChevronDown size={10} />
+                    </button>
+                    <button className="border border-green-400 text-green-600 rounded-xl px-3 py-2 hover:bg-green-50">
+                      <FaEllipsisH size={14} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* TABLE */}
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        <th className="p-3 w-10">
+                          <input type="checkbox" />
+                        </th>
+
+                        <th className="text-left p-3">Item</th>
+                        <th className="text-left p-3">Detail</th>
+                        <th className="text-left p-3">Description</th>
+                        <th className="text-left p-3">Available Quantity</th>
+                        <th className="text-left p-3">Increase Quantity</th>
+                        <th className="text-left p-3">Decrease Quantity</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {filteredt.map((c, i) => (
+                        <tr
+                          key={c.id}
+                          className="border-b hover:bg-gray-50 transition cursor-pointer"
+                          onClick={() => openProfile(c, i)}
+                        >
+                          <td className="p-3">
+                            <input type="checkbox" />
+                          </td>
+
+                          <td className="p-3 flex items-center gap-3">
+                            {c.name}
+                          </td>
+                          <td className="p-3">{c.detail}</td>
+
+                          <td className="p-3">{c.description}</td>
+                          <td className="p-3">{c.available}</td>
+                          <td className="p-3">{c.increase}</td>
+                          <td className="p-3">{c.decrease}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* PAGINATION */}
+                <div className="flex justify-between items-center mt-6 text-sm text-gray-500">
+                  <p>Showing 20 of 100</p>
+
+                  <div className="flex gap-2">
+                    {[1, 2, 3, 4].map((page) => (
+                      <button
+                        key={page}
+                        className={`border border-gray-300 w-8 h-8 rounded flex items-center justify-center ${
+                          page === 1
+                            ? "bg-green-100 text-green-700"
+                            : "hover:bg-gray-100"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {showModal && (
+                  <ItemModal
+                    title="Add Item"
+                    image={image}
+                    step={step}
+                    setStep={setStep}
+                    steps={stepss}
+                    nextStep={nextStep}
+                    prevStep={prevStep}
+                    handleClick={handleClick}
+                    handleImageChange={handleImageChange}
+                    fileInputRef={fileInputRef}
+                    setShowModal={setShowModal}
+                  />
+                )}
+              </div>
+            </>
+          )}
+
+          {activeTab === "attach" && (
+            <>
+              <div className="px-10 py-14 text-black">
+                <h1 className="mb-8 text-3xl font-semibold tracking-tight">
+                  Attachments
+                </h1>
+
+                <div className="flex  items-center justify-between rounded-3xl border border-zinc-30 px-6 py-7 shadow-lg transition-all duration-200 hover:border-zinc-400">
+                  {/* Left Section */}
+                  <div className="flex items-center gap-5">
+                    {/* File Icon */}
+                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-pink-500">
+                      <FileText className="h-8 w-8 text-black" />
+                    </div>
+
+                    {/* File Details */}
+                    <div className="flex items-center gap-3 text-lg">
+                      <span className="font-medium text-black">
+                        {file.type}
+                      </span>
+
+                      <span className="text-zinc-500">•</span>
+
+                      <span className="text-zinc-300">{file.size}</span>
+                    </div>
+                  </div>
+
+                  {/* Right Section */}
+                  <div className="flex items-center gap-5">
+                    {/* Download Button */}
+                    <button
+                      onClick={handleDownload}
+                      className="rounded-full p-2 text-zinc-400 transition hover:bg-zinc-800 hover:text-white"
+                      aria-label="Download file"
+                    >
+                      <Download className="h-6 w-6" />
+                    </button>
+
+                    {/* Delete Button */}
+                    <button
+                      onClick={handleDeleten}
+                      className="rounded-full p-2 text-zinc-400 transition hover:bg-red-500/10 hover:text-red-400"
+                      aria-label="Delete file"
+                    >
+                      <Trash2 className="h-6 w-6" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Hidden File Input (Optional if you want upload support later) */}
+                <input ref={fileInputRef} type="file" className="hidden" />
+              </div>
+            </>
+          )}
+          {/* ACTIVITY TAB */}
+          {activeTab === "historian" && (
+            <>
+              <h2>Today</h2>
+              <div className="flex gap-3">
+                <img src={dotgreen} className="w-6 h-6 " />
+                <p>Increase Quantity changed to 500pcs</p>{" "}
+                <img src={dot} className="w-3 h-3" />
+                <p>12:00 PM - December 09, 2024</p>
+              </div>
+              <img src={lineman} className="h-10" />
+              <div className="flex gap-3">
+                <img src={dotgreen} className="w-6 h-6 " />
+                <p>Nails was added to list</p>{" "}
+                <img src={dot} className="w-3 h-3" />
+                <p>12:00 PM - December 09, 2024</p>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* EDIT MODAL */}
+        {showModal && (
+          <GroupModal
+            title="Edit Group"
+            image={selectedProfile.avatar}
+            step={step}
+            setStep={setStep}
+            steps={steps}
+            nextStep={nextStep}
+            prevStep={prevStep}
+            handleClick={handleClick}
+            handleImageChange={handleImageChange}
+            fileInputRef={fileInputRef}
+            setShowModal={setShowModal}
+          />
+        )}
+      </div>
+    );
+  }
+
+  /* =========================
+     TABLE VIEW
+  ========================= */
+
+  return (
+    <div className="bg-white text-gray-800 p-6 rounded-xl shadow">
+      {/* HEADER */}
+
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex-col">
+          <h2 className="text-xl text-black">Stock Adjustments</h2>
+          <p>100 items</p>
+        </div>
+
+        <button
+          onClick={() => setShowModal(true)}
+          className="flex items-center gap-2 bg-green-500 hover:bg-green-600 px-4 py-2 rounded-md text-black font-normal"
+        >
+          Add Item
+        </button>
+      </div>
+
+      <hr className="border-gray-200 mb-6" />
+
+      {/* FILTER BAR */}
+      <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-xl px-3 py-2 text-sm w-80">
+          <FaSearch className="text-gray-400" />
+          <input
+            className="outline-none w-full placeholder-gray-400"
+            placeholder="Search for an item"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        <div className="ml-auto flex items-center gap-2">
+          <button className="flex items-center gap-2 border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white text-gray-600 hover:bg-gray-50">
+            5 <FaChevronDown size={10} />
+          </button>
+          <button className="border border-green-400 text-green-600 rounded-xl px-3 py-2 hover:bg-green-50">
+            <FaEllipsisH size={14} />
+          </button>
+        </div>
+      </div>
+
+      {/* TABLE */}
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="p-3 w-10">
+                <input type="checkbox" />
+              </th>
+
+              <th className="text-left p-3">Refernce Number</th>
+              <th className="text-left p-3">Warehouse</th>
+              <th className="text-left p-3">Reason</th>
+              <th className="text-left p-3">Description</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {filtered.map((c, i) => (
+              <tr
+                key={c.id}
+                className="border-b hover:bg-gray-50 transition cursor-pointer"
+                onClick={() => openProfile(c, i)}
+              >
+                <td className="p-3">
+                  <input type="checkbox" />
+                </td>
+
+                <td className="p-3">{c.referencenumber}</td>
+
+                <td className="p-3">{c.warehouse}</td>
+                <td className="p-3">{c.reason}</td>
+                <td className="p-3">{c.description}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* PAGINATION */}
+      <div className="flex justify-between items-center mt-6 text-sm text-gray-500">
+        <p>Showing 20 of 100</p>
+
+        <div className="flex gap-2">
+          {[1, 2, 3, 4].map((page) => (
+            <button
+              key={page}
+              className={`border border-gray-300 w-8 h-8 rounded flex items-center justify-center ${
+                page === 1 ? "bg-green-100 text-green-700" : "hover:bg-gray-100"
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {showModal && <StockModal title="Add Item" setShowModal={setShowModal} />}
+    </div>
+  );
+}
+
+const Newtransfer = [
+  {
+    id: 1,
+    transfertype: "Scheduled",
+    referencenumber: "TI-20240201",
+    source: "Main Warehouse",
+    destination: "Regional Depot",
+    reason: "Restocking",
+    status: "Initiated",
+    name: "General Repairs",
+    identify: "G001",
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    brand: "Brand",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "apexglobal.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "Ghana",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description: " Items damaged in transit",
+  },
+  {
+    id: 2,
+    transfertype: "Scheduled",
+    referencenumber: "TI-20240201",
+    source: "Main Warehouse",
+    destination: "Regional Depot",
+    reason: "Restocking",
+    status: "Initiated",
+    name: "General Repairs",
+    identify: "G001",
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    brand: "Brand",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "apexglobal.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "Ghana",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description:
+      " is a longstanding client specializing in consultancy services for small and medium-sized enterprises. Known for consistent and timely payments, Jane relies on her client manager to facilitate communication and ensure seamless service delivery. Her preferred communication channels include email for official correspondence and WhatsApp for quick updates.",
+  },
+  {
+    id: 3,
+    transfertype: "Scheduled",
+    referencenumber: "TI-20240201",
+    source: "Main Warehouse",
+    destination: "Regional Depot",
+    reason: "Restocking",
+    status: "Initiated",
+    name: "General Repairs",
+    identify: "G001",
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    brand: "Brand",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "apexglobal.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "Ghana",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description:
+      " is a longstanding client specializing in consultancy services for small and medium-sized enterprises. Known for consistent and timely payments, Jane relies on her client manager to facilitate communication and ensure seamless service delivery. Her preferred communication channels include email for official correspondence and WhatsApp for quick updates.",
+  },
+  {
+    id: 4,
+    transfertype: "Scheduled",
+    referencenumber: "TI-20240201",
+    source: "Main Warehouse",
+    destination: "Regional Depot",
+    reason: "Restocking",
+    status: "Initiated",
+    name: "General Repairs",
+    identify: "G001",
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    brand: "Brand",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "apexglobal.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "Ghana",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description:
+      " is a longstanding client specializing in consultancy services for small and medium-sized enterprises. Known for consistent and timely payments, Jane relies on her client manager to facilitate communication and ensure seamless service delivery. Her preferred communication channels include email for official correspondence and WhatsApp for quick updates.",
+  },
+];
+function TransferTable() {
+  /* =========================
+     STATES
+  ========================= */
+
+  const [profiles, setProfiles] = useState(Newtransfer);
+  const [profilest, setProfilest] = useState(Newitemss);
+  const [selectedProfile, setSelectedProfile] = useState(null);
+  const [search, setSearch] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
+  const [step, setStep] = useState(0);
+  const [activeTab, setActiveTab] = useState("details");
+
+  const [activeSettingsSection, setActiveSettingsSection] =
+    useState("Upload Logo");
+
+  const [profileIndex, setProfileIndex] = useState(0);
+
+  const [logoPreview, setLogoPreview] = useState(null);
+
+  const [image, setImage] = useState(null);
+
+  const fileInputRef = useRef(null);
+  const [showExpirationDate, setShowExpirationDate] = useState(false);
+
+  // const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const file = {
+    name: "Document.pdf",
+    type: "PDF",
+    size: "1.5 MB",
+    url: "/sample.pdf", // replace with actual file URL
+  };
+
+  const handleDownload = () => {
+    const link = document.createElement("a");
+    link.href = file.url;
+    link.download = file.name;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleDeleten = () => {
+    alert("File deleted");
+    // Add your delete logic here
+  };
+
+  /* =========================
+     FILTERED DATA
+  ========================= */
+
+  const filtered = profiles.filter(
+    (p) =>
+      p.referencenumber?.toLowerCase().includes(search.toLowerCase()) ||
+      p.source?.toLowerCase().includes(search.toLowerCase()) ||
+      p.reason?.toLowerCase().includes(search.toLowerCase()) ||
+      p.destination.toLowerCase().includes(search.toLowerCase()) ||
+      p.status.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  const filteredt = profilest.filter(
+    (p) =>
+      p.name.toLowerCase().includes(search.toLowerCase()) ||
+      p.detail.toLowerCase().includes(search.toLowerCase()) ||
+      p.description.toLowerCase().includes(search.toLowerCase()) ||
+      p.available.toLowerCase().includes(search.toLowerCase()) ||
+      p.increase.toLowerCase().includes(search.toLowerCase()) ||
+      p.decrease.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  const salesUsageData = [
+    { month: "January", sales: 320, usage: 50 },
+    { month: "February", sales: 220, usage: 210 },
+    { month: "March", sales: 430, usage: 70 },
+    { month: "April", sales: 100, usage: 180 },
+    { month: "May", sales: 140, usage: 230 },
+    { month: "June", sales: 410, usage: 130 },
+    { month: "July", sales: 380, usage: 160 },
+    { month: "August", sales: 90, usage: 180 },
+    { month: "September", sales: 370, usage: 60 },
+    { month: "October", sales: 420, usage: 120 },
+    { month: "November", sales: 180, usage: 200 },
+    { month: "December", sales: 250, usage: 110 },
+  ];
+
+  const stockSalesData = [
+    { month: "January", stock: 40, sales: 150 },
+    { month: "February", stock: 330, sales: 30 },
+    { month: "March", stock: 240, sales: 460 },
+    { month: "April", stock: 150, sales: 260 },
+    { month: "May", stock: 500, sales: 310 },
+    { month: "June", stock: 340, sales: 90 },
+    { month: "July", stock: 310, sales: 230 },
+    { month: "August", stock: 80, sales: 150 },
+    { month: "September", stock: 85, sales: 220 },
+    { month: "October", stock: 430, sales: 460 },
+    { month: "November", stock: 160, sales: 300 },
+    { month: "December", stock: 200, sales: 110 },
+  ];
+
+  // Dummy Invoice Data
+  const invoices = [
+    {
+      id: "INV-1001",
+      dateIssued: "2025-08-01",
+      dueDate: "2025-08-10",
+      amount: 2500,
+      status: "Paid",
+    },
+    {
+      id: "INV-1002",
+      dateIssued: "2025-08-03",
+      dueDate: "2025-08-12",
+      amount: 1200,
+      status: "Unpaid",
+    },
+    {
+      id: "INV-1003",
+      dateIssued: "2025-08-05",
+      dueDate: "2025-08-15",
+      amount: 4000,
+      status: "Overdue",
+    },
+    {
+      id: "INV-1004",
+      dateIssued: "2025-08-07",
+      dueDate: "2025-08-17",
+      amount: 950,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+  ];
+
+  // Dynamic Stats
+  const totalInvoices = invoices.length;
+
+  const paidCount = invoices.filter(
+    (invoice) => invoice.status === "Paid",
+  ).length;
+
+  const unpaidCount = invoices.filter(
+    (invoice) => invoice.status === "Unpaid",
+  ).length;
+
+  const overdueCount = invoices.filter(
+    (invoice) => invoice.status === "Overdue",
+  ).length;
+
+  const revenue = invoices
+    .filter((invoice) => invoice.status === "Paid")
+    .reduce((acc, invoice) => acc + invoice.amount, 0);
+
+  const outstandingAmount = invoices
+    .filter(
+      (invoice) => invoice.status === "Unpaid" || invoice.status === "Overdue",
+    )
+    .reduce((acc, invoice) => acc + invoice.amount, 0);
+
+  const estimation = [
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Declined",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Pending",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+  ];
+
+  const totalestimate = estimation.length;
+
+  const approvedCount = estimation.filter(
+    (esteem) => esteem.status === "Approved",
+  ).length;
+
+  const declinedCount = estimation.filter(
+    (esteem) => esteem.status === "Declined",
+  ).length;
+
+  const pendingCount = estimation.filter(
+    (esteem) => esteem.status === "Pending",
+  ).length;
+
+  const finalEstimate = estimation
+    .filter((esteem) => esteem.status === "Approved")
+    .reduce((acc, esteem) => acc + esteem.amount, 0);
+
+  const payments = [
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+  ];
+
+  const totalpayments = payments.length;
+
+  const attachments = [
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+  ];
+
+  const totalattachments = attachments.length;
+
+  /* =========================
+     STEPS
+  ========================= */
+
+  const steps = [
+    "Basic Details",
+    "Tax & Financial Details",
+    "Additional Information",
+    "Service Level Settings",
+  ];
+
+  const stepss = [
+    "Basic Details",
+    "Attributes",
+    "Pricing & Stock",
+    "Options & Controls",
+  ];
+
+  /* =========================
+     HANDLERS
+  ========================= */
+
+  const openProfile = (profile, index) => {
+    setSelectedProfile(profile);
+    setProfileIndex(index);
+    setActiveTab("details");
+    setActiveSettingsSection("Upload Logo");
+    setLogoPreview(null);
+  };
+
+  const nextStep = () => {
+    if (step < steps.length - 1) {
+      setStep(step + 1);
+    }
+  };
+
+  const prevStep = () => {
+    if (step > 0) {
+      setStep(step - 1);
+    }
+  };
+
+  const handleClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setImage(imageUrl);
+    }
+  };
+
+  const handleNavProfile = (direction) => {
+    const newIndex = profileIndex + direction;
+
+    if (newIndex >= 0 && newIndex < filtered.length) {
+      setProfileIndex(newIndex);
+      setSelectedProfile(filtered[newIndex]);
+    }
+  };
+
+  const handleDelete = (id) => {
+    setProfiles((prev) => prev.filter((item) => item.id !== id));
+    setSelectedProfile(null);
+  };
+
+  /* =========================
+     DETAIL VIEW
+  ========================= */
+
+  if (selectedProfile) {
+    return (
+      <div className="min-h-full bg-gray-50">
+        {/* TOP NAV */}
+        <div className="bg-white border-b border-gray-200 px-6 py-3 flex items-center gap-3 text-sm">
+          <button
+            onClick={() => setSelectedProfile(null)}
+            className="flex items-center gap-1.5 text-green-600 hover:text-green-700 font-medium"
+          >
+            <FaArrowLeft size={11} />
+            Back to Transfer items
+          </button>
+
+          <div className="w-px h-4 bg-gray-300" />
+
+          <div className="flex items-center gap-1 text-gray-500">
+            <button
+              onClick={() => handleNavProfile(-1)}
+              disabled={profileIndex === 0}
+              className="p-1 hover:bg-gray-100 rounded disabled:opacity-30 transition"
+            >
+              <ChevronUp size={13} />
+            </button>
+
+            <button
+              onClick={() => handleNavProfile(1)}
+              disabled={profileIndex === filtered.length - 1}
+              className="p-1 hover:bg-gray-100 rounded disabled:opacity-30 transition"
+            >
+              <ChevronDown size={13} />
+            </button>
+
+            <span className="text-xs">
+              {profileIndex + 1} of {filtered.length}
+            </span>
+          </div>
+        </div>
+
+        {/* CONTENT */}
+        <div className="px-6 pt-5 pb-10 max-w-5xl">
+          {/* PROFILE HEADER */}
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-4">
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  {selectedProfile.referencenumber}
+                </h1>
+              </div>
+            </div>
+
+            <button
+              onClick={() => handleDelete(selectedProfile.id)}
+              className="flex items-center gap-2 border border-red-300 text-red-500 hover:bg-red-50 px-4 py-2 rounded-lg text-sm font-medium transition"
+            >
+              <FaTrash size={11} />
+              Delete Transfer Item
+            </button>
+          </div>
+
+          {/* TABS */}
+          <div className="flex gap-0 border-b border-gray-200 mb-5">
+            <button
+              onClick={() => setActiveTab("details")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "details"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <FaInfoCircle size={12} />
+              Transfer items information
+            </button>
+
+            <button
+              onClick={() => setActiveTab("trend")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "trend"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={list} className="w-5 h-5" />
+              Items
+            </button>
+
+            <button
+              onClick={() => setActiveTab("attach")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "attach"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={attachment} className="w-5 h-5" />
+              Attachments
+            </button>
+
+            <button
+              onClick={() => setActiveTab("historian")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${activeTab === "historian" ? "border-green-500 text-green-600" : "border-transparent text-gray-500 hover:text-gray-700"}`}
+            >
+              <img src={historytime} className="w-5 h-5" /> History
+            </button>
+          </div>
+
+          {/* DETAILS TAB */}
+          {activeTab === "details" && (
+            <>
+              <div className="flex gap-3">
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 w-screen">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="font-semibold text-gray-800 text-base">
+                      Basic Details
+                    </h2>
+
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="flex items-center gap-1.5 border border-gray-300 text-gray-600 hover:bg-gray-50 px-3 py-1.5 rounded-lg text-sm transition"
+                    >
+                      <Pencil size={12} />
+                      Edit
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-y-6 gap-x-6">
+                    {[
+                      ["Source Warehouse", selectedProfile.source],
+                      ["Destination Warehouse", selectedProfile.destination],
+                      ["Transfer Type", selectedProfile.transfertype],
+                      ["Reason for Transfer", selectedProfile.reason],
+                    ].map(([label, value]) => (
+                      <div key={label}>
+                        <p className="text-xs text-gray-400 mb-1 font-medium">
+                          {label}
+                        </p>
+
+                        <p className="text-sm text-gray-800">{value}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* INVOICE TAB */}
+          {activeTab === "trend" && (
+            <>
+              <div className="bg-white text-gray-800 p-6 rounded-xl shadow">
+                {/* HEADER */}
+
+                <div className="flex justify-between items-center mb-4">
+                  <div className="flex-col">
+                    <h2 className="text-xl text-black">Items</h2>
+                  </div>
+
+                  {/* <button
+                    onClick={() => setShowModal(true)}
+                    className="flex items-center gap-2 bg-green-500 hover:bg-green-600 px-4 py-2 rounded-md text-black font-normal"
+                  >
+                    Add Item
+                  </button> */}
+                </div>
+
+                {/* FILTER BAR */}
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-xl px-3 py-2 text-sm w-80">
+                    <FaSearch className="text-gray-400" />
+                    <input
+                      className="outline-none w-full placeholder-gray-400"
+                      placeholder="Search for an item"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </div>
+                  <div className="ml-auto flex items-center gap-2">
+                    <button className="flex items-center gap-2 border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white text-gray-600 hover:bg-gray-50">
+                      5 <FaChevronDown size={10} />
+                    </button>
+                    <button className="border border-green-400 text-green-600 rounded-xl px-3 py-2 hover:bg-green-50">
+                      <FaEllipsisH size={14} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* TABLE */}
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        <th className="p-3 w-10">
+                          <input type="checkbox" />
+                        </th>
+
+                        <th className="text-left p-3">Item</th>
+                        <th className="text-left p-3">Detail</th>
+                        <th className="text-left p-3">Description</th>
+                        <th className="text-left p-3">Available Quantity</th>
+                        <th className="text-left p-3">Increase Quantity</th>
+                        <th className="text-left p-3">Decrease Quantity</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {filteredt.map((c, i) => (
+                        <tr
+                          key={c.id}
+                          className="border-b hover:bg-gray-50 transition cursor-pointer"
+                          onClick={() => openProfile(c, i)}
+                        >
+                          <td className="p-3">
+                            <input type="checkbox" />
+                          </td>
+
+                          <td className="p-3 flex items-center gap-3">
+                            {c.name}
+                          </td>
+                          <td className="p-3">{c.detail}</td>
+
+                          <td className="p-3">{c.description}</td>
+                          <td className="p-3">{c.available}</td>
+                          <td className="p-3">{c.increase}</td>
+                          <td className="p-3">{c.decrease}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* PAGINATION */}
+                <div className="flex justify-between items-center mt-6 text-sm text-gray-500">
+                  <p>Showing 20 of 100</p>
+
+                  <div className="flex gap-2">
+                    {[1, 2, 3, 4].map((page) => (
+                      <button
+                        key={page}
+                        className={`border border-gray-300 w-8 h-8 rounded flex items-center justify-center ${
+                          page === 1
+                            ? "bg-green-100 text-green-700"
+                            : "hover:bg-gray-100"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {showModal && (
+                  <ItemModal
+                    title="Add Item"
+                    image={image}
+                    step={step}
+                    setStep={setStep}
+                    steps={stepss}
+                    nextStep={nextStep}
+                    prevStep={prevStep}
+                    handleClick={handleClick}
+                    handleImageChange={handleImageChange}
+                    fileInputRef={fileInputRef}
+                    setShowModal={setShowModal}
+                  />
+                )}
+              </div>
+            </>
+          )}
+
+          {activeTab === "attach" && (
+            <>
+              <div className="px-10 py-14 text-black">
+                <h1 className="mb-8 text-3xl font-semibold tracking-tight">
+                  Attachments
+                </h1>
+
+                <div className="flex  items-center justify-between rounded-3xl border border-zinc-30 px-6 py-7 shadow-lg transition-all duration-200 hover:border-zinc-400">
+                  {/* Left Section */}
+                  <div className="flex items-center gap-5">
+                    {/* File Icon */}
+                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-pink-500">
+                      <FileText className="h-8 w-8 text-black" />
+                    </div>
+
+                    {/* File Details */}
+                    <div className="flex items-center gap-3 text-lg">
+                      <span className="font-medium text-black">
+                        {file.type}
+                      </span>
+
+                      <span className="text-zinc-500">•</span>
+
+                      <span className="text-zinc-300">{file.size}</span>
+                    </div>
+                  </div>
+
+                  {/* Right Section */}
+                  <div className="flex items-center gap-5">
+                    {/* Download Button */}
+                    <button
+                      onClick={handleDownload}
+                      className="rounded-full p-2 text-zinc-400 transition hover:bg-zinc-800 hover:text-white"
+                      aria-label="Download file"
+                    >
+                      <Download className="h-6 w-6" />
+                    </button>
+
+                    {/* Delete Button */}
+                    <button
+                      onClick={handleDeleten}
+                      className="rounded-full p-2 text-zinc-400 transition hover:bg-red-500/10 hover:text-red-400"
+                      aria-label="Delete file"
+                    >
+                      <Trash2 className="h-6 w-6" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Hidden File Input (Optional if you want upload support later) */}
+                <input ref={fileInputRef} type="file" className="hidden" />
+              </div>
+            </>
+          )}
+          {/* ACTIVITY TAB */}
+          {activeTab === "historian" && (
+            <>
+              <h2>Today</h2>
+              <div className="flex gap-3">
+                <img src={dotgreen} className="w-6 h-6 " />
+                <p>Transfer status changed to In Transit</p>{" "}
+                <img src={dot} className="w-3 h-3" />
+                <p>12:00 PM - December 09, 2024</p>
+              </div>
+              <img src={lineman} className="h-10" />
+              <div className="flex gap-3">
+                <img src={dotgreen} className="w-6 h-6 " />
+                <p>Nails was added to list</p>{" "}
+                <img src={dot} className="w-3 h-3" />
+                <p>12:00 PM - December 09, 2024</p>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* EDIT MODAL */}
+        {showModal && (
+          <GroupModal
+            title="Edit Group"
+            image={selectedProfile.avatar}
+            step={step}
+            setStep={setStep}
+            steps={steps}
+            nextStep={nextStep}
+            prevStep={prevStep}
+            handleClick={handleClick}
+            handleImageChange={handleImageChange}
+            fileInputRef={fileInputRef}
+            setShowModal={setShowModal}
+          />
+        )}
+      </div>
+    );
+  }
+
+  /* =========================
+     TABLE VIEW
+  ========================= */
+
+  return (
+    <div className="bg-white text-gray-800 p-6 rounded-xl shadow">
+      {/* HEADER */}
+
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex-col">
+          <h2 className="text-xl text-black">Transfer Items</h2>
+          <p>100 items</p>
+        </div>
+
+        <button
+          onClick={() => setShowModal(true)}
+          className="flex items-center gap-2 bg-green-500 hover:bg-green-600 px-4 py-2 rounded-md text-black font-normal"
+        >
+          Add Item
+        </button>
+      </div>
+
+      <hr className="border-gray-200 mb-6" />
+
+      {/* FILTER BAR */}
+      <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-xl px-3 py-2 text-sm w-80">
+          <FaSearch className="text-gray-400" />
+          <input
+            className="outline-none w-full placeholder-gray-400"
+            placeholder="Search for an item"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        <div className="ml-auto flex items-center gap-2">
+          <button className="flex items-center gap-2 border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white text-gray-600 hover:bg-gray-50">
+            5 <FaChevronDown size={10} />
+          </button>
+          <button className="border border-green-400 text-green-600 rounded-xl px-3 py-2 hover:bg-green-50">
+            <FaEllipsisH size={14} />
+          </button>
+        </div>
+      </div>
+
+      {/* TABLE */}
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="p-3 w-10">
+                <input type="checkbox" />
+              </th>
+
+              <th className="text-left p-3">Refernce Number</th>
+              <th className="text-left p-3">Source Warehouse</th>
+              <th className="text-left p-3">Destination Warehouse</th>
+              <th className="text-left p-3">Reason</th>
+              <th className="text-left p-3">status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {filtered.map((c, i) => (
+              <tr
+                key={c.id}
+                className="border-b hover:bg-gray-50 transition cursor-pointer"
+                onClick={() => openProfile(c, i)}
+              >
+                <td className="p-3">
+                  <input type="checkbox" />
+                </td>
+
+                <td className="p-3">{c.referencenumber}</td>
+
+                <td className="p-3">{c.source}</td>
+                <td className="p-3">{c.destination}</td>
+                <td className="p-3">{c.reason}</td>
+                <td className="p-3">{c.status}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* PAGINATION */}
+      <div className="flex justify-between items-center mt-6 text-sm text-gray-500">
+        <p>Showing 20 of 100</p>
+
+        <div className="flex gap-2">
+          {[1, 2, 3, 4].map((page) => (
+            <button
+              key={page}
+              className={`border border-gray-300 w-8 h-8 rounded flex items-center justify-center ${
+                page === 1 ? "bg-green-100 text-green-700" : "hover:bg-gray-100"
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {showModal && (
+        <TransferModal title="Add Item" setShowModal={setShowModal} />
       )}
     </div>
   );
