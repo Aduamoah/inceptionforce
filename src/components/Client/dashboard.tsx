@@ -768,6 +768,14 @@ export default function Dashboard() {
         return <MasterTable />;
       case "requests":
         return <RequestTable />;
+      case "assignedrequest":
+        return <AssRequestTable />;
+      case "taskpool":
+        return <TaskTable />;
+      case "mytasks":
+        return <MyTaskTable />;
+      case "estimates":
+        return <EstimateTable />;
       default:
         return (
           <div className="bg-white p-4 rounded shadow">{activePage} Page</div>
@@ -26184,6 +26192,365 @@ function RequestModal({
   );
 }
 
+function EstimateModal({
+  title,
+  image,
+  step,
+  setStep,
+  steps,
+  nextStep,
+  prevStep,
+  handleClick,
+  handleImageChange,
+  fileInputRef,
+  setShowModal,
+}) {
+  const [attachments, setAttachments] = useState([
+    {
+      id: Date.now(),
+      files: [],
+    },
+  ]);
+
+  // ADD NEW ATTACHMENT BOX
+  const addAttachment = () => {
+    setAttachments((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        files: [],
+      },
+    ]);
+  };
+
+  // REMOVE ATTACHMENT BOX
+  const removeAttachmentGroup = (id) => {
+    setAttachments((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  // UPLOAD FILES
+  const handleFileUpload = (e, groupId) => {
+    const uploadedFiles = Array.from(e.target.files);
+
+    setAttachments((prev) =>
+      prev.map((group) =>
+        group.id === groupId
+          ? {
+              ...group,
+              files: [...group.files, ...uploadedFiles],
+            }
+          : group,
+      ),
+    );
+  };
+
+  // DELETE SINGLE FILE
+  const removeFile = (groupId, fileIndex) => {
+    setAttachments((prev) =>
+      prev.map((group) =>
+        group.id === groupId
+          ? {
+              ...group,
+              files: group.files.filter((_, index) => index !== fileIndex),
+            }
+          : group,
+      ),
+    );
+  };
+  return (
+    <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center">
+      <div className="bg-white w-[90%] max-w-6xl h-[90vh] rounded-2xl p-6 flex flex-col">
+        {/* HEADER */}
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-semibold">{title}</h2>
+
+          <button
+            onClick={() => setShowModal(false)}
+            className="border rounded-full w-8 h-8 flex items-center justify-center"
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* BODY */}
+        <div className="flex flex-1 overflow-hidden">
+          {/* SIDEBAR */}
+          <div className="w-1/4 border-r pr-6">
+            {/* STEPS */}
+            <div className="space-y-2 text-sm">
+              {steps.map((s, index) => (
+                <p
+                  key={index}
+                  onClick={() => setStep(index)}
+                  className={`px-3 py-1 rounded-full cursor-pointer ${
+                    step === index
+                      ? "bg-green-100 text-green-700"
+                      : "text-gray-500 hover:bg-gray-100"
+                  }`}
+                >
+                  {s}
+                </p>
+              ))}
+            </div>
+          </div>
+
+          {/* FORM AREA */}
+          <div className="flex-1 pl-8 overflow-y-auto">
+            <h3 className="text-lg font-medium mb-6">{steps[step]}</h3>
+
+            {/* STEP 0 */}
+            {step === 0 && (
+              <div className="grid grid-cols-2 gap-6">
+                <SelectField label="Client Name" />
+                <SelectField label="Estimate Type" />
+                <InputField label="Representative Contact" />
+
+                <SelectField label="Company Name (optional)" />
+                <DateField label="Due Date" />
+                <SelectField label="Branch" />
+                <SelectField label="Division" />
+                <SelectField label="Tag" />
+
+                <SelectField label="Sales Representative" />
+              </div>
+            )}
+
+            {/* STEP 1 */}
+            {step === 1 && (
+              <>
+                <div className="grid grid-cols-2 gap-6">
+                  <SelectField label="Project Type/Service Category" />
+                </div>
+                <div className="grid grid-cols-2 gap-6">
+                  <InputField label="Location" />
+                </div>
+              </>
+            )}
+
+            {/* STEP 2 */}
+            {step === 3 && (
+              <>
+                <div className="grid grid-cols-2 gap-6">
+                  <SelectField label="Material Preferences" />
+                  <SelectField label="Labour Requirements" />
+                  <InputField label="Budget Constraints" />
+                </div>
+                <div className="grid grid-cols-1 gap-6">
+                  <div>
+                    <label>Equipment Needed</label>
+                    <textarea
+                      placeholder="type a material to add"
+                      className="border border-gray-400 w-full h-60 text-gray-700 p-2 rounded-lg"
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* STEP 3 */}
+            {/* STEP 3 */}
+            {/* {step === 3 && (
+              <div className="space-y-3">
+                {[
+                  "Shows Applicable Tax on Estimates, Invoices, etc",
+                  "Apply Group/Service-Level Labour to Estimates, Invoices, etc.",
+                  "Apply Group/Service-Level Warranty to Estimates, Invoices, etc.",
+                  "Apply Group/Service-Level Terms & Conditions to Estimates, Invoices, etc.",
+                ].map((item) => (
+                  <div key={item}>
+                    <div className="flex gap-2">
+                      <input
+                        type="checkbox"
+                    
+                      />
+
+                      <p className="text-gray-500">{item}</p>
+                    </div>
+
+                  
+                  </div>
+                ))}
+              </div>
+            )} */}
+
+            {step === 2 && (
+              <div className="w-full space-y-6">
+                {attachments.map((group, groupIndex) => (
+                  <div
+                    key={group.id}
+                    className="relative border border-white rounded-[24px] p-8 min-h-[320px]"
+                  >
+                    {/* Close Attachment Group */}
+                    <button
+                      type="button"
+                      onClick={() => removeAttachmentGroup(group.id)}
+                      className="absolute top-6 right-6 text-[#1B2559] hover:text-red-500 transition"
+                    >
+                      ✕
+                    </button>
+
+                    <div className="grid grid-cols-2 gap-10 h-full">
+                      {/* Left Side */}
+                      <div className="flex flex-col">
+                        {groupIndex === 0 && (
+                          <p className="text-[#2C3553] text-[20px] font-medium mb-4">
+                            Attachment Type
+                          </p>
+                        )}
+
+                        <div className="flex-1" />
+                      </div>
+
+                      {/* Right Side */}
+                      <div className="flex flex-col">
+                        {groupIndex === 0 && (
+                          <p className="text-[#2C3553] text-[20px] font-medium mb-4">
+                            Attachment
+                          </p>
+                        )}
+
+                        {/* Uploaded Files */}
+                        <div className="space-y-4 mt-10">
+                          {group.files.map((file, fileIndex) => (
+                            <div
+                              key={fileIndex}
+                              className="flex items-center gap-4"
+                            >
+                              <div className="flex items-center justify-between border border-white rounded-[18px] px-5 py-4 w-full max-w-[400px]">
+                                <div className="flex items-center gap-4">
+                                  {/* PDF ICON */}
+                                  <div className="w-12 h-12 rounded-md bg-pink-500 flex items-center justify-center text-white text-xs font-bold">
+                                    PDF
+                                  </div>
+
+                                  <div className="text-white text-sm truncate max-w-[180px]">
+                                    {file.name}
+                                  </div>
+                                </div>
+
+                                <span className="text-[#7D849A] text-sm whitespace-nowrap">
+                                  {(file.size / (1024 * 1024)).toFixed(1)} MB
+                                </span>
+                              </div>
+
+                              {/* Delete File */}
+                              <button
+                                type="button"
+                                onClick={() => removeFile(group.id, fileIndex)}
+                                className="text-[#1B2559] hover:text-red-500 transition text-xl"
+                              >
+                                🗑
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Upload Button */}
+                        <label className="flex items-center gap-3 text-[#00FFA3] text-[22px] mt-8 cursor-pointer hover:opacity-80 transition">
+                          <input
+                            type="file"
+                            multiple
+                            className="hidden"
+                            onChange={(e) => handleFileUpload(e, group.id)}
+                          />
+
+                          <span className="text-3xl">⤴</span>
+
+                          <span>Upload Document</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                {/* Add Attachment */}
+                <button
+                  type="button"
+                  onClick={addAttachment}
+                  className="border-2 border-[#00FFA3] text-[#00FFA3] rounded-xl px-10 py-5 text-[22px] font-medium hover:bg-[#00FFA3] hover:text-black transition"
+                >
+                  Add Attachment
+                </button>
+              </div>
+            )}
+
+            {/* STEP 4 */}
+            {step === 4 && (
+              <>
+                <div className="grid grid-cols-2 gap-6">
+                  <SelectField label="Team Leader" />
+                </div>
+
+                <div className="grid grid-cols-1 gap-6">
+                  <div>
+                    <label>Members</label>
+                    <textarea
+                      placeholder="type a user to add"
+                      className="border border-gray-400 w-full h-60 text-gray-700 p-2 rounded-lg"
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* STEP 5 */}
+            {step === 5 && (
+              <>
+                <div className="flex gap-2 mb-4">
+                  <input type="checkbox" />
+
+                  <p className="text-gray-500">
+                    Use Shipping Address as Billing Address
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-6">
+                  <InputField label="Name" />
+                  <InputField label="Phone Number" />
+                  <InputField label="Company Name" />
+                  <InputField label="Address Line1" />
+                  <InputField label="Address Line2" />
+                  <InputField label="ZIP/Postal Code" />
+                  <InputField label="Country" />
+                  <InputField label="City/Town" />
+                  <InputField label="State/Province" />
+                </div>
+              </>
+            )}
+
+            {/* STEP 6 */}
+            {step === 6 && (
+              <textarea
+                placeholder="Description"
+                className="border border-gray-400 w-full h-60 text-gray-700 p-2 rounded-lg"
+              />
+            )}
+          </div>
+        </div>
+
+        {/* FOOTER */}
+        <div className="flex justify-end mt-6 gap-2">
+          {step > 0 && (
+            <button
+              onClick={prevStep}
+              className="px-5 py-2 rounded-lg border border-green-300 text-green-500"
+            >
+              Previous
+            </button>
+          )}
+
+          <button
+            onClick={nextStep}
+            className="bg-green-500 text-black px-6 py-2 rounded-lg"
+          >
+            {step === steps.length - 1 ? "Save Estimate" : "Next"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const attachmentreq = [
   {
     id: 1,
@@ -28100,6 +28467,7528 @@ function RequestTable() {
   );
 }
 
+const Newrequestass = [
+  {
+    id: 1,
+    requestid: "REQ-00125",
+    requesttitle: "Industrial Kitchen Estimate",
+    client: "Jane Doe",
+    priority: "High",
+    projectype: "Commercial",
+    location: "Spintex",
+    qrcode: "WH-001-ACC",
+    role: "Field Engineer",
+    storetypes: "Pallets,Racks",
+    availitems: "Electronics, Food, Apparel",
+    gps: "0-73738-8282",
+    shelfname: "Rods Shelf",
+    warehouse: "Main Warehouse",
+    totalcapacity: "10,000kg",
+    usedcapacity: "75,000kg",
+    availablecapacity: "2,500kg",
+    status: "in Progress",
+    symbol: "kg",
+    itemscount: "120",
+    brandimg: <img src={nike} className="w-5 h-5" />,
+    countryimg: <img src={usa} className="w-5 h-5" />,
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "nike.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "USA",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description: " Items damaged in transit",
+    allowed: "Fragile, etc.",
+    datesubmit: "24/04/2025",
+    lead: "Eva Thompson",
+    department: "Department",
+    workloadindicator: 5,
+    estimatedarea: "Opening Stock",
+    completedate: "o6/11/2025",
+    note: "Note goes here",
+    material: "Material",
+    labour: "Requirement",
+    constraint: "GHC 25,000",
+    equipmentneeded: "Excavator, Crane, Special Tools",
+  },
+  {
+    id: 2,
+    requestid: "REQ-00125",
+    requesttitle: "Industrial Kitchen Estimate",
+    client: "Jane Doe",
+    priority: "High",
+    projectype: "Commercial",
+    location: "Spintex",
+    qrcode: "WH-001-ACC",
+    role: "Field Engineer",
+    storetypes: "Pallets,Racks",
+    availitems: "Electronics, Food, Apparel",
+    gps: "0-73738-8282",
+    shelfname: "Rods Shelf",
+    warehouse: "Main Warehouse",
+    totalcapacity: "10,000kg",
+    usedcapacity: "75,000kg",
+    availablecapacity: "2,500kg",
+    status: "in Progress",
+    symbol: "kg",
+    itemscount: "120",
+    brandimg: <img src={nike} className="w-5 h-5" />,
+    countryimg: <img src={usa} className="w-5 h-5" />,
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "nike.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "USA",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description: " Items damaged in transit",
+    allowed: "Fragile, etc.",
+    datesubmit: "24/04/2025",
+    lead: "Eva Thompson",
+    department: "Department",
+    workloadindicator: 5,
+    estimatedarea: "Opening Stock",
+    completedate: "o6/11/2025",
+    note: "Note goes here",
+    material: "Material",
+    labour: "Requirement",
+    constraint: "GHC 25,000",
+    equipmentneeded: "Excavator, Crane, Special Tools",
+  },
+  {
+    id: 3,
+    requestid: "REQ-00125",
+    requesttitle: "Industrial Kitchen Estimate",
+    client: "Jane Doe",
+    priority: "High",
+    projectype: "Commercial",
+    location: "Spintex",
+    qrcode: "WH-001-ACC",
+    role: "Field Engineer",
+    storetypes: "Pallets,Racks",
+    availitems: "Electronics, Food, Apparel",
+    gps: "0-73738-8282",
+    shelfname: "Rods Shelf",
+    warehouse: "Main Warehouse",
+    totalcapacity: "10,000kg",
+    usedcapacity: "75,000kg",
+    availablecapacity: "2,500kg",
+    status: "in Progress",
+    symbol: "kg",
+    itemscount: "120",
+    brandimg: <img src={nike} className="w-5 h-5" />,
+    countryimg: <img src={usa} className="w-5 h-5" />,
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "nike.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "USA",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description: " Items damaged in transit",
+    allowed: "Fragile, etc.",
+    datesubmit: "24/04/2025",
+    lead: "Eva Thompson",
+    department: "Department",
+    workloadindicator: 5,
+    estimatedarea: "Opening Stock",
+    completedate: "o6/11/2025",
+    note: "Note goes here",
+    material: "Material",
+    labour: "Requirement",
+    constraint: "GHC 25,000",
+    equipmentneeded: "Excavator, Crane, Special Tools",
+  },
+  {
+    id: 4,
+    requestid: "REQ-00125",
+    requesttitle: "Industrial Kitchen Estimate",
+    client: "Jane Doe",
+    priority: "High",
+    projectype: "Commercial",
+    location: "Spintex",
+    qrcode: "WH-001-ACC",
+    role: "Field Engineer",
+    storetypes: "Pallets,Racks",
+    availitems: "Electronics, Food, Apparel",
+    gps: "0-73738-8282",
+    shelfname: "Rods Shelf",
+    warehouse: "Main Warehouse",
+    totalcapacity: "10,000kg",
+    usedcapacity: "75,000kg",
+    availablecapacity: "2,500kg",
+    status: "in Progress",
+    symbol: "kg",
+    itemscount: "120",
+    brandimg: <img src={nike} className="w-5 h-5" />,
+    countryimg: <img src={usa} className="w-5 h-5" />,
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "nike.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "USA",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description: " Items damaged in transit",
+    allowed: "Fragile, etc.",
+    datesubmit: "24/04/2025",
+    lead: "Eva Thompson",
+    department: "Department",
+    workloadindicator: 5,
+    estimatedarea: "Opening Stock",
+    completedate: "o6/11/2025",
+    note: "Note goes here",
+    material: "Material",
+    labour: "Requirement",
+    constraint: "GHC 25,000",
+    equipmentneeded: "Excavator, Crane, Special Tools",
+  },
+  {
+    id: 5,
+    requestid: "REQ-00125",
+    requesttitle: "Industrial Kitchen Estimate",
+    client: "Jane Doe",
+    priority: "High",
+    projectype: "Commercial",
+    location: "Spintex",
+    qrcode: "WH-001-ACC",
+    role: "Field Engineer",
+    storetypes: "Pallets,Racks",
+    availitems: "Electronics, Food, Apparel",
+    gps: "0-73738-8282",
+    shelfname: "Rods Shelf",
+    warehouse: "Main Warehouse",
+    totalcapacity: "10,000kg",
+    usedcapacity: "75,000kg",
+    availablecapacity: "2,500kg",
+    status: "in Progress",
+    symbol: "kg",
+    itemscount: "120",
+    brandimg: <img src={nike} className="w-5 h-5" />,
+    countryimg: <img src={usa} className="w-5 h-5" />,
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "nike.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "USA",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description: " Items damaged in transit",
+    allowed: "Fragile, etc.",
+    datesubmit: "24/04/2025",
+    lead: "Eva Thompson",
+    department: "Department",
+    workloadindicator: 5,
+    estimatedarea: "Opening Stock",
+    completedate: "o6/11/2025",
+    note: "Note goes here",
+    material: "Material",
+    labour: "Requirement",
+    constraint: "GHC 25,000",
+    equipmentneeded: "Excavator, Crane, Special Tools",
+  },
+];
+
+function AssRequestTable() {
+  /* =========================
+     STATES
+  ========================= */
+
+  const [profiles, setProfiles] = useState(Newrequestass);
+  const [profilest, setProfilest] = useState(attachmentreq);
+  const [selectedProfile, setSelectedProfile] = useState(null);
+  const [search, setSearch] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
+  const [step, setStep] = useState(0);
+  const [activeTab, setActiveTab] = useState("details");
+
+  const [activeSettingsSection, setActiveSettingsSection] =
+    useState("Upload Logo");
+
+  const [profileIndex, setProfileIndex] = useState(0);
+
+  const [logoPreview, setLogoPreview] = useState(null);
+
+  const [image, setImage] = useState(null);
+
+  const fileInputRef = useRef(null);
+  const [showExpirationDate, setShowExpirationDate] = useState(false);
+
+  /* =========================
+     FILTERED DATA
+  ========================= */
+
+  const filtered = profiles.filter(
+    (p) =>
+      p.requestid.toLowerCase().includes(search.toLowerCase()) ||
+      p.requesttitle.toLowerCase().includes(search.toLowerCase()) ||
+      p.client.toLowerCase().includes(search.toLowerCase()) ||
+      p.priority.toLowerCase().includes(search.toLowerCase()) ||
+      p.projectype.toLowerCase().includes(search.toLowerCase()) ||
+      p.location.toLowerCase().includes(search.toLowerCase()) ||
+      p.status.toLowerCase().includes(search.toLowerCase()) ||
+      p.avatar.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  const filteredt = profilest.filter(
+    (p) =>
+      p.filename.toLowerCase().includes(search.toLowerCase()) ||
+      p.attachmenttype.toLowerCase().includes(search.toLowerCase()) ||
+      p.uploaded.toLowerCase().includes(search.toLowerCase()) ||
+      p.date.toLowerCase().includes(search.toLowerCase()) ||
+      p.image.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  const salesUsageData = [
+    { month: "January", sales: 320, usage: 50 },
+    { month: "February", sales: 220, usage: 210 },
+    { month: "March", sales: 430, usage: 70 },
+    { month: "April", sales: 100, usage: 180 },
+    { month: "May", sales: 140, usage: 230 },
+    { month: "June", sales: 410, usage: 130 },
+    { month: "July", sales: 380, usage: 160 },
+    { month: "August", sales: 90, usage: 180 },
+    { month: "September", sales: 370, usage: 60 },
+    { month: "October", sales: 420, usage: 120 },
+    { month: "November", sales: 180, usage: 200 },
+    { month: "December", sales: 250, usage: 110 },
+  ];
+
+  const stockSalesData = [
+    { month: "January", stock: 40, sales: 150 },
+    { month: "February", stock: 330, sales: 30 },
+    { month: "March", stock: 240, sales: 460 },
+    { month: "April", stock: 150, sales: 260 },
+    { month: "May", stock: 500, sales: 310 },
+    { month: "June", stock: 340, sales: 90 },
+    { month: "July", stock: 310, sales: 230 },
+    { month: "August", stock: 80, sales: 150 },
+    { month: "September", stock: 85, sales: 220 },
+    { month: "October", stock: 430, sales: 460 },
+    { month: "November", stock: 160, sales: 300 },
+    { month: "December", stock: 200, sales: 110 },
+  ];
+
+  // Dummy Invoice Data
+  const invoices = [
+    {
+      id: "INV-1001",
+      dateIssued: "2025-08-01",
+      dueDate: "2025-08-10",
+      amount: 2500,
+      status: "Paid",
+    },
+    {
+      id: "INV-1002",
+      dateIssued: "2025-08-03",
+      dueDate: "2025-08-12",
+      amount: 1200,
+      status: "Unpaid",
+    },
+    {
+      id: "INV-1003",
+      dateIssued: "2025-08-05",
+      dueDate: "2025-08-15",
+      amount: 4000,
+      status: "Overdue",
+    },
+    {
+      id: "INV-1004",
+      dateIssued: "2025-08-07",
+      dueDate: "2025-08-17",
+      amount: 950,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+  ];
+
+  // Dynamic Stats
+  const totalInvoices = invoices.length;
+
+  const paidCount = invoices.filter(
+    (invoice) => invoice.status === "Paid",
+  ).length;
+
+  const unpaidCount = invoices.filter(
+    (invoice) => invoice.status === "Unpaid",
+  ).length;
+
+  const overdueCount = invoices.filter(
+    (invoice) => invoice.status === "Overdue",
+  ).length;
+
+  const revenue = invoices
+    .filter((invoice) => invoice.status === "Paid")
+    .reduce((acc, invoice) => acc + invoice.amount, 0);
+
+  const outstandingAmount = invoices
+    .filter(
+      (invoice) => invoice.status === "Unpaid" || invoice.status === "Overdue",
+    )
+    .reduce((acc, invoice) => acc + invoice.amount, 0);
+
+  const estimation = [
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Declined",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Pending",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+  ];
+
+  const totalestimate = estimation.length;
+
+  const approvedCount = estimation.filter(
+    (esteem) => esteem.status === "Approved",
+  ).length;
+
+  const declinedCount = estimation.filter(
+    (esteem) => esteem.status === "Declined",
+  ).length;
+
+  const pendingCount = estimation.filter(
+    (esteem) => esteem.status === "Pending",
+  ).length;
+
+  const finalEstimate = estimation
+    .filter((esteem) => esteem.status === "Approved")
+    .reduce((acc, esteem) => acc + esteem.amount, 0);
+
+  const payments = [
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+  ];
+
+  const totalpayments = payments.length;
+
+  const attachments = [
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+  ];
+
+  const totalattachments = attachments.length;
+
+  /* =========================
+     STEPS
+  ========================= */
+
+  const steps = [
+    "General Information",
+    "Project/Service Details",
+    "Materials & Resources",
+    "Attachments & Resources",
+    "Assigned Team",
+  ];
+
+  const stepss = [
+    "Basic Details",
+    "Attributes",
+    "Pricing & Stock",
+    "Options & Controls",
+  ];
+
+  /* =========================
+     HANDLERS
+  ========================= */
+
+  const openProfile = (profile, index) => {
+    setSelectedProfile(profile);
+    setProfileIndex(index);
+    setActiveTab("details");
+    setActiveSettingsSection("Upload Logo");
+    setLogoPreview(null);
+  };
+
+  const nextStep = () => {
+    if (step < steps.length - 1) {
+      setStep(step + 1);
+    }
+  };
+
+  const prevStep = () => {
+    if (step > 0) {
+      setStep(step - 1);
+    }
+  };
+
+  const handleClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setImage(imageUrl);
+    }
+  };
+
+  const handleNavProfile = (direction) => {
+    const newIndex = profileIndex + direction;
+
+    if (newIndex >= 0 && newIndex < filtered.length) {
+      setProfileIndex(newIndex);
+      setSelectedProfile(filtered[newIndex]);
+    }
+  };
+
+  const handleDelete = (id) => {
+    setProfiles((prev) => prev.filter((item) => item.id !== id));
+    setSelectedProfile(null);
+  };
+
+  /* =========================
+     DETAIL VIEW
+  ========================= */
+
+  if (selectedProfile) {
+    return (
+      <div className="min-h-full bg-gray-50">
+        {/* TOP NAV */}
+        <div className="bg-white border-b border-gray-200 px-6 py-3 flex items-center gap-3 text-sm">
+          <button
+            onClick={() => setSelectedProfile(null)}
+            className="flex items-center gap-1.5 text-green-600 hover:text-green-700 font-medium"
+          >
+            <FaArrowLeft size={11} />
+            Back to Requests
+          </button>
+
+          <div className="w-px h-4 bg-gray-300" />
+
+          <div className="flex items-center gap-1 text-gray-500">
+            <button
+              onClick={() => handleNavProfile(-1)}
+              disabled={profileIndex === 0}
+              className="p-1 hover:bg-gray-100 rounded disabled:opacity-30 transition"
+            >
+              <ChevronUp size={13} />
+            </button>
+
+            <button
+              onClick={() => handleNavProfile(1)}
+              disabled={profileIndex === filtered.length - 1}
+              className="p-1 hover:bg-gray-100 rounded disabled:opacity-30 transition"
+            >
+              <ChevronDown size={13} />
+            </button>
+
+            <span className="text-xs">
+              {profileIndex + 1} of {filtered.length}
+            </span>
+          </div>
+        </div>
+
+        {/* CONTENT */}
+        <div className="px-6 pt-5 pb-10 max-w-5xl">
+          {/* PROFILE HEADER */}
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-4">
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  {selectedProfile.requestid}
+                </h1>
+                <span
+                  className={`inline-block px-3 py-1 rounded-full border text-sm font-medium bg-white
+      ${
+        selectedProfile.status === "Active"
+          ? "border-green-500 text-green-500"
+          : selectedProfile.status === "Inactive"
+            ? "border-red-500 text-red-500"
+            : "border-gray-300 text-gray-500"
+      }`}
+                >
+                  {selectedProfile.status}
+                </span>
+              </div>
+            </div>
+
+            <button
+              onClick={() => handleDelete(selectedProfile.id)}
+              className="flex items-center gap-2 border border-red-300 text-red-500 hover:bg-red-50 px-4 py-2 rounded-lg text-sm font-medium transition"
+            >
+              <FaTrash size={11} />
+              Delete Request
+            </button>
+          </div>
+
+          {/* TABS */}
+          <div className="flex gap-0 border-b border-gray-200 mb-5">
+            <button
+              onClick={() => setActiveTab("details")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "details"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <FaInfoCircle size={12} />
+              Overview
+            </button>
+
+            <button
+              onClick={() => setActiveTab("attach")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "attach"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={attachment} className="w-5 h-5" />
+              Attachments
+            </button>
+
+            <button
+              onClick={() => setActiveTab("chat")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "chat"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={chat} className="w-5 h-5" />
+              Chat
+            </button>
+
+            <button
+              onClick={() => setActiveTab("issue")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "issue"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={issues} className="w-5 h-5" />
+              Issues
+            </button>
+
+            <button
+              onClick={() => setActiveTab("activity")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "activity"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={activity} className="w-5 h-5" />
+              Activity
+            </button>
+
+            <button
+              onClick={() => setActiveTab("trend")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "trend"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={list} className="w-5 h-5" />
+              Items
+            </button>
+          </div>
+
+          {/* DETAILS TAB */}
+          {activeTab === "details" && (
+            <>
+              <div className="flex gap-3">
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 w-screen">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="font-semibold text-gray-800 text-base">
+                      General Information
+                    </h2>
+
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="flex items-center gap-1.5 border border-gray-300 text-gray-600 hover:bg-gray-50 px-3 py-1.5 rounded-lg text-sm transition"
+                    >
+                      <Pencil size={12} />
+                      Edit
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-y-6 gap-x-6">
+                    {[
+                      ["Request Title", selectedProfile.requesttitle],
+
+                      [
+                        "Client",
+                        <div className="flex items-center gap-2">
+                          <img
+                            src={selectedProfile.avatar}
+                            alt={selectedProfile.client}
+                            className="w-8 h-8 rounded-full object-cover"
+                          />
+                          <span>{selectedProfile.client}</span>
+                        </div>,
+                      ],
+
+                      ["Project Type", selectedProfile.projectype],
+                      ["Location", selectedProfile.location],
+                      [
+                        "Priority",
+                        <span
+                          className={`inline-block px-3 py-1 rounded-full border text-sm font-medium bg-white
+      ${
+        selectedProfile.priority === "Low"
+          ? "border-green-500 text-green-500"
+          : selectedProfile.priority === "High"
+            ? "border-red-500 text-red-500"
+            : "border-gray-300 text-gray-500"
+      }`}
+                        >
+                          {selectedProfile.priority}
+                        </span>,
+                      ],
+                      ["Date Submitted", selectedProfile.datesubmit],
+                    ].map(([label, value]) => (
+                      <div key={label}>
+                        <p className="text-xs text-gray-400 mb-1 font-medium">
+                          {label}
+                        </p>
+
+                        <div className="text-sm text-gray-800">{value}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 w-screen">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="font-semibold text-gray-800 text-base">
+                      Assignee Details
+                    </h2>
+
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="flex items-center gap-1.5 border border-gray-300 text-gray-600 hover:bg-gray-50 px-3 py-1.5 rounded-lg text-sm transition"
+                    >
+                      <Pencil size={12} />
+                      Edit
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-y-6 gap-x-6">
+                    {[
+                      [
+                        "Lead Estimator",
+                        <div className="flex items-center gap-2">
+                          <img
+                            src={selectedProfile.avatar}
+                            alt={selectedProfile.lead}
+                            className="w-8 h-8 rounded-full object-cover"
+                          />
+                          <span>{selectedProfile.lead}</span>
+                        </div>,
+                      ],
+                      ["Role", selectedProfile.role],
+                      ["Department", selectedProfile.department],
+                      ["Workload indicator", selectedProfile.workloadindicator],
+                      [
+                        "Team Collaboration",
+                        <img
+                          src={selectedProfile.avatar}
+                          alt={selectedProfile.lead}
+                          className="w-8 h-8 rounded-full object-cover"
+                        />,
+                      ],
+                    ].map(([label, value]) => (
+                      <div key={label}>
+                        <p className="text-xs text-gray-400 mb-1 font-medium">
+                          {label}
+                        </p>
+
+                        <p className="text-sm text-gray-800">{value}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 w-screen">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="font-semibold text-gray-800 text-base">
+                      Project/Service Details
+                    </h2>
+
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="flex items-center gap-1.5 border border-gray-300 text-gray-600 hover:bg-gray-50 px-3 py-1.5 rounded-lg text-sm transition"
+                    >
+                      <Pencil size={12} />
+                      Edit
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-y-6 gap-x-6">
+                    {[
+                      ["Project Type", selectedProfile.projectype],
+                      ["Location", selectedProfile.location],
+                      ["Estimated Area", selectedProfile.availablecapacity],
+                      [
+                        "Required Completion Date",
+                        selectedProfile.completedate,
+                      ],
+                      ["Detailed Description", selectedProfile.description],
+                      ["Note", selectedProfile.note],
+                    ].map(([label, value]) => (
+                      <div key={label}>
+                        <p className="text-xs text-gray-400 mb-1 font-medium">
+                          {label}
+                        </p>
+
+                        <p className="text-sm text-gray-800">{value}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 w-screen">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="font-semibold text-gray-800 text-base">
+                      Materials & Resources
+                    </h2>
+
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="flex items-center gap-1.5 border border-gray-300 text-gray-600 hover:bg-gray-50 px-3 py-1.5 rounded-lg text-sm transition"
+                    >
+                      <Pencil size={12} />
+                      Edit
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-y-6 gap-x-6">
+                    {[
+                      ["Material Preferences", selectedProfile.material],
+                      ["Labour Requirement", selectedProfile.labour],
+                      ["Budget Constraints", selectedProfile.constraint],
+                      [
+                        "Required Completion Date",
+                        selectedProfile.equipmentneeded,
+                      ],
+                    ].map(([label, value]) => (
+                      <div key={label}>
+                        <p className="text-xs text-gray-400 mb-1 font-medium">
+                          {label}
+                        </p>
+
+                        <p className="text-sm text-gray-800">{value}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* INVOICE TAB */}
+          {activeTab === "attach" && (
+            <>
+              <div className="bg-white text-gray-800 p-6 rounded-xl shadow">
+                {/* HEADER */}
+
+                <div className="flex justify-between items-center mb-4">
+                  <div className="flex-col">
+                    <h2 className="text-xl text-black">Attachments</h2>
+                  </div>
+
+                  <button className="bg-green-500 hover:bg-green-600 text-white px-5 py-2.5 rounded-lg font-medium transition">
+                    + Add File
+                  </button>
+                </div>
+
+                {/* FILTER BAR */}
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-xl px-3 py-2 text-sm w-80">
+                    <FaSearch className="text-gray-400" />
+                    <input
+                      className="outline-none w-full placeholder-gray-400"
+                      placeholder="Search for a file"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </div>
+                  <div className="ml-auto flex items-center gap-2">
+                    <button className="flex items-center gap-2 border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white text-gray-600 hover:bg-gray-50">
+                      20 <FaChevronDown size={10} />
+                    </button>
+                    <button className="border border-green-400 text-green-600 rounded-xl px-3 py-2 hover:bg-green-50">
+                      <FaEllipsisH size={14} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* TABLE */}
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        <th className="p-3 w-10">
+                          <input type="checkbox" />
+                        </th>
+
+                        <th className="text-left p-3">File Name</th>
+                        <th className="text-left p-3">Attachment Type</th>
+                        <th className="text-left p-3">Uploaded By</th>
+                        <th className="text-left p-3">Date Uploaded</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {filteredt.map((c, i) => (
+                        <tr
+                          key={c.id}
+                          className="border-b hover:bg-gray-50 transition cursor-pointer"
+                          onClick={() => openProfile(c, i)}
+                        >
+                          <td className="p-3">
+                            <input type="checkbox" />
+                          </td>
+
+                          <td className="p-3 flex items-center gap-3">
+                            {c.image ?? ""}
+
+                            {c.filename}
+                          </td>
+                          <td className="p-3">{c.attachmenttype}</td>
+
+                          <td className="p-3">{c.uploaded}</td>
+                          <td className="p-3">{c.date}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* PAGINATION */}
+                <div className="flex justify-between items-center mt-6 text-sm text-gray-500">
+                  <p>Showing 20 of 100</p>
+
+                  <div className="flex gap-2">
+                    {[1, 2, 3, 4].map((page) => (
+                      <button
+                        key={page}
+                        className={`border border-gray-300 w-8 h-8 rounded flex items-center justify-center ${
+                          page === 1
+                            ? "bg-green-100 text-green-700"
+                            : "hover:bg-gray-100"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {showModal && (
+                  <ItemModal
+                    title="Add Item"
+                    image={image}
+                    step={step}
+                    setStep={setStep}
+                    steps={stepss}
+                    nextStep={nextStep}
+                    prevStep={prevStep}
+                    handleClick={handleClick}
+                    handleImageChange={handleImageChange}
+                    fileInputRef={fileInputRef}
+                    setShowModal={setShowModal}
+                  />
+                )}
+              </div>
+            </>
+          )}
+
+          {/* ACTIVITY TAB */}
+          {activeTab === "activity" && (
+            <>
+              <h2>Today</h2>
+              <div className="flex gap-3">
+                <img src={dotgreen} className="w-6 h-6 " />
+                <p>Request now In Progress</p>{" "}
+                <img src={dot} className="w-3 h-3" />
+                <p>12:00 PM - December 09, 2024</p>
+              </div>
+              <img src={lineman} className="h-10" />
+              <div className="flex gap-3">
+                <img src={dotgreen} className="w-6 h-6 " />
+                <p>Eva Thompson attached added an Issue</p>{" "}
+                <img src={dot} className="w-3 h-3" />
+                <p>12:00 PM - December 09, 2024</p>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* EDIT MODAL */}
+        {showModal && (
+          <GroupModal
+            title="Edit Group"
+            image={selectedProfile.avatar}
+            step={step}
+            setStep={setStep}
+            steps={steps}
+            nextStep={nextStep}
+            prevStep={prevStep}
+            handleClick={handleClick}
+            handleImageChange={handleImageChange}
+            fileInputRef={fileInputRef}
+            setShowModal={setShowModal}
+          />
+        )}
+      </div>
+    );
+  }
+
+  /* =========================
+     TABLE VIEW
+  ========================= */
+  return (
+    <div className="bg-white text-gray-800 p-6 rounded-xl shadow">
+      {/* HEADER */}
+
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex-col">
+          <h2 className="text-xl text-black">Assigned Requests</h2>
+          <p>100 requests</p>
+        </div>
+
+        <button
+          onClick={() => setShowModal(true)}
+          className="flex items-center gap-2 bg-green-500 hover:bg-green-600 px-4 py-2 rounded-md text-black font-normal"
+        >
+          Add Request
+        </button>
+      </div>
+
+      <hr className="border-gray-200 mb-6" />
+
+      {/* FILTER BAR */}
+      <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-xl px-3 py-2 text-sm w-80">
+          <FaSearch className="text-gray-400" />
+          <input
+            className="outline-none w-full placeholder-gray-400"
+            placeholder="Search for a request"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        <div className="ml-auto flex items-center gap-2">
+          <button className="flex items-center gap-2 border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white text-gray-600 hover:bg-gray-50">
+            5 <FaChevronDown size={10} />
+          </button>
+          <button className="border border-green-400 text-green-600 rounded-xl px-3 py-2 hover:bg-green-50">
+            <FaEllipsisH size={14} />
+          </button>
+        </div>
+      </div>
+
+      {/* TABLE */}
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="p-3 w-10">
+                <input type="checkbox" />
+              </th>
+
+              <th className="text-left p-3">Request ID</th>
+              <th className="text-left p-3">Request Title</th>
+              <th className="text-left p-3">Client</th>
+              <th className="text-left p-3">Status</th>
+              <th className="text-left p-3">Priority</th>
+              <th className="text-left p-3">Project Type</th>
+              <th className="text-left p-3">Location</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {filtered.map((c, i) => (
+              <tr
+                key={c.id}
+                className="border-b hover:bg-gray-50 transition cursor-pointer"
+                onClick={() => openProfile(c, i)}
+              >
+                <td className="p-3">
+                  <input type="checkbox" />
+                </td>
+
+                <td className="p-3 flex items-center gap-3">{c.requestid}</td>
+                <td className="p-3">{c.requesttitle}</td>
+                <td className="p-3">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={c.avatar}
+                      className="w-9 h-9 rounded-full object-cover border border-gray-200"
+                      alt=""
+                    />
+                    <span className="font-medium text-green-500 group-hover:text-green-700 transition">
+                      {c.client}
+                    </span>
+                  </div>
+                </td>
+                <td className="p-3">
+                  <span
+                    className={`inline-block px-3 py-1 rounded-full border text-sm font-medium bg-white
+      ${
+        c.status === "Active"
+          ? "border-green-500 text-green-500"
+          : c.status === "in Progress"
+            ? "border-orange-500 text-orange-500"
+            : "border-gray-300 text-gray-500"
+      }`}
+                  >
+                    {c.status}
+                  </span>
+                </td>
+
+                <td className="p-3">
+                  <span
+                    className={`inline-block px-3 py-1 rounded-full border text-sm font-medium bg-white
+      ${
+        c.priority === "Low"
+          ? "border-green-500 text-green-500"
+          : c.priority === "High"
+            ? "border-red-500 text-red-500"
+            : "border-gray-300 text-gray-500"
+      }`}
+                  >
+                    {c.priority}
+                  </span>
+                </td>
+
+                <td className="p-3">{c.projectype}</td>
+                <td className="p-3">{c.location}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* PAGINATION */}
+      <div className="flex justify-between items-center mt-6 text-sm text-gray-500">
+        <p>Showing 20 of 100</p>
+
+        <div className="flex gap-2">
+          {[1, 2, 3, 4].map((page) => (
+            <button
+              key={page}
+              className={`border border-gray-300 w-8 h-8 rounded flex items-center justify-center ${
+                page === 1 ? "bg-green-100 text-green-700" : "hover:bg-gray-100"
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {showModal && (
+        <RequestModal
+          title="Add Request"
+          image={image}
+          step={step}
+          setStep={setStep}
+          steps={steps}
+          nextStep={nextStep}
+          prevStep={prevStep}
+          handleClick={handleClick}
+          handleImageChange={handleImageChange}
+          fileInputRef={fileInputRef}
+          setShowModal={setShowModal}
+        />
+      )}
+    </div>
+  );
+}
+
+const Newrequesttask = [
+  {
+    id: 1,
+    requestid: "T-001",
+    requesttitle: "Roof Replacement-Mall",
+    client: "Jane Doe",
+    priority: "High",
+    projectype: "Commercial",
+    location: "Spintex",
+    qrcode: "WH-001-ACC",
+    role: "Field Engineer",
+    storetypes: "Pallets,Racks",
+    availitems: "Electronics, Food, Apparel",
+    gps: "0-73738-8282",
+    shelfname: "Rods Shelf",
+    warehouse: "Main Warehouse",
+    totalcapacity: "10,000kg",
+    usedcapacity: "75,000kg",
+    availablecapacity: "2,500kg",
+    status: "Open",
+    symbol: "kg",
+    itemscount: "120",
+    brandimg: <img src={nike} className="w-5 h-5" />,
+    countryimg: <img src={usa} className="w-5 h-5" />,
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "nike.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "USA",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description: " Items damaged in transit",
+    allowed: "Fragile, etc.",
+    datesubmit: "24/04/2025",
+    lead: "Eva Thompson",
+    department: "Department",
+    workloadindicator: 5,
+    estimatedarea: "Opening Stock",
+    completedate: "o6/11/2025",
+    note: "Note goes here",
+    material: "Material",
+    labour: "Requirement",
+    constraint: "GHC 25,000",
+    equipmentneeded: "Excavator, Crane, Special Tools",
+  },
+  {
+    id: 2,
+    requestid: "T-001",
+    requesttitle: "Roof Replacement-Mall",
+    client: "Jane Doe",
+    priority: "High",
+    projectype: "Commercial",
+    location: "Spintex",
+    qrcode: "WH-001-ACC",
+    role: "Field Engineer",
+    storetypes: "Pallets,Racks",
+    availitems: "Electronics, Food, Apparel",
+    gps: "0-73738-8282",
+    shelfname: "Rods Shelf",
+    warehouse: "Main Warehouse",
+    totalcapacity: "10,000kg",
+    usedcapacity: "75,000kg",
+    availablecapacity: "2,500kg",
+    status: "Open",
+    symbol: "kg",
+    itemscount: "120",
+    brandimg: <img src={nike} className="w-5 h-5" />,
+    countryimg: <img src={usa} className="w-5 h-5" />,
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "nike.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "USA",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description: " Items damaged in transit",
+    allowed: "Fragile, etc.",
+    datesubmit: "24/04/2025",
+    lead: "Eva Thompson",
+    department: "Department",
+    workloadindicator: 5,
+    estimatedarea: "Opening Stock",
+    completedate: "o6/11/2025",
+    note: "Note goes here",
+    material: "Material",
+    labour: "Requirement",
+    constraint: "GHC 25,000",
+    equipmentneeded: "Excavator, Crane, Special Tools",
+  },
+  {
+    id: 3,
+    requestid: "T-001",
+    requesttitle: "Roof Replacement-Mall",
+    client: "Jane Doe",
+    priority: "High",
+    projectype: "Commercial",
+    location: "Spintex",
+    qrcode: "WH-001-ACC",
+    role: "Field Engineer",
+    storetypes: "Pallets,Racks",
+    availitems: "Electronics, Food, Apparel",
+    gps: "0-73738-8282",
+    shelfname: "Rods Shelf",
+    warehouse: "Main Warehouse",
+    totalcapacity: "10,000kg",
+    usedcapacity: "75,000kg",
+    availablecapacity: "2,500kg",
+    status: "Open",
+    symbol: "kg",
+    itemscount: "120",
+    brandimg: <img src={nike} className="w-5 h-5" />,
+    countryimg: <img src={usa} className="w-5 h-5" />,
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "nike.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "USA",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description: " Items damaged in transit",
+    allowed: "Fragile, etc.",
+    datesubmit: "24/04/2025",
+    lead: "Eva Thompson",
+    department: "Department",
+    workloadindicator: 5,
+    estimatedarea: "Opening Stock",
+    completedate: "o6/11/2025",
+    note: "Note goes here",
+    material: "Material",
+    labour: "Requirement",
+    constraint: "GHC 25,000",
+    equipmentneeded: "Excavator, Crane, Special Tools",
+  },
+  {
+    id: 4,
+    requestid: "T-001",
+    requesttitle: "Roof Replacement-Mall",
+    client: "Jane Doe",
+    priority: "High",
+    projectype: "Commercial",
+    location: "Spintex",
+    qrcode: "WH-001-ACC",
+    role: "Field Engineer",
+    storetypes: "Pallets,Racks",
+    availitems: "Electronics, Food, Apparel",
+    gps: "0-73738-8282",
+    shelfname: "Rods Shelf",
+    warehouse: "Main Warehouse",
+    totalcapacity: "10,000kg",
+    usedcapacity: "75,000kg",
+    availablecapacity: "2,500kg",
+    status: "Open",
+    symbol: "kg",
+    itemscount: "120",
+    brandimg: <img src={nike} className="w-5 h-5" />,
+    countryimg: <img src={usa} className="w-5 h-5" />,
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "nike.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "USA",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description: " Items damaged in transit",
+    allowed: "Fragile, etc.",
+    datesubmit: "24/04/2025",
+    lead: "Eva Thompson",
+    department: "Department",
+    workloadindicator: 5,
+    estimatedarea: "Opening Stock",
+    completedate: "o6/11/2025",
+    note: "Note goes here",
+    material: "Material",
+    labour: "Requirement",
+    constraint: "GHC 25,000",
+    equipmentneeded: "Excavator, Crane, Special Tools",
+  },
+  {
+    id: 5,
+    requestid: "T-001",
+    requesttitle: "Roof Replacement-Mall",
+    client: "Jane Doe",
+    priority: "High",
+    projectype: "Commercial",
+    location: "Spintex",
+    qrcode: "WH-001-ACC",
+    role: "Field Engineer",
+    storetypes: "Pallets,Racks",
+    availitems: "Electronics, Food, Apparel",
+    gps: "0-73738-8282",
+    shelfname: "Rods Shelf",
+    warehouse: "Main Warehouse",
+    totalcapacity: "10,000kg",
+    usedcapacity: "75,000kg",
+    availablecapacity: "2,500kg",
+    status: "Open",
+    symbol: "kg",
+    itemscount: "120",
+    brandimg: <img src={nike} className="w-5 h-5" />,
+    countryimg: <img src={usa} className="w-5 h-5" />,
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "nike.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "USA",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description: " Items damaged in transit",
+    allowed: "Fragile, etc.",
+    datesubmit: "24/04/2025",
+    lead: "Eva Thompson",
+    department: "Department",
+    workloadindicator: 5,
+    estimatedarea: "Opening Stock",
+    completedate: "o6/11/2025",
+    note: "Note goes here",
+    material: "Material",
+    labour: "Requirement",
+    constraint: "GHC 25,000",
+    equipmentneeded: "Excavator, Crane, Special Tools",
+  },
+];
+
+function TaskTable() {
+  /* =========================
+     STATES
+  ========================= */
+
+  const [profiles, setProfiles] = useState(Newrequesttask);
+  const [profilest, setProfilest] = useState(attachmentreq);
+  const [selectedProfile, setSelectedProfile] = useState(null);
+  const [search, setSearch] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
+  const [step, setStep] = useState(0);
+  const [activeTab, setActiveTab] = useState("details");
+
+  const [activeSettingsSection, setActiveSettingsSection] =
+    useState("Upload Logo");
+
+  const [profileIndex, setProfileIndex] = useState(0);
+
+  const [logoPreview, setLogoPreview] = useState(null);
+
+  const [image, setImage] = useState(null);
+
+  const fileInputRef = useRef(null);
+  const [showExpirationDate, setShowExpirationDate] = useState(false);
+
+  /* =========================
+     FILTERED DATA
+  ========================= */
+
+  const filtered = profiles.filter(
+    (p) =>
+      p.requestid.toLowerCase().includes(search.toLowerCase()) ||
+      p.requesttitle.toLowerCase().includes(search.toLowerCase()) ||
+      p.client.toLowerCase().includes(search.toLowerCase()) ||
+      p.priority.toLowerCase().includes(search.toLowerCase()) ||
+      p.projectype.toLowerCase().includes(search.toLowerCase()) ||
+      p.location.toLowerCase().includes(search.toLowerCase()) ||
+      p.status.toLowerCase().includes(search.toLowerCase()) ||
+      p.avatar.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  const filteredt = profilest.filter(
+    (p) =>
+      p.filename.toLowerCase().includes(search.toLowerCase()) ||
+      p.attachmenttype.toLowerCase().includes(search.toLowerCase()) ||
+      p.uploaded.toLowerCase().includes(search.toLowerCase()) ||
+      p.date.toLowerCase().includes(search.toLowerCase()) ||
+      p.image.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  const salesUsageData = [
+    { month: "January", sales: 320, usage: 50 },
+    { month: "February", sales: 220, usage: 210 },
+    { month: "March", sales: 430, usage: 70 },
+    { month: "April", sales: 100, usage: 180 },
+    { month: "May", sales: 140, usage: 230 },
+    { month: "June", sales: 410, usage: 130 },
+    { month: "July", sales: 380, usage: 160 },
+    { month: "August", sales: 90, usage: 180 },
+    { month: "September", sales: 370, usage: 60 },
+    { month: "October", sales: 420, usage: 120 },
+    { month: "November", sales: 180, usage: 200 },
+    { month: "December", sales: 250, usage: 110 },
+  ];
+
+  const stockSalesData = [
+    { month: "January", stock: 40, sales: 150 },
+    { month: "February", stock: 330, sales: 30 },
+    { month: "March", stock: 240, sales: 460 },
+    { month: "April", stock: 150, sales: 260 },
+    { month: "May", stock: 500, sales: 310 },
+    { month: "June", stock: 340, sales: 90 },
+    { month: "July", stock: 310, sales: 230 },
+    { month: "August", stock: 80, sales: 150 },
+    { month: "September", stock: 85, sales: 220 },
+    { month: "October", stock: 430, sales: 460 },
+    { month: "November", stock: 160, sales: 300 },
+    { month: "December", stock: 200, sales: 110 },
+  ];
+
+  // Dummy Invoice Data
+  const invoices = [
+    {
+      id: "INV-1001",
+      dateIssued: "2025-08-01",
+      dueDate: "2025-08-10",
+      amount: 2500,
+      status: "Paid",
+    },
+    {
+      id: "INV-1002",
+      dateIssued: "2025-08-03",
+      dueDate: "2025-08-12",
+      amount: 1200,
+      status: "Unpaid",
+    },
+    {
+      id: "INV-1003",
+      dateIssued: "2025-08-05",
+      dueDate: "2025-08-15",
+      amount: 4000,
+      status: "Overdue",
+    },
+    {
+      id: "INV-1004",
+      dateIssued: "2025-08-07",
+      dueDate: "2025-08-17",
+      amount: 950,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+  ];
+
+  // Dynamic Stats
+  const totalInvoices = invoices.length;
+
+  const paidCount = invoices.filter(
+    (invoice) => invoice.status === "Paid",
+  ).length;
+
+  const unpaidCount = invoices.filter(
+    (invoice) => invoice.status === "Unpaid",
+  ).length;
+
+  const overdueCount = invoices.filter(
+    (invoice) => invoice.status === "Overdue",
+  ).length;
+
+  const revenue = invoices
+    .filter((invoice) => invoice.status === "Paid")
+    .reduce((acc, invoice) => acc + invoice.amount, 0);
+
+  const outstandingAmount = invoices
+    .filter(
+      (invoice) => invoice.status === "Unpaid" || invoice.status === "Overdue",
+    )
+    .reduce((acc, invoice) => acc + invoice.amount, 0);
+
+  const estimation = [
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Declined",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Pending",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+  ];
+
+  const totalestimate = estimation.length;
+
+  const approvedCount = estimation.filter(
+    (esteem) => esteem.status === "Approved",
+  ).length;
+
+  const declinedCount = estimation.filter(
+    (esteem) => esteem.status === "Declined",
+  ).length;
+
+  const pendingCount = estimation.filter(
+    (esteem) => esteem.status === "Pending",
+  ).length;
+
+  const finalEstimate = estimation
+    .filter((esteem) => esteem.status === "Approved")
+    .reduce((acc, esteem) => acc + esteem.amount, 0);
+
+  const payments = [
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+  ];
+
+  const totalpayments = payments.length;
+
+  const attachments = [
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+  ];
+
+  const totalattachments = attachments.length;
+
+  /* =========================
+     STEPS
+  ========================= */
+
+  const steps = [
+    "General Information",
+    "Project/Service Details",
+    "Materials & Resources",
+    "Attachments & Resources",
+    "Assigned Team",
+  ];
+
+  const stepss = [
+    "Basic Details",
+    "Attributes",
+    "Pricing & Stock",
+    "Options & Controls",
+  ];
+
+  /* =========================
+     HANDLERS
+  ========================= */
+
+  const openProfile = (profile, index) => {
+    setSelectedProfile(profile);
+    setProfileIndex(index);
+    setActiveTab("details");
+    setActiveSettingsSection("Upload Logo");
+    setLogoPreview(null);
+  };
+
+  const nextStep = () => {
+    if (step < steps.length - 1) {
+      setStep(step + 1);
+    }
+  };
+
+  const prevStep = () => {
+    if (step > 0) {
+      setStep(step - 1);
+    }
+  };
+
+  const handleClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setImage(imageUrl);
+    }
+  };
+
+  const handleNavProfile = (direction) => {
+    const newIndex = profileIndex + direction;
+
+    if (newIndex >= 0 && newIndex < filtered.length) {
+      setProfileIndex(newIndex);
+      setSelectedProfile(filtered[newIndex]);
+    }
+  };
+
+  const handleDelete = (id) => {
+    setProfiles((prev) => prev.filter((item) => item.id !== id));
+    setSelectedProfile(null);
+  };
+
+  /* =========================
+     DETAIL VIEW
+  ========================= */
+
+  if (selectedProfile) {
+    return (
+      <div className="min-h-full bg-gray-50">
+        {/* TOP NAV */}
+        <div className="bg-white border-b border-gray-200 px-6 py-3 flex items-center gap-3 text-sm">
+          <button
+            onClick={() => setSelectedProfile(null)}
+            className="flex items-center gap-1.5 text-green-600 hover:text-green-700 font-medium"
+          >
+            <FaArrowLeft size={11} />
+            Back to Requests
+          </button>
+
+          <div className="w-px h-4 bg-gray-300" />
+
+          <div className="flex items-center gap-1 text-gray-500">
+            <button
+              onClick={() => handleNavProfile(-1)}
+              disabled={profileIndex === 0}
+              className="p-1 hover:bg-gray-100 rounded disabled:opacity-30 transition"
+            >
+              <ChevronUp size={13} />
+            </button>
+
+            <button
+              onClick={() => handleNavProfile(1)}
+              disabled={profileIndex === filtered.length - 1}
+              className="p-1 hover:bg-gray-100 rounded disabled:opacity-30 transition"
+            >
+              <ChevronDown size={13} />
+            </button>
+
+            <span className="text-xs">
+              {profileIndex + 1} of {filtered.length}
+            </span>
+          </div>
+        </div>
+
+        {/* CONTENT */}
+        <div className="px-6 pt-5 pb-10 max-w-5xl">
+          {/* PROFILE HEADER */}
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-4">
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  {selectedProfile.requestid}
+                </h1>
+                <span
+                  className={`inline-block px-3 py-1 rounded-full border text-sm font-medium bg-white
+      ${
+        selectedProfile.status === "Open"
+          ? "border-blue-500 text-blue-500"
+          : selectedProfile.status === "in Progress"
+            ? "border-orange-500 text-orange-500"
+            : "border-gray-300 text-gray-500"
+      }`}
+                >
+                  {selectedProfile.status}
+                </span>
+              </div>
+            </div>
+
+            <button
+              onClick={() => handleDelete(selectedProfile.id)}
+              className="flex items-center gap-2 border border-red-300 text-red-500 hover:bg-red-50 px-4 py-2 rounded-lg text-sm font-medium transition"
+            >
+              <FaTrash size={11} />
+              Delete Request
+            </button>
+          </div>
+
+          {/* TABS */}
+          <div className="flex gap-0 border-b border-gray-200 mb-5">
+            <button
+              onClick={() => setActiveTab("details")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "details"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <FaInfoCircle size={12} />
+              Overview
+            </button>
+
+            <button
+              onClick={() => setActiveTab("attach")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "attach"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={attachment} className="w-5 h-5" />
+              Attachments
+            </button>
+
+            <button
+              onClick={() => setActiveTab("chat")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "chat"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={chat} className="w-5 h-5" />
+              Chat
+            </button>
+
+            <button
+              onClick={() => setActiveTab("issue")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "issue"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={issues} className="w-5 h-5" />
+              Issues
+            </button>
+
+            <button
+              onClick={() => setActiveTab("activity")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "activity"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={activity} className="w-5 h-5" />
+              Activity
+            </button>
+
+            <button
+              onClick={() => setActiveTab("trend")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "trend"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={list} className="w-5 h-5" />
+              Items
+            </button>
+          </div>
+
+          {/* DETAILS TAB */}
+          {activeTab === "details" && (
+            <>
+              <div className="flex gap-3">
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 w-screen">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="font-semibold text-gray-800 text-base">
+                      General Information
+                    </h2>
+
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="flex items-center gap-1.5 border border-gray-300 text-gray-600 hover:bg-gray-50 px-3 py-1.5 rounded-lg text-sm transition"
+                    >
+                      <Pencil size={12} />
+                      Edit
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-y-6 gap-x-6">
+                    {[
+                      ["Request Title", selectedProfile.requesttitle],
+
+                      [
+                        "Client",
+                        <div className="flex items-center gap-2">
+                          <img
+                            src={selectedProfile.avatar}
+                            alt={selectedProfile.client}
+                            className="w-8 h-8 rounded-full object-cover"
+                          />
+                          <span>{selectedProfile.client}</span>
+                        </div>,
+                      ],
+
+                      ["Project Type", selectedProfile.projectype],
+                      ["Location", selectedProfile.location],
+                      [
+                        "Priority",
+                        <span
+                          className={`inline-block px-3 py-1 rounded-full border text-sm font-medium bg-white
+      ${
+        selectedProfile.priority === "Low"
+          ? "border-green-500 text-green-500"
+          : selectedProfile.priority === "High"
+            ? "border-red-500 text-red-500"
+            : "border-gray-300 text-gray-500"
+      }`}
+                        >
+                          {selectedProfile.priority}
+                        </span>,
+                      ],
+                      ["Date Submitted", selectedProfile.datesubmit],
+                    ].map(([label, value]) => (
+                      <div key={label}>
+                        <p className="text-xs text-gray-400 mb-1 font-medium">
+                          {label}
+                        </p>
+
+                        <div className="text-sm text-gray-800">{value}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 w-screen">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="font-semibold text-gray-800 text-base">
+                      Assignee Details
+                    </h2>
+
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="flex items-center gap-1.5 border border-gray-300 text-gray-600 hover:bg-gray-50 px-3 py-1.5 rounded-lg text-sm transition"
+                    >
+                      <Pencil size={12} />
+                      Edit
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-y-6 gap-x-6">
+                    {[
+                      [
+                        "Lead Estimator",
+                        <div className="flex items-center gap-2">
+                          <img
+                            src={selectedProfile.avatar}
+                            alt={selectedProfile.lead}
+                            className="w-8 h-8 rounded-full object-cover"
+                          />
+                          <span>{selectedProfile.lead}</span>
+                        </div>,
+                      ],
+                      ["Role", selectedProfile.role],
+                      ["Department", selectedProfile.department],
+                      ["Workload indicator", selectedProfile.workloadindicator],
+                      [
+                        "Team Collaboration",
+                        <img
+                          src={selectedProfile.avatar}
+                          alt={selectedProfile.lead}
+                          className="w-8 h-8 rounded-full object-cover"
+                        />,
+                      ],
+                    ].map(([label, value]) => (
+                      <div key={label}>
+                        <p className="text-xs text-gray-400 mb-1 font-medium">
+                          {label}
+                        </p>
+
+                        <p className="text-sm text-gray-800">{value}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 w-screen">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="font-semibold text-gray-800 text-base">
+                      Project/Service Details
+                    </h2>
+
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="flex items-center gap-1.5 border border-gray-300 text-gray-600 hover:bg-gray-50 px-3 py-1.5 rounded-lg text-sm transition"
+                    >
+                      <Pencil size={12} />
+                      Edit
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-y-6 gap-x-6">
+                    {[
+                      ["Project Type", selectedProfile.projectype],
+                      ["Location", selectedProfile.location],
+                      ["Estimated Area", selectedProfile.availablecapacity],
+                      [
+                        "Required Completion Date",
+                        selectedProfile.completedate,
+                      ],
+                      ["Detailed Description", selectedProfile.description],
+                      ["Note", selectedProfile.note],
+                    ].map(([label, value]) => (
+                      <div key={label}>
+                        <p className="text-xs text-gray-400 mb-1 font-medium">
+                          {label}
+                        </p>
+
+                        <p className="text-sm text-gray-800">{value}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 w-screen">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="font-semibold text-gray-800 text-base">
+                      Materials & Resources
+                    </h2>
+
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="flex items-center gap-1.5 border border-gray-300 text-gray-600 hover:bg-gray-50 px-3 py-1.5 rounded-lg text-sm transition"
+                    >
+                      <Pencil size={12} />
+                      Edit
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-y-6 gap-x-6">
+                    {[
+                      ["Material Preferences", selectedProfile.material],
+                      ["Labour Requirement", selectedProfile.labour],
+                      ["Budget Constraints", selectedProfile.constraint],
+                      [
+                        "Required Completion Date",
+                        selectedProfile.equipmentneeded,
+                      ],
+                    ].map(([label, value]) => (
+                      <div key={label}>
+                        <p className="text-xs text-gray-400 mb-1 font-medium">
+                          {label}
+                        </p>
+
+                        <p className="text-sm text-gray-800">{value}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* INVOICE TAB */}
+          {activeTab === "attach" && (
+            <>
+              <div className="bg-white text-gray-800 p-6 rounded-xl shadow">
+                {/* HEADER */}
+
+                <div className="flex justify-between items-center mb-4">
+                  <div className="flex-col">
+                    <h2 className="text-xl text-black">Attachments</h2>
+                  </div>
+
+                  <button className="bg-green-500 hover:bg-green-600 text-white px-5 py-2.5 rounded-lg font-medium transition">
+                    + Add File
+                  </button>
+                </div>
+
+                {/* FILTER BAR */}
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-xl px-3 py-2 text-sm w-80">
+                    <FaSearch className="text-gray-400" />
+                    <input
+                      className="outline-none w-full placeholder-gray-400"
+                      placeholder="Search for a file"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </div>
+                  <div className="ml-auto flex items-center gap-2">
+                    <button className="flex items-center gap-2 border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white text-gray-600 hover:bg-gray-50">
+                      20 <FaChevronDown size={10} />
+                    </button>
+                    <button className="border border-green-400 text-green-600 rounded-xl px-3 py-2 hover:bg-green-50">
+                      <FaEllipsisH size={14} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* TABLE */}
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        <th className="p-3 w-10">
+                          <input type="checkbox" />
+                        </th>
+
+                        <th className="text-left p-3">File Name</th>
+                        <th className="text-left p-3">Attachment Type</th>
+                        <th className="text-left p-3">Uploaded By</th>
+                        <th className="text-left p-3">Date Uploaded</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {filteredt.map((c, i) => (
+                        <tr
+                          key={c.id}
+                          className="border-b hover:bg-gray-50 transition cursor-pointer"
+                          onClick={() => openProfile(c, i)}
+                        >
+                          <td className="p-3">
+                            <input type="checkbox" />
+                          </td>
+
+                          <td className="p-3 flex items-center gap-3">
+                            {c.image ?? ""}
+
+                            {c.filename}
+                          </td>
+                          <td className="p-3">{c.attachmenttype}</td>
+
+                          <td className="p-3">{c.uploaded}</td>
+                          <td className="p-3">{c.date}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* PAGINATION */}
+                <div className="flex justify-between items-center mt-6 text-sm text-gray-500">
+                  <p>Showing 20 of 100</p>
+
+                  <div className="flex gap-2">
+                    {[1, 2, 3, 4].map((page) => (
+                      <button
+                        key={page}
+                        className={`border border-gray-300 w-8 h-8 rounded flex items-center justify-center ${
+                          page === 1
+                            ? "bg-green-100 text-green-700"
+                            : "hover:bg-gray-100"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {showModal && (
+                  <ItemModal
+                    title="Add Item"
+                    image={image}
+                    step={step}
+                    setStep={setStep}
+                    steps={stepss}
+                    nextStep={nextStep}
+                    prevStep={prevStep}
+                    handleClick={handleClick}
+                    handleImageChange={handleImageChange}
+                    fileInputRef={fileInputRef}
+                    setShowModal={setShowModal}
+                  />
+                )}
+              </div>
+            </>
+          )}
+
+          {/* ACTIVITY TAB */}
+          {activeTab === "activity" && (
+            <>
+              <h2>Today</h2>
+              <div className="flex gap-3">
+                <img src={dotgreen} className="w-6 h-6 " />
+                <p>Request now In Progress</p>{" "}
+                <img src={dot} className="w-3 h-3" />
+                <p>12:00 PM - December 09, 2024</p>
+              </div>
+              <img src={lineman} className="h-10" />
+              <div className="flex gap-3">
+                <img src={dotgreen} className="w-6 h-6 " />
+                <p>Eva Thompson attached added an Issue</p>{" "}
+                <img src={dot} className="w-3 h-3" />
+                <p>12:00 PM - December 09, 2024</p>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* EDIT MODAL */}
+        {showModal && (
+          <GroupModal
+            title="Edit Group"
+            image={selectedProfile.avatar}
+            step={step}
+            setStep={setStep}
+            steps={steps}
+            nextStep={nextStep}
+            prevStep={prevStep}
+            handleClick={handleClick}
+            handleImageChange={handleImageChange}
+            fileInputRef={fileInputRef}
+            setShowModal={setShowModal}
+          />
+        )}
+      </div>
+    );
+  }
+
+  /* =========================
+     TABLE VIEW
+  ========================= */
+  return (
+    <div className="bg-white text-gray-800 p-6 rounded-xl shadow">
+      {/* HEADER */}
+
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex-col">
+          <h2 className="text-xl text-black">Task Pool</h2>
+          <p>100 tasks</p>
+        </div>
+
+        <button
+          onClick={() => setShowModal(true)}
+          className="flex items-center gap-2 bg-green-500 hover:bg-green-600 px-4 py-2 rounded-md text-black font-normal"
+        >
+          Add Request
+        </button>
+      </div>
+
+      <hr className="border-gray-200 mb-6" />
+
+      {/* FILTER BAR */}
+      <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-xl px-3 py-2 text-sm w-80">
+          <FaSearch className="text-gray-400" />
+          <input
+            className="outline-none w-full placeholder-gray-400"
+            placeholder="Search for a request"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        <div className="ml-auto flex items-center gap-2">
+          <button className="flex items-center gap-2 border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white text-gray-600 hover:bg-gray-50">
+            5 <FaChevronDown size={10} />
+          </button>
+          <button className="border border-green-400 text-green-600 rounded-xl px-3 py-2 hover:bg-green-50">
+            <FaEllipsisH size={14} />
+          </button>
+        </div>
+      </div>
+
+      {/* TABLE */}
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="p-3 w-10">
+                <input type="checkbox" />
+              </th>
+
+              <th className="text-left p-3">Task ID</th>
+              <th className="text-left p-3">Task Title</th>
+              <th className="text-left p-3">Client</th>
+              <th className="text-left p-3">Status</th>
+              <th className="text-left p-3">Priority</th>
+              <th className="text-left p-3">Project Type</th>
+              <th className="text-left p-3">Location</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {filtered.map((c, i) => (
+              <tr
+                key={c.id}
+                className="border-b hover:bg-gray-50 transition cursor-pointer"
+                onClick={() => openProfile(c, i)}
+              >
+                <td className="p-3">
+                  <input type="checkbox" />
+                </td>
+
+                <td className="p-3 flex items-center gap-3">{c.requestid}</td>
+                <td className="p-3">{c.requesttitle}</td>
+                <td className="p-3">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={c.avatar}
+                      className="w-9 h-9 rounded-full object-cover border border-gray-200"
+                      alt=""
+                    />
+                    <span className="font-medium text-green-500 group-hover:text-green-700 transition">
+                      {c.client}
+                    </span>
+                  </div>
+                </td>
+                <td className="p-3">
+                  <span
+                    className={`inline-block px-3 py-1 rounded-full border text-sm font-medium bg-white
+      ${
+        c.status === "Open"
+          ? "border-blue-500 text-blue-500"
+          : c.status === "in Progress"
+            ? "border-orange-500 text-orange-500"
+            : "border-gray-300 text-gray-500"
+      }`}
+                  >
+                    {c.status}
+                  </span>
+                </td>
+
+                <td className="p-3">
+                  <span
+                    className={`inline-block px-3 py-1 rounded-full border text-sm font-medium bg-white
+      ${
+        c.priority === "Low"
+          ? "border-green-500 text-green-500"
+          : c.priority === "High"
+            ? "border-red-500 text-red-500"
+            : "border-gray-300 text-gray-500"
+      }`}
+                  >
+                    {c.priority}
+                  </span>
+                </td>
+
+                <td className="p-3">{c.projectype}</td>
+                <td className="p-3">{c.location}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* PAGINATION */}
+      <div className="flex justify-between items-center mt-6 text-sm text-gray-500">
+        <p>Showing 20 of 100</p>
+
+        <div className="flex gap-2">
+          {[1, 2, 3, 4].map((page) => (
+            <button
+              key={page}
+              className={`border border-gray-300 w-8 h-8 rounded flex items-center justify-center ${
+                page === 1 ? "bg-green-100 text-green-700" : "hover:bg-gray-100"
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {showModal && (
+        <RequestModal
+          title="Add Request"
+          image={image}
+          step={step}
+          setStep={setStep}
+          steps={steps}
+          nextStep={nextStep}
+          prevStep={prevStep}
+          handleClick={handleClick}
+          handleImageChange={handleImageChange}
+          fileInputRef={fileInputRef}
+          setShowModal={setShowModal}
+        />
+      )}
+    </div>
+  );
+}
+
+const Newmytask = [
+  {
+    id: 1,
+    requestid: "T-001",
+    requesttitle: "Roof Replacement-Mall",
+    client: "Jane Doe",
+    priority: "High",
+    projectype: "Commercial",
+    location: "Spintex",
+    qrcode: "WH-001-ACC",
+    role: "Field Engineer",
+    storetypes: "Pallets,Racks",
+    availitems: "Electronics, Food, Apparel",
+    gps: "0-73738-8282",
+    shelfname: "Rods Shelf",
+    warehouse: "Main Warehouse",
+    totalcapacity: "10,000kg",
+    usedcapacity: "75,000kg",
+    availablecapacity: "2,500kg",
+    status: "Taken",
+    symbol: "kg",
+    itemscount: "120",
+    brandimg: <img src={nike} className="w-5 h-5" />,
+    countryimg: <img src={usa} className="w-5 h-5" />,
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "nike.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "USA",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description: " Items damaged in transit",
+    allowed: "Fragile, etc.",
+    datesubmit: "24/04/2025",
+    lead: "Eva Thompson",
+    department: "Department",
+    workloadindicator: 5,
+    estimatedarea: "Opening Stock",
+    completedate: "o6/11/2025",
+    note: "Note goes here",
+    material: "Material",
+    labour: "Requirement",
+    constraint: "GHC 25,000",
+    equipmentneeded: "Excavator, Crane, Special Tools",
+  },
+  {
+    id: 2,
+    requestid: "T-001",
+    requesttitle: "Roof Replacement-Mall",
+    client: "Jane Doe",
+    priority: "High",
+    projectype: "Commercial",
+    location: "Spintex",
+    qrcode: "WH-001-ACC",
+    role: "Field Engineer",
+    storetypes: "Pallets,Racks",
+    availitems: "Electronics, Food, Apparel",
+    gps: "0-73738-8282",
+    shelfname: "Rods Shelf",
+    warehouse: "Main Warehouse",
+    totalcapacity: "10,000kg",
+    usedcapacity: "75,000kg",
+    availablecapacity: "2,500kg",
+    status: "Taken",
+    symbol: "kg",
+    itemscount: "120",
+    brandimg: <img src={nike} className="w-5 h-5" />,
+    countryimg: <img src={usa} className="w-5 h-5" />,
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "nike.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "USA",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description: " Items damaged in transit",
+    allowed: "Fragile, etc.",
+    datesubmit: "24/04/2025",
+    lead: "Eva Thompson",
+    department: "Department",
+    workloadindicator: 5,
+    estimatedarea: "Opening Stock",
+    completedate: "o6/11/2025",
+    note: "Note goes here",
+    material: "Material",
+    labour: "Requirement",
+    constraint: "GHC 25,000",
+    equipmentneeded: "Excavator, Crane, Special Tools",
+  },
+  {
+    id: 3,
+    requestid: "T-001",
+    requesttitle: "Roof Replacement-Mall",
+    client: "Jane Doe",
+    priority: "High",
+    projectype: "Commercial",
+    location: "Spintex",
+    qrcode: "WH-001-ACC",
+    role: "Field Engineer",
+    storetypes: "Pallets,Racks",
+    availitems: "Electronics, Food, Apparel",
+    gps: "0-73738-8282",
+    shelfname: "Rods Shelf",
+    warehouse: "Main Warehouse",
+    totalcapacity: "10,000kg",
+    usedcapacity: "75,000kg",
+    availablecapacity: "2,500kg",
+    status: "Taken",
+    symbol: "kg",
+    itemscount: "120",
+    brandimg: <img src={nike} className="w-5 h-5" />,
+    countryimg: <img src={usa} className="w-5 h-5" />,
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "nike.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "USA",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description: " Items damaged in transit",
+    allowed: "Fragile, etc.",
+    datesubmit: "24/04/2025",
+    lead: "Eva Thompson",
+    department: "Department",
+    workloadindicator: 5,
+    estimatedarea: "Opening Stock",
+    completedate: "o6/11/2025",
+    note: "Note goes here",
+    material: "Material",
+    labour: "Requirement",
+    constraint: "GHC 25,000",
+    equipmentneeded: "Excavator, Crane, Special Tools",
+  },
+  {
+    id: 4,
+    requestid: "T-001",
+    requesttitle: "Roof Replacement-Mall",
+    client: "Jane Doe",
+    priority: "High",
+    projectype: "Commercial",
+    location: "Spintex",
+    qrcode: "WH-001-ACC",
+    role: "Field Engineer",
+    storetypes: "Pallets,Racks",
+    availitems: "Electronics, Food, Apparel",
+    gps: "0-73738-8282",
+    shelfname: "Rods Shelf",
+    warehouse: "Main Warehouse",
+    totalcapacity: "10,000kg",
+    usedcapacity: "75,000kg",
+    availablecapacity: "2,500kg",
+    status: "Taken",
+    symbol: "kg",
+    itemscount: "120",
+    brandimg: <img src={nike} className="w-5 h-5" />,
+    countryimg: <img src={usa} className="w-5 h-5" />,
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "nike.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "USA",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description: " Items damaged in transit",
+    allowed: "Fragile, etc.",
+    datesubmit: "24/04/2025",
+    lead: "Eva Thompson",
+    department: "Department",
+    workloadindicator: 5,
+    estimatedarea: "Opening Stock",
+    completedate: "o6/11/2025",
+    note: "Note goes here",
+    material: "Material",
+    labour: "Requirement",
+    constraint: "GHC 25,000",
+    equipmentneeded: "Excavator, Crane, Special Tools",
+  },
+  {
+    id: 5,
+    requestid: "T-001",
+    requesttitle: "Roof Replacement-Mall",
+    client: "Jane Doe",
+    priority: "High",
+    projectype: "Commercial",
+    location: "Spintex",
+    qrcode: "WH-001-ACC",
+    role: "Field Engineer",
+    storetypes: "Pallets,Racks",
+    availitems: "Electronics, Food, Apparel",
+    gps: "0-73738-8282",
+    shelfname: "Rods Shelf",
+    warehouse: "Main Warehouse",
+    totalcapacity: "10,000kg",
+    usedcapacity: "75,000kg",
+    availablecapacity: "2,500kg",
+    status: "Taken",
+    symbol: "kg",
+    itemscount: "120",
+    brandimg: <img src={nike} className="w-5 h-5" />,
+    countryimg: <img src={usa} className="w-5 h-5" />,
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "nike.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "USA",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description: " Items damaged in transit",
+    allowed: "Fragile, etc.",
+    datesubmit: "24/04/2025",
+    lead: "Eva Thompson",
+    department: "Department",
+    workloadindicator: 5,
+    estimatedarea: "Opening Stock",
+    completedate: "o6/11/2025",
+    note: "Note goes here",
+    material: "Material",
+    labour: "Requirement",
+    constraint: "GHC 25,000",
+    equipmentneeded: "Excavator, Crane, Special Tools",
+  },
+];
+
+function MyTaskTable() {
+  /* =========================
+     STATES
+  ========================= */
+
+  const [profiles, setProfiles] = useState(Newmytask);
+  const [profilest, setProfilest] = useState(attachmentreq);
+  const [selectedProfile, setSelectedProfile] = useState(null);
+  const [search, setSearch] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
+  const [step, setStep] = useState(0);
+  const [activeTab, setActiveTab] = useState("details");
+
+  const [activeSettingsSection, setActiveSettingsSection] =
+    useState("Upload Logo");
+
+  const [profileIndex, setProfileIndex] = useState(0);
+
+  const [logoPreview, setLogoPreview] = useState(null);
+
+  const [image, setImage] = useState(null);
+
+  const fileInputRef = useRef(null);
+  const [showExpirationDate, setShowExpirationDate] = useState(false);
+
+  /* =========================
+     FILTERED DATA
+  ========================= */
+
+  const filtered = profiles.filter(
+    (p) =>
+      p.requestid.toLowerCase().includes(search.toLowerCase()) ||
+      p.requesttitle.toLowerCase().includes(search.toLowerCase()) ||
+      p.client.toLowerCase().includes(search.toLowerCase()) ||
+      p.priority.toLowerCase().includes(search.toLowerCase()) ||
+      p.projectype.toLowerCase().includes(search.toLowerCase()) ||
+      p.location.toLowerCase().includes(search.toLowerCase()) ||
+      p.status.toLowerCase().includes(search.toLowerCase()) ||
+      p.avatar.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  const filteredt = profilest.filter(
+    (p) =>
+      p.filename.toLowerCase().includes(search.toLowerCase()) ||
+      p.attachmenttype.toLowerCase().includes(search.toLowerCase()) ||
+      p.uploaded.toLowerCase().includes(search.toLowerCase()) ||
+      p.date.toLowerCase().includes(search.toLowerCase()) ||
+      p.image.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  const salesUsageData = [
+    { month: "January", sales: 320, usage: 50 },
+    { month: "February", sales: 220, usage: 210 },
+    { month: "March", sales: 430, usage: 70 },
+    { month: "April", sales: 100, usage: 180 },
+    { month: "May", sales: 140, usage: 230 },
+    { month: "June", sales: 410, usage: 130 },
+    { month: "July", sales: 380, usage: 160 },
+    { month: "August", sales: 90, usage: 180 },
+    { month: "September", sales: 370, usage: 60 },
+    { month: "October", sales: 420, usage: 120 },
+    { month: "November", sales: 180, usage: 200 },
+    { month: "December", sales: 250, usage: 110 },
+  ];
+
+  const stockSalesData = [
+    { month: "January", stock: 40, sales: 150 },
+    { month: "February", stock: 330, sales: 30 },
+    { month: "March", stock: 240, sales: 460 },
+    { month: "April", stock: 150, sales: 260 },
+    { month: "May", stock: 500, sales: 310 },
+    { month: "June", stock: 340, sales: 90 },
+    { month: "July", stock: 310, sales: 230 },
+    { month: "August", stock: 80, sales: 150 },
+    { month: "September", stock: 85, sales: 220 },
+    { month: "October", stock: 430, sales: 460 },
+    { month: "November", stock: 160, sales: 300 },
+    { month: "December", stock: 200, sales: 110 },
+  ];
+
+  // Dummy Invoice Data
+  const invoices = [
+    {
+      id: "INV-1001",
+      dateIssued: "2025-08-01",
+      dueDate: "2025-08-10",
+      amount: 2500,
+      status: "Paid",
+    },
+    {
+      id: "INV-1002",
+      dateIssued: "2025-08-03",
+      dueDate: "2025-08-12",
+      amount: 1200,
+      status: "Unpaid",
+    },
+    {
+      id: "INV-1003",
+      dateIssued: "2025-08-05",
+      dueDate: "2025-08-15",
+      amount: 4000,
+      status: "Overdue",
+    },
+    {
+      id: "INV-1004",
+      dateIssued: "2025-08-07",
+      dueDate: "2025-08-17",
+      amount: 950,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+  ];
+
+  // Dynamic Stats
+  const totalInvoices = invoices.length;
+
+  const paidCount = invoices.filter(
+    (invoice) => invoice.status === "Paid",
+  ).length;
+
+  const unpaidCount = invoices.filter(
+    (invoice) => invoice.status === "Unpaid",
+  ).length;
+
+  const overdueCount = invoices.filter(
+    (invoice) => invoice.status === "Overdue",
+  ).length;
+
+  const revenue = invoices
+    .filter((invoice) => invoice.status === "Paid")
+    .reduce((acc, invoice) => acc + invoice.amount, 0);
+
+  const outstandingAmount = invoices
+    .filter(
+      (invoice) => invoice.status === "Unpaid" || invoice.status === "Overdue",
+    )
+    .reduce((acc, invoice) => acc + invoice.amount, 0);
+
+  const estimation = [
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Declined",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Pending",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+  ];
+
+  const totalestimate = estimation.length;
+
+  const approvedCount = estimation.filter(
+    (esteem) => esteem.status === "Approved",
+  ).length;
+
+  const declinedCount = estimation.filter(
+    (esteem) => esteem.status === "Declined",
+  ).length;
+
+  const pendingCount = estimation.filter(
+    (esteem) => esteem.status === "Pending",
+  ).length;
+
+  const finalEstimate = estimation
+    .filter((esteem) => esteem.status === "Approved")
+    .reduce((acc, esteem) => acc + esteem.amount, 0);
+
+  const payments = [
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+  ];
+
+  const totalpayments = payments.length;
+
+  const attachments = [
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+  ];
+
+  const totalattachments = attachments.length;
+
+  /* =========================
+     STEPS
+  ========================= */
+
+  const steps = [
+    "General Information",
+    "Project/Service Details",
+    "Materials & Resources",
+    "Attachments & Resources",
+    "Assigned Team",
+  ];
+
+  const stepss = [
+    "Basic Details",
+    "Attributes",
+    "Pricing & Stock",
+    "Options & Controls",
+  ];
+
+  /* =========================
+     HANDLERS
+  ========================= */
+
+  const openProfile = (profile, index) => {
+    setSelectedProfile(profile);
+    setProfileIndex(index);
+    setActiveTab("details");
+    setActiveSettingsSection("Upload Logo");
+    setLogoPreview(null);
+  };
+
+  const nextStep = () => {
+    if (step < steps.length - 1) {
+      setStep(step + 1);
+    }
+  };
+
+  const prevStep = () => {
+    if (step > 0) {
+      setStep(step - 1);
+    }
+  };
+
+  const handleClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setImage(imageUrl);
+    }
+  };
+
+  const handleNavProfile = (direction) => {
+    const newIndex = profileIndex + direction;
+
+    if (newIndex >= 0 && newIndex < filtered.length) {
+      setProfileIndex(newIndex);
+      setSelectedProfile(filtered[newIndex]);
+    }
+  };
+
+  const handleDelete = (id) => {
+    setProfiles((prev) => prev.filter((item) => item.id !== id));
+    setSelectedProfile(null);
+  };
+
+  /* =========================
+     DETAIL VIEW
+  ========================= */
+
+  if (selectedProfile) {
+    return (
+      <div className="min-h-full bg-gray-50">
+        {/* TOP NAV */}
+        <div className="bg-white border-b border-gray-200 px-6 py-3 flex items-center gap-3 text-sm">
+          <button
+            onClick={() => setSelectedProfile(null)}
+            className="flex items-center gap-1.5 text-green-600 hover:text-green-700 font-medium"
+          >
+            <FaArrowLeft size={11} />
+            Back to Requests
+          </button>
+
+          <div className="w-px h-4 bg-gray-300" />
+
+          <div className="flex items-center gap-1 text-gray-500">
+            <button
+              onClick={() => handleNavProfile(-1)}
+              disabled={profileIndex === 0}
+              className="p-1 hover:bg-gray-100 rounded disabled:opacity-30 transition"
+            >
+              <ChevronUp size={13} />
+            </button>
+
+            <button
+              onClick={() => handleNavProfile(1)}
+              disabled={profileIndex === filtered.length - 1}
+              className="p-1 hover:bg-gray-100 rounded disabled:opacity-30 transition"
+            >
+              <ChevronDown size={13} />
+            </button>
+
+            <span className="text-xs">
+              {profileIndex + 1} of {filtered.length}
+            </span>
+          </div>
+        </div>
+
+        {/* CONTENT */}
+        <div className="px-6 pt-5 pb-10 max-w-5xl">
+          {/* PROFILE HEADER */}
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-4">
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  {selectedProfile.requestid}
+                </h1>
+                <span
+                  className={`inline-block px-3 py-1 rounded-full border text-sm font-medium bg-white
+      ${
+        selectedProfile.status === "Open"
+          ? "border-blue-500 text-blue-500"
+          : selectedProfile.status === "in Progress"
+            ? "border-orange-500 text-orange-500"
+            : "border-gray-300 text-gray-500"
+      }`}
+                >
+                  {selectedProfile.status}
+                </span>
+              </div>
+            </div>
+
+            <button
+              onClick={() => handleDelete(selectedProfile.id)}
+              className="flex items-center gap-2 border border-red-300 text-red-500 hover:bg-red-50 px-4 py-2 rounded-lg text-sm font-medium transition"
+            >
+              <FaTrash size={11} />
+              Delete Request
+            </button>
+          </div>
+
+          {/* TABS */}
+          <div className="flex gap-0 border-b border-gray-200 mb-5">
+            <button
+              onClick={() => setActiveTab("details")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "details"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <FaInfoCircle size={12} />
+              Overview
+            </button>
+
+            <button
+              onClick={() => setActiveTab("attach")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "attach"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={attachment} className="w-5 h-5" />
+              Attachments
+            </button>
+
+            <button
+              onClick={() => setActiveTab("chat")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "chat"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={chat} className="w-5 h-5" />
+              Chat
+            </button>
+
+            <button
+              onClick={() => setActiveTab("issue")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "issue"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={issues} className="w-5 h-5" />
+              Issues
+            </button>
+
+            <button
+              onClick={() => setActiveTab("activity")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "activity"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={activity} className="w-5 h-5" />
+              Activity
+            </button>
+
+            <button
+              onClick={() => setActiveTab("trend")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "trend"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={list} className="w-5 h-5" />
+              Items
+            </button>
+          </div>
+
+          {/* DETAILS TAB */}
+          {activeTab === "details" && (
+            <>
+              <div className="flex gap-3">
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 w-screen">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="font-semibold text-gray-800 text-base">
+                      General Information
+                    </h2>
+
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="flex items-center gap-1.5 border border-gray-300 text-gray-600 hover:bg-gray-50 px-3 py-1.5 rounded-lg text-sm transition"
+                    >
+                      <Pencil size={12} />
+                      Edit
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-y-6 gap-x-6">
+                    {[
+                      ["Request Title", selectedProfile.requesttitle],
+
+                      [
+                        "Client",
+                        <div className="flex items-center gap-2">
+                          <img
+                            src={selectedProfile.avatar}
+                            alt={selectedProfile.client}
+                            className="w-8 h-8 rounded-full object-cover"
+                          />
+                          <span>{selectedProfile.client}</span>
+                        </div>,
+                      ],
+
+                      ["Project Type", selectedProfile.projectype],
+                      ["Location", selectedProfile.location],
+                      [
+                        "Priority",
+                        <span
+                          className={`inline-block px-3 py-1 rounded-full border text-sm font-medium bg-white
+      ${
+        selectedProfile.priority === "Low"
+          ? "border-green-500 text-green-500"
+          : selectedProfile.priority === "High"
+            ? "border-red-500 text-red-500"
+            : "border-gray-300 text-gray-500"
+      }`}
+                        >
+                          {selectedProfile.priority}
+                        </span>,
+                      ],
+                      ["Date Submitted", selectedProfile.datesubmit],
+                    ].map(([label, value]) => (
+                      <div key={label}>
+                        <p className="text-xs text-gray-400 mb-1 font-medium">
+                          {label}
+                        </p>
+
+                        <div className="text-sm text-gray-800">{value}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 w-screen">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="font-semibold text-gray-800 text-base">
+                      Assignee Details
+                    </h2>
+
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="flex items-center gap-1.5 border border-gray-300 text-gray-600 hover:bg-gray-50 px-3 py-1.5 rounded-lg text-sm transition"
+                    >
+                      <Pencil size={12} />
+                      Edit
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-y-6 gap-x-6">
+                    {[
+                      [
+                        "Lead Estimator",
+                        <div className="flex items-center gap-2">
+                          <img
+                            src={selectedProfile.avatar}
+                            alt={selectedProfile.lead}
+                            className="w-8 h-8 rounded-full object-cover"
+                          />
+                          <span>{selectedProfile.lead}</span>
+                        </div>,
+                      ],
+                      ["Role", selectedProfile.role],
+                      ["Department", selectedProfile.department],
+                      ["Workload indicator", selectedProfile.workloadindicator],
+                      [
+                        "Team Collaboration",
+                        <img
+                          src={selectedProfile.avatar}
+                          alt={selectedProfile.lead}
+                          className="w-8 h-8 rounded-full object-cover"
+                        />,
+                      ],
+                    ].map(([label, value]) => (
+                      <div key={label}>
+                        <p className="text-xs text-gray-400 mb-1 font-medium">
+                          {label}
+                        </p>
+
+                        <p className="text-sm text-gray-800">{value}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 w-screen">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="font-semibold text-gray-800 text-base">
+                      Project/Service Details
+                    </h2>
+
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="flex items-center gap-1.5 border border-gray-300 text-gray-600 hover:bg-gray-50 px-3 py-1.5 rounded-lg text-sm transition"
+                    >
+                      <Pencil size={12} />
+                      Edit
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-y-6 gap-x-6">
+                    {[
+                      ["Project Type", selectedProfile.projectype],
+                      ["Location", selectedProfile.location],
+                      ["Estimated Area", selectedProfile.availablecapacity],
+                      [
+                        "Required Completion Date",
+                        selectedProfile.completedate,
+                      ],
+                      ["Detailed Description", selectedProfile.description],
+                      ["Note", selectedProfile.note],
+                    ].map(([label, value]) => (
+                      <div key={label}>
+                        <p className="text-xs text-gray-400 mb-1 font-medium">
+                          {label}
+                        </p>
+
+                        <p className="text-sm text-gray-800">{value}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 w-screen">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="font-semibold text-gray-800 text-base">
+                      Materials & Resources
+                    </h2>
+
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="flex items-center gap-1.5 border border-gray-300 text-gray-600 hover:bg-gray-50 px-3 py-1.5 rounded-lg text-sm transition"
+                    >
+                      <Pencil size={12} />
+                      Edit
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-y-6 gap-x-6">
+                    {[
+                      ["Material Preferences", selectedProfile.material],
+                      ["Labour Requirement", selectedProfile.labour],
+                      ["Budget Constraints", selectedProfile.constraint],
+                      [
+                        "Required Completion Date",
+                        selectedProfile.equipmentneeded,
+                      ],
+                    ].map(([label, value]) => (
+                      <div key={label}>
+                        <p className="text-xs text-gray-400 mb-1 font-medium">
+                          {label}
+                        </p>
+
+                        <p className="text-sm text-gray-800">{value}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* INVOICE TAB */}
+          {activeTab === "attach" && (
+            <>
+              <div className="bg-white text-gray-800 p-6 rounded-xl shadow">
+                {/* HEADER */}
+
+                <div className="flex justify-between items-center mb-4">
+                  <div className="flex-col">
+                    <h2 className="text-xl text-black">Attachments</h2>
+                  </div>
+
+                  <button className="bg-green-500 hover:bg-green-600 text-white px-5 py-2.5 rounded-lg font-medium transition">
+                    + Add File
+                  </button>
+                </div>
+
+                {/* FILTER BAR */}
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-xl px-3 py-2 text-sm w-80">
+                    <FaSearch className="text-gray-400" />
+                    <input
+                      className="outline-none w-full placeholder-gray-400"
+                      placeholder="Search for a file"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </div>
+                  <div className="ml-auto flex items-center gap-2">
+                    <button className="flex items-center gap-2 border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white text-gray-600 hover:bg-gray-50">
+                      20 <FaChevronDown size={10} />
+                    </button>
+                    <button className="border border-green-400 text-green-600 rounded-xl px-3 py-2 hover:bg-green-50">
+                      <FaEllipsisH size={14} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* TABLE */}
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        <th className="p-3 w-10">
+                          <input type="checkbox" />
+                        </th>
+
+                        <th className="text-left p-3">File Name</th>
+                        <th className="text-left p-3">Attachment Type</th>
+                        <th className="text-left p-3">Uploaded By</th>
+                        <th className="text-left p-3">Date Uploaded</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {filteredt.map((c, i) => (
+                        <tr
+                          key={c.id}
+                          className="border-b hover:bg-gray-50 transition cursor-pointer"
+                          onClick={() => openProfile(c, i)}
+                        >
+                          <td className="p-3">
+                            <input type="checkbox" />
+                          </td>
+
+                          <td className="p-3 flex items-center gap-3">
+                            {c.image ?? ""}
+
+                            {c.filename}
+                          </td>
+                          <td className="p-3">{c.attachmenttype}</td>
+
+                          <td className="p-3">{c.uploaded}</td>
+                          <td className="p-3">{c.date}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* PAGINATION */}
+                <div className="flex justify-between items-center mt-6 text-sm text-gray-500">
+                  <p>Showing 20 of 100</p>
+
+                  <div className="flex gap-2">
+                    {[1, 2, 3, 4].map((page) => (
+                      <button
+                        key={page}
+                        className={`border border-gray-300 w-8 h-8 rounded flex items-center justify-center ${
+                          page === 1
+                            ? "bg-green-100 text-green-700"
+                            : "hover:bg-gray-100"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {showModal && (
+                  <ItemModal
+                    title="Add Item"
+                    image={image}
+                    step={step}
+                    setStep={setStep}
+                    steps={stepss}
+                    nextStep={nextStep}
+                    prevStep={prevStep}
+                    handleClick={handleClick}
+                    handleImageChange={handleImageChange}
+                    fileInputRef={fileInputRef}
+                    setShowModal={setShowModal}
+                  />
+                )}
+              </div>
+            </>
+          )}
+
+          {/* ACTIVITY TAB */}
+          {activeTab === "activity" && (
+            <>
+              <h2>Today</h2>
+              <div className="flex gap-3">
+                <img src={dotgreen} className="w-6 h-6 " />
+                <p>Request now In Progress</p>{" "}
+                <img src={dot} className="w-3 h-3" />
+                <p>12:00 PM - December 09, 2024</p>
+              </div>
+              <img src={lineman} className="h-10" />
+              <div className="flex gap-3">
+                <img src={dotgreen} className="w-6 h-6 " />
+                <p>Eva Thompson attached added an Issue</p>{" "}
+                <img src={dot} className="w-3 h-3" />
+                <p>12:00 PM - December 09, 2024</p>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* EDIT MODAL */}
+        {showModal && (
+          <GroupModal
+            title="Edit Group"
+            image={selectedProfile.avatar}
+            step={step}
+            setStep={setStep}
+            steps={steps}
+            nextStep={nextStep}
+            prevStep={prevStep}
+            handleClick={handleClick}
+            handleImageChange={handleImageChange}
+            fileInputRef={fileInputRef}
+            setShowModal={setShowModal}
+          />
+        )}
+      </div>
+    );
+  }
+
+  /* =========================
+     TABLE VIEW
+  ========================= */
+  return (
+    <div className="bg-white text-gray-800 p-6 rounded-xl shadow">
+      {/* HEADER */}
+
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex-col">
+          <h2 className="text-xl text-black">My Tasks</h2>
+          <p>100 tasks</p>
+        </div>
+
+        <button
+          onClick={() => setShowModal(true)}
+          className="flex items-center gap-2 bg-green-500 hover:bg-green-600 px-4 py-2 rounded-md text-black font-normal"
+        >
+          Add Task
+        </button>
+      </div>
+
+      <hr className="border-gray-200 mb-6" />
+
+      {/* FILTER BAR */}
+      <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-xl px-3 py-2 text-sm w-80">
+          <FaSearch className="text-gray-400" />
+          <input
+            className="outline-none w-full placeholder-gray-400"
+            placeholder="Search for a request"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        <div className="ml-auto flex items-center gap-2">
+          <button className="flex items-center gap-2 border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white text-gray-600 hover:bg-gray-50">
+            5 <FaChevronDown size={10} />
+          </button>
+          <button className="border border-green-400 text-green-600 rounded-xl px-3 py-2 hover:bg-green-50">
+            <FaEllipsisH size={14} />
+          </button>
+        </div>
+      </div>
+
+      {/* TABLE */}
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="p-3 w-10">
+                <input type="checkbox" />
+              </th>
+
+              <th className="text-left p-3">Task ID</th>
+              <th className="text-left p-3">Task Title</th>
+              <th className="text-left p-3">Client</th>
+              <th className="text-left p-3">Status</th>
+              <th className="text-left p-3">Priority</th>
+              <th className="text-left p-3">Project Type</th>
+              <th className="text-left p-3">Location</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {filtered.map((c, i) => (
+              <tr
+                key={c.id}
+                className="border-b hover:bg-gray-50 transition cursor-pointer"
+                onClick={() => openProfile(c, i)}
+              >
+                <td className="p-3">
+                  <input type="checkbox" />
+                </td>
+
+                <td className="p-3 flex items-center gap-3">{c.requestid}</td>
+                <td className="p-3">{c.requesttitle}</td>
+                <td className="p-3">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={c.avatar}
+                      className="w-9 h-9 rounded-full object-cover border border-gray-200"
+                      alt=""
+                    />
+                    <span className="font-medium text-green-500 group-hover:text-green-700 transition">
+                      {c.client}
+                    </span>
+                  </div>
+                </td>
+                <td className="p-3">
+                  <span
+                    className={`inline-block px-3 py-1 rounded-full border text-sm font-medium bg-white
+      ${
+        c.status === "Open"
+          ? "border-blue-500 text-blue-500"
+          : c.status === "in Progress"
+            ? "border-orange-500 text-orange-500"
+            : "border-gray-300 text-gray-500"
+      }`}
+                  >
+                    {c.status}
+                  </span>
+                </td>
+
+                <td className="p-3">
+                  <span
+                    className={`inline-block px-3 py-1 rounded-full border text-sm font-medium bg-white
+      ${
+        c.priority === "Low"
+          ? "border-green-500 text-green-500"
+          : c.priority === "High"
+            ? "border-red-500 text-red-500"
+            : "border-gray-300 text-gray-500"
+      }`}
+                  >
+                    {c.priority}
+                  </span>
+                </td>
+
+                <td className="p-3">{c.projectype}</td>
+                <td className="p-3">{c.location}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* PAGINATION */}
+      <div className="flex justify-between items-center mt-6 text-sm text-gray-500">
+        <p>Showing 20 of 100</p>
+
+        <div className="flex gap-2">
+          {[1, 2, 3, 4].map((page) => (
+            <button
+              key={page}
+              className={`border border-gray-300 w-8 h-8 rounded flex items-center justify-center ${
+                page === 1 ? "bg-green-100 text-green-700" : "hover:bg-gray-100"
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {showModal && (
+        <RequestModal
+          title="Add Request"
+          image={image}
+          step={step}
+          setStep={setStep}
+          steps={steps}
+          nextStep={nextStep}
+          prevStep={prevStep}
+          handleClick={handleClick}
+          handleImageChange={handleImageChange}
+          fileInputRef={fileInputRef}
+          setShowModal={setShowModal}
+        />
+      )}
+    </div>
+  );
+}
+
+const Newestimate = [
+  {
+    id: 1,
+    estimateid: "EST-001",
+    projectservice: "Project/Service",
+    requestid: "T-001",
+    requesttitle: "Roof Replacement-Mall",
+    client: "Jane Doe",
+    priority: "High",
+    projectype: "Commercial",
+    location: "Spintex",
+    qrcode: "WH-001-ACC",
+    role: "Field Engineer",
+    storetypes: "Pallets,Racks",
+    availitems: "Electronics, Food, Apparel",
+    gps: "0-73738-8282",
+    shelfname: "Rods Shelf",
+    warehouse: "Main Warehouse",
+    totalcapacity: "10,000kg",
+    usedcapacity: "75,000kg",
+    availablecapacity: "2,500kg",
+    status: "Draft",
+    symbol: "kg",
+    itemscount: "120",
+    brandimg: <img src={nike} className="w-5 h-5" />,
+    countryimg: <img src={usa} className="w-5 h-5" />,
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "nike.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "USA",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description: " Items damaged in transit",
+    allowed: "Fragile, etc.",
+    datesubmit: "24/04/2025",
+    lead: "Eva Thompson",
+    department: "Department",
+    workloadindicator: 5,
+    estimatedarea: "Opening Stock",
+    completedate: "o6/11/2025",
+    note: "Note goes here",
+    material: "Material",
+    labour: "Requirement",
+    constraint: "GHC 25,000",
+    equipmentneeded: "Excavator, Crane, Special Tools",
+  },
+  {
+    id: 2,
+    estimateid: "EST-001",
+    projectservice: "Project/Service",
+    requestid: "T-001",
+    requesttitle: "Roof Replacement-Mall",
+    client: "Jane Doe",
+    priority: "High",
+    projectype: "Commercial",
+    location: "Spintex",
+    qrcode: "WH-001-ACC",
+    role: "Field Engineer",
+    storetypes: "Pallets,Racks",
+    availitems: "Electronics, Food, Apparel",
+    gps: "0-73738-8282",
+    shelfname: "Rods Shelf",
+    warehouse: "Main Warehouse",
+    totalcapacity: "10,000kg",
+    usedcapacity: "75,000kg",
+    availablecapacity: "2,500kg",
+    status: "Draft",
+    symbol: "kg",
+    itemscount: "120",
+    brandimg: <img src={nike} className="w-5 h-5" />,
+    countryimg: <img src={usa} className="w-5 h-5" />,
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "nike.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "USA",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description: " Items damaged in transit",
+    allowed: "Fragile, etc.",
+    datesubmit: "24/04/2025",
+    lead: "Eva Thompson",
+    department: "Department",
+    workloadindicator: 5,
+    estimatedarea: "Opening Stock",
+    completedate: "o6/11/2025",
+    note: "Note goes here",
+    material: "Material",
+    labour: "Requirement",
+    constraint: "GHC 25,000",
+    equipmentneeded: "Excavator, Crane, Special Tools",
+  },
+  {
+    id: 3,
+    estimateid: "EST-001",
+    projectservice: "Project/Service",
+    requestid: "T-001",
+    requesttitle: "Roof Replacement-Mall",
+    client: "Jane Doe",
+    priority: "High",
+    projectype: "Commercial",
+    location: "Spintex",
+    qrcode: "WH-001-ACC",
+    role: "Field Engineer",
+    storetypes: "Pallets,Racks",
+    availitems: "Electronics, Food, Apparel",
+    gps: "0-73738-8282",
+    shelfname: "Rods Shelf",
+    warehouse: "Main Warehouse",
+    totalcapacity: "10,000kg",
+    usedcapacity: "75,000kg",
+    availablecapacity: "2,500kg",
+    status: "Draft",
+    symbol: "kg",
+    itemscount: "120",
+    brandimg: <img src={nike} className="w-5 h-5" />,
+    countryimg: <img src={usa} className="w-5 h-5" />,
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "nike.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "USA",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description: " Items damaged in transit",
+    allowed: "Fragile, etc.",
+    datesubmit: "24/04/2025",
+    lead: "Eva Thompson",
+    department: "Department",
+    workloadindicator: 5,
+    estimatedarea: "Opening Stock",
+    completedate: "o6/11/2025",
+    note: "Note goes here",
+    material: "Material",
+    labour: "Requirement",
+    constraint: "GHC 25,000",
+    equipmentneeded: "Excavator, Crane, Special Tools",
+  },
+  {
+    id: 4,
+    estimateid: "EST-001",
+    projectservice: "Project/Service",
+    requestid: "T-001",
+    requesttitle: "Roof Replacement-Mall",
+    client: "Jane Doe",
+    priority: "High",
+    projectype: "Commercial",
+    location: "Spintex",
+    qrcode: "WH-001-ACC",
+    role: "Field Engineer",
+    storetypes: "Pallets,Racks",
+    availitems: "Electronics, Food, Apparel",
+    gps: "0-73738-8282",
+    shelfname: "Rods Shelf",
+    warehouse: "Main Warehouse",
+    totalcapacity: "10,000kg",
+    usedcapacity: "75,000kg",
+    availablecapacity: "2,500kg",
+    status: "Draft",
+    symbol: "kg",
+    itemscount: "120",
+    brandimg: <img src={nike} className="w-5 h-5" />,
+    countryimg: <img src={usa} className="w-5 h-5" />,
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "nike.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "USA",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description: " Items damaged in transit",
+    allowed: "Fragile, etc.",
+    datesubmit: "24/04/2025",
+    lead: "Eva Thompson",
+    department: "Department",
+    workloadindicator: 5,
+    estimatedarea: "Opening Stock",
+    completedate: "o6/11/2025",
+    note: "Note goes here",
+    material: "Material",
+    labour: "Requirement",
+    constraint: "GHC 25,000",
+    equipmentneeded: "Excavator, Crane, Special Tools",
+  },
+  {
+    id: 5,
+    estimateid: "EST-001",
+    projectservice: "Project/Service",
+    requestid: "T-001",
+    requesttitle: "Roof Replacement-Mall",
+    client: "Jane Doe",
+    priority: "High",
+    projectype: "Commercial",
+    location: "Spintex",
+    qrcode: "WH-001-ACC",
+    role: "Field Engineer",
+    storetypes: "Pallets,Racks",
+    availitems: "Electronics, Food, Apparel",
+    gps: "0-73738-8282",
+    shelfname: "Rods Shelf",
+    warehouse: "Main Warehouse",
+    totalcapacity: "10,000kg",
+    usedcapacity: "75,000kg",
+    availablecapacity: "2,500kg",
+    status: "Draft",
+    symbol: "kg",
+    itemscount: "120",
+    brandimg: <img src={nike} className="w-5 h-5" />,
+    countryimg: <img src={usa} className="w-5 h-5" />,
+    displayname: "Repair Services",
+    access: "Main Branch",
+    businessprofile: "Standard",
+    sku: "ST-1001",
+    stocklevel: "500pcs",
+    openingstock: "600pcs",
+    reorderlevel: "100pcs",
+    sales: "50 pcs/mo",
+    manufacturer: "Manufacturer",
+    manupartnumber: "Part Number",
+    barcode: "Barcode",
+    uniproductcode: "Universal Product Code",
+    lengths: "Length",
+    width: "Width",
+    height: "Height",
+    thickness: "Height",
+    unit: "Unit",
+    colortag: "Color Tag",
+    sizetag: "Size Tag",
+    itemcost: "Item Cost",
+    sellingprice: "Selling Price",
+    taxrate: "Tax Rate",
+    inventorychart: "Inventory Chart",
+    saleschart: "Sales Chart",
+    purchasecart: "Purchase Cart",
+    warranty: "Warranty Note",
+    terms: "Terms and Conditions",
+    describe: "Description",
+    email: "info@apexglobal.com",
+    website: "nike.com",
+    phone: "+233 20 123 4567",
+    address: "Accra, Ghana",
+    manager: "Sarah Johnson",
+    avatar: `https://i.pravatar.cc/40?img=20`,
+    secemail: "-",
+    primaryphone: "+233 540123456",
+    secondaryphone: "+233 540123456",
+    whatsapp: "+233 540123456",
+    Fax: "-",
+    representativename: "Peter Appiah",
+    representativenumber: "+233 548765432",
+    vendorname: "Doe Logistics",
+    vendorphone: "+233 540123456",
+    companyname: "Jane Doe Consults",
+    leadsource: "Online Store",
+    clientmanager: "John Smith",
+    addressline1: "12 Akosombo Road",
+    addressline2: "Suite 8, Sunrise Plaza",
+    country: "USA",
+    zip: "00233",
+    city: "Accra",
+    state: "Greater Accra",
+    clientaddressline1: "15 Ridge Avenue",
+    clientaddressline2: "Office 14, Silver Tower",
+    description: " Items damaged in transit",
+    allowed: "Fragile, etc.",
+    datesubmit: "24/04/2025",
+    lead: "Eva Thompson",
+    department: "Department",
+    workloadindicator: 5,
+    estimatedarea: "Opening Stock",
+    completedate: "o6/11/2025",
+    note: "Note goes here",
+    material: "Material",
+    labour: "Requirement",
+    constraint: "GHC 25,000",
+    equipmentneeded: "Excavator, Crane, Special Tools",
+  },
+];
+
+function EstimateTable() {
+  /* =========================
+     STATES
+  ========================= */
+
+  const [profiles, setProfiles] = useState(Newestimate);
+  const [profilest, setProfilest] = useState(attachmentreq);
+  const [selectedProfile, setSelectedProfile] = useState(null);
+  const [search, setSearch] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
+  const [step, setStep] = useState(0);
+  const [activeTab, setActiveTab] = useState("details");
+
+  const [activeSettingsSection, setActiveSettingsSection] =
+    useState("Upload Logo");
+
+  const [profileIndex, setProfileIndex] = useState(0);
+
+  const [logoPreview, setLogoPreview] = useState(null);
+
+  const [image, setImage] = useState(null);
+
+  const fileInputRef = useRef(null);
+  const [showExpirationDate, setShowExpirationDate] = useState(false);
+
+  /* =========================
+     FILTERED DATA
+  ========================= */
+
+  const filtered = profiles.filter(
+    (p) =>
+      p.requestid.toLowerCase().includes(search.toLowerCase()) ||
+      p.constraint.toLowerCase().includes(search.toLowerCase()) ||
+      p.client.toLowerCase().includes(search.toLowerCase()) ||
+      p.priority.toLowerCase().includes(search.toLowerCase()) ||
+      p.projectype.toLowerCase().includes(search.toLowerCase()) ||
+      p.projectservice.toLowerCase().includes(search.toLowerCase()) ||
+      p.status.toLowerCase().includes(search.toLowerCase()) ||
+      p.avatar.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  const filteredt = profilest.filter(
+    (p) =>
+      p.filename.toLowerCase().includes(search.toLowerCase()) ||
+      p.attachmenttype.toLowerCase().includes(search.toLowerCase()) ||
+      p.uploaded.toLowerCase().includes(search.toLowerCase()) ||
+      p.date.toLowerCase().includes(search.toLowerCase()) ||
+      p.image.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  const salesUsageData = [
+    { month: "January", sales: 320, usage: 50 },
+    { month: "February", sales: 220, usage: 210 },
+    { month: "March", sales: 430, usage: 70 },
+    { month: "April", sales: 100, usage: 180 },
+    { month: "May", sales: 140, usage: 230 },
+    { month: "June", sales: 410, usage: 130 },
+    { month: "July", sales: 380, usage: 160 },
+    { month: "August", sales: 90, usage: 180 },
+    { month: "September", sales: 370, usage: 60 },
+    { month: "October", sales: 420, usage: 120 },
+    { month: "November", sales: 180, usage: 200 },
+    { month: "December", sales: 250, usage: 110 },
+  ];
+
+  const stockSalesData = [
+    { month: "January", stock: 40, sales: 150 },
+    { month: "February", stock: 330, sales: 30 },
+    { month: "March", stock: 240, sales: 460 },
+    { month: "April", stock: 150, sales: 260 },
+    { month: "May", stock: 500, sales: 310 },
+    { month: "June", stock: 340, sales: 90 },
+    { month: "July", stock: 310, sales: 230 },
+    { month: "August", stock: 80, sales: 150 },
+    { month: "September", stock: 85, sales: 220 },
+    { month: "October", stock: 430, sales: 460 },
+    { month: "November", stock: 160, sales: 300 },
+    { month: "December", stock: 200, sales: 110 },
+  ];
+
+  // Dummy Invoice Data
+  const invoices = [
+    {
+      id: "INV-1001",
+      dateIssued: "2025-08-01",
+      dueDate: "2025-08-10",
+      amount: 2500,
+      status: "Paid",
+    },
+    {
+      id: "INV-1002",
+      dateIssued: "2025-08-03",
+      dueDate: "2025-08-12",
+      amount: 1200,
+      status: "Unpaid",
+    },
+    {
+      id: "INV-1003",
+      dateIssued: "2025-08-05",
+      dueDate: "2025-08-15",
+      amount: 4000,
+      status: "Overdue",
+    },
+    {
+      id: "INV-1004",
+      dateIssued: "2025-08-07",
+      dueDate: "2025-08-17",
+      amount: 950,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+    {
+      id: "INV-1005",
+      dateIssued: "2025-08-08",
+      dueDate: "2025-08-18",
+      amount: 3100,
+      status: "Paid",
+    },
+  ];
+
+  // Dynamic Stats
+  const totalInvoices = invoices.length;
+
+  const paidCount = invoices.filter(
+    (invoice) => invoice.status === "Paid",
+  ).length;
+
+  const unpaidCount = invoices.filter(
+    (invoice) => invoice.status === "Unpaid",
+  ).length;
+
+  const overdueCount = invoices.filter(
+    (invoice) => invoice.status === "Overdue",
+  ).length;
+
+  const revenue = invoices
+    .filter((invoice) => invoice.status === "Paid")
+    .reduce((acc, invoice) => acc + invoice.amount, 0);
+
+  const outstandingAmount = invoices
+    .filter(
+      (invoice) => invoice.status === "Unpaid" || invoice.status === "Overdue",
+    )
+    .reduce((acc, invoice) => acc + invoice.amount, 0);
+
+  const estimation = [
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Declined",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Pending",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+    {
+      id: "EST-00122",
+      datesent: "2024-11-06",
+      amount: 5200,
+      status: "Approved",
+    },
+  ];
+
+  const totalestimate = estimation.length;
+
+  const approvedCount = estimation.filter(
+    (esteem) => esteem.status === "Approved",
+  ).length;
+
+  const declinedCount = estimation.filter(
+    (esteem) => esteem.status === "Declined",
+  ).length;
+
+  const pendingCount = estimation.filter(
+    (esteem) => esteem.status === "Pending",
+  ).length;
+
+  const finalEstimate = estimation
+    .filter((esteem) => esteem.status === "Approved")
+    .reduce((acc, esteem) => acc + esteem.amount, 0);
+
+  const payments = [
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+    {
+      id: "PAY-00145",
+      invoiceid: "INV-00145",
+      datereceived: "2024-11-09",
+      amount: 5200,
+      method: "MoMo",
+      refernceNumber: "REF-12345678",
+    },
+  ];
+
+  const totalpayments = payments.length;
+
+  const attachments = [
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+    {
+      filename: "invoice.pdf",
+      size: "2.5MB",
+      uploadedby: "Timothy Afful",
+      date: "2024-11-03",
+    },
+  ];
+
+  const totalattachments = attachments.length;
+
+  /* =========================
+     STEPS
+  ========================= */
+
+  const steps = [
+    "General Information",
+    "Project/Service Details",
+    "Attachments & Resources",
+  ];
+
+  const stepss = [
+    "Basic Details",
+    "Attributes",
+    "Pricing & Stock",
+    "Options & Controls",
+  ];
+
+  /* =========================
+     HANDLERS
+  ========================= */
+
+  const openProfile = (profile, index) => {
+    setSelectedProfile(profile);
+    setProfileIndex(index);
+    setActiveTab("details");
+    setActiveSettingsSection("Upload Logo");
+    setLogoPreview(null);
+  };
+
+  const nextStep = () => {
+    if (step < steps.length - 1) {
+      setStep(step + 1);
+    }
+  };
+
+  const prevStep = () => {
+    if (step > 0) {
+      setStep(step - 1);
+    }
+  };
+
+  const handleClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setImage(imageUrl);
+    }
+  };
+
+  const handleNavProfile = (direction) => {
+    const newIndex = profileIndex + direction;
+
+    if (newIndex >= 0 && newIndex < filtered.length) {
+      setProfileIndex(newIndex);
+      setSelectedProfile(filtered[newIndex]);
+    }
+  };
+
+  const handleDelete = (id) => {
+    setProfiles((prev) => prev.filter((item) => item.id !== id));
+    setSelectedProfile(null);
+  };
+
+  /* =========================
+     DETAIL VIEW
+  ========================= */
+
+  if (selectedProfile) {
+    return (
+      <div className="min-h-full bg-gray-50">
+        {/* TOP NAV */}
+        <div className="bg-white border-b border-gray-200 px-6 py-3 flex items-center gap-3 text-sm">
+          <button
+            onClick={() => setSelectedProfile(null)}
+            className="flex items-center gap-1.5 text-green-600 hover:text-green-700 font-medium"
+          >
+            <FaArrowLeft size={11} />
+            Back to Estimates
+          </button>
+
+          <div className="w-px h-4 bg-gray-300" />
+
+          <div className="flex items-center gap-1 text-gray-500">
+            <button
+              onClick={() => handleNavProfile(-1)}
+              disabled={profileIndex === 0}
+              className="p-1 hover:bg-gray-100 rounded disabled:opacity-30 transition"
+            >
+              <ChevronUp size={13} />
+            </button>
+
+            <button
+              onClick={() => handleNavProfile(1)}
+              disabled={profileIndex === filtered.length - 1}
+              className="p-1 hover:bg-gray-100 rounded disabled:opacity-30 transition"
+            >
+              <ChevronDown size={13} />
+            </button>
+
+            <span className="text-xs">
+              {profileIndex + 1} of {filtered.length}
+            </span>
+          </div>
+        </div>
+
+        {/* CONTENT */}
+        <div className="px-6 pt-5 pb-10 max-w-5xl">
+          {/* PROFILE HEADER */}
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-4">
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  {selectedProfile.estimateid}
+                </h1>
+                <span
+                  className={`inline-block px-3 py-1 rounded-full border text-sm font-medium bg-white
+       ${
+         selectedProfile.status === "Draft"
+           ? "border-gray-500 text-gray-500"
+           : selectedProfile.status === "in Progress"
+             ? "border-orange-500 text-orange-500"
+             : "border-blue-300 text-blue-500"
+       }`}
+                >
+                  {selectedProfile.status}
+                </span>
+              </div>
+            </div>
+
+            <button
+              onClick={() => handleDelete(selectedProfile.id)}
+              className="flex items-center gap-2 border border-red-300 text-red-500 hover:bg-red-50 px-4 py-2 rounded-lg text-sm font-medium transition"
+            >
+              <FaTrash size={11} />
+              Delete Estimate
+            </button>
+          </div>
+
+          {/* TABS */}
+          <div className="flex gap-0 border-b border-gray-200 mb-5">
+            <button
+              onClick={() => setActiveTab("details")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "details"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <FaInfoCircle size={12} />
+              Overview
+            </button>
+
+            <button
+              onClick={() => setActiveTab("attach")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "attach"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={attachment} className="w-5 h-5" />
+              Attachments
+            </button>
+
+            <button
+              onClick={() => setActiveTab("chat")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "chat"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={chat} className="w-5 h-5" />
+              Chat
+            </button>
+
+            <button
+              onClick={() => setActiveTab("issue")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "issue"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={issues} className="w-5 h-5" />
+              Issues
+            </button>
+
+            <button
+              onClick={() => setActiveTab("activity")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "activity"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={activity} className="w-5 h-5" />
+              Activity
+            </button>
+
+            <button
+              onClick={() => setActiveTab("trend")}
+              className={`px-5 pb-3 pt-1 text-sm font-medium flex items-center gap-2 border-b-2 transition ${
+                activeTab === "trend"
+                  ? "border-green-500 text-green-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <img src={list} className="w-5 h-5" />
+              Items
+            </button>
+          </div>
+
+          {/* DETAILS TAB */}
+          {activeTab === "details" && (
+            <>
+              <div className="flex gap-3">
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 w-screen">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="font-semibold text-gray-800 text-base">
+                      General Information
+                    </h2>
+
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="flex items-center gap-1.5 border border-gray-300 text-gray-600 hover:bg-gray-50 px-3 py-1.5 rounded-lg text-sm transition"
+                    >
+                      <Pencil size={12} />
+                      Edit
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-y-6 gap-x-6">
+                    {[
+                      ["Request Title", selectedProfile.requesttitle],
+
+                      [
+                        "Client",
+                        <div className="flex items-center gap-2">
+                          <img
+                            src={selectedProfile.avatar}
+                            alt={selectedProfile.client}
+                            className="w-8 h-8 rounded-full object-cover"
+                          />
+                          <span>{selectedProfile.client}</span>
+                        </div>,
+                      ],
+
+                      ["Project Type", selectedProfile.projectype],
+                      ["Location", selectedProfile.location],
+                      [
+                        "Priority",
+                        <span
+                          className={`inline-block px-3 py-1 rounded-full border text-sm font-medium bg-white
+      ${
+        selectedProfile.priority === "Low"
+          ? "border-green-500 text-green-500"
+          : selectedProfile.priority === "High"
+            ? "border-red-500 text-red-500"
+            : "border-gray-300 text-gray-500"
+      }`}
+                        >
+                          {selectedProfile.priority}
+                        </span>,
+                      ],
+                      ["Date Submitted", selectedProfile.datesubmit],
+                    ].map(([label, value]) => (
+                      <div key={label}>
+                        <p className="text-xs text-gray-400 mb-1 font-medium">
+                          {label}
+                        </p>
+
+                        <div className="text-sm text-gray-800">{value}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 w-screen">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="font-semibold text-gray-800 text-base">
+                      Assignee Details
+                    </h2>
+
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="flex items-center gap-1.5 border border-gray-300 text-gray-600 hover:bg-gray-50 px-3 py-1.5 rounded-lg text-sm transition"
+                    >
+                      <Pencil size={12} />
+                      Edit
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-y-6 gap-x-6">
+                    {[
+                      [
+                        "Lead Estimator",
+                        <div className="flex items-center gap-2">
+                          <img
+                            src={selectedProfile.avatar}
+                            alt={selectedProfile.lead}
+                            className="w-8 h-8 rounded-full object-cover"
+                          />
+                          <span>{selectedProfile.lead}</span>
+                        </div>,
+                      ],
+                      ["Role", selectedProfile.role],
+                      ["Department", selectedProfile.department],
+                      ["Workload indicator", selectedProfile.workloadindicator],
+                      [
+                        "Team Collaboration",
+                        <img
+                          src={selectedProfile.avatar}
+                          alt={selectedProfile.lead}
+                          className="w-8 h-8 rounded-full object-cover"
+                        />,
+                      ],
+                    ].map(([label, value]) => (
+                      <div key={label}>
+                        <p className="text-xs text-gray-400 mb-1 font-medium">
+                          {label}
+                        </p>
+
+                        <p className="text-sm text-gray-800">{value}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 w-screen">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="font-semibold text-gray-800 text-base">
+                      Project/Service Details
+                    </h2>
+
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="flex items-center gap-1.5 border border-gray-300 text-gray-600 hover:bg-gray-50 px-3 py-1.5 rounded-lg text-sm transition"
+                    >
+                      <Pencil size={12} />
+                      Edit
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-y-6 gap-x-6">
+                    {[
+                      ["Project Type", selectedProfile.projectype],
+                      ["Location", selectedProfile.location],
+                      ["Estimated Area", selectedProfile.availablecapacity],
+                      [
+                        "Required Completion Date",
+                        selectedProfile.completedate,
+                      ],
+                      ["Detailed Description", selectedProfile.description],
+                      ["Note", selectedProfile.note],
+                    ].map(([label, value]) => (
+                      <div key={label}>
+                        <p className="text-xs text-gray-400 mb-1 font-medium">
+                          {label}
+                        </p>
+
+                        <p className="text-sm text-gray-800">{value}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 w-screen">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="font-semibold text-gray-800 text-base">
+                      Materials & Resources
+                    </h2>
+
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="flex items-center gap-1.5 border border-gray-300 text-gray-600 hover:bg-gray-50 px-3 py-1.5 rounded-lg text-sm transition"
+                    >
+                      <Pencil size={12} />
+                      Edit
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-y-6 gap-x-6">
+                    {[
+                      ["Material Preferences", selectedProfile.material],
+                      ["Labour Requirement", selectedProfile.labour],
+                      ["Budget Constraints", selectedProfile.constraint],
+                      [
+                        "Required Completion Date",
+                        selectedProfile.equipmentneeded,
+                      ],
+                    ].map(([label, value]) => (
+                      <div key={label}>
+                        <p className="text-xs text-gray-400 mb-1 font-medium">
+                          {label}
+                        </p>
+
+                        <p className="text-sm text-gray-800">{value}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* INVOICE TAB */}
+          {activeTab === "attach" && (
+            <>
+              <div className="bg-white text-gray-800 p-6 rounded-xl shadow">
+                {/* HEADER */}
+
+                <div className="flex justify-between items-center mb-4">
+                  <div className="flex-col">
+                    <h2 className="text-xl text-black">Attachments</h2>
+                  </div>
+
+                  <button className="bg-green-500 hover:bg-green-600 text-white px-5 py-2.5 rounded-lg font-medium transition">
+                    + Add File
+                  </button>
+                </div>
+
+                {/* FILTER BAR */}
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-xl px-3 py-2 text-sm w-80">
+                    <FaSearch className="text-gray-400" />
+                    <input
+                      className="outline-none w-full placeholder-gray-400"
+                      placeholder="Search for a file"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </div>
+                  <div className="ml-auto flex items-center gap-2">
+                    <button className="flex items-center gap-2 border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white text-gray-600 hover:bg-gray-50">
+                      20 <FaChevronDown size={10} />
+                    </button>
+                    <button className="border border-green-400 text-green-600 rounded-xl px-3 py-2 hover:bg-green-50">
+                      <FaEllipsisH size={14} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* TABLE */}
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        <th className="p-3 w-10">
+                          <input type="checkbox" />
+                        </th>
+
+                        <th className="text-left p-3">File Name</th>
+                        <th className="text-left p-3">Attachment Type</th>
+                        <th className="text-left p-3">Uploaded By</th>
+                        <th className="text-left p-3">Date Uploaded</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {filteredt.map((c, i) => (
+                        <tr
+                          key={c.id}
+                          className="border-b hover:bg-gray-50 transition cursor-pointer"
+                          onClick={() => openProfile(c, i)}
+                        >
+                          <td className="p-3">
+                            <input type="checkbox" />
+                          </td>
+
+                          <td className="p-3 flex items-center gap-3">
+                            {c.image ?? ""}
+
+                            {c.filename}
+                          </td>
+                          <td className="p-3">{c.attachmenttype}</td>
+
+                          <td className="p-3">{c.uploaded}</td>
+                          <td className="p-3">{c.date}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* PAGINATION */}
+                <div className="flex justify-between items-center mt-6 text-sm text-gray-500">
+                  <p>Showing 20 of 100</p>
+
+                  <div className="flex gap-2">
+                    {[1, 2, 3, 4].map((page) => (
+                      <button
+                        key={page}
+                        className={`border border-gray-300 w-8 h-8 rounded flex items-center justify-center ${
+                          page === 1
+                            ? "bg-green-100 text-green-700"
+                            : "hover:bg-gray-100"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {showModal && (
+                  <ItemModal
+                    title="Add Item"
+                    image={image}
+                    step={step}
+                    setStep={setStep}
+                    steps={stepss}
+                    nextStep={nextStep}
+                    prevStep={prevStep}
+                    handleClick={handleClick}
+                    handleImageChange={handleImageChange}
+                    fileInputRef={fileInputRef}
+                    setShowModal={setShowModal}
+                  />
+                )}
+              </div>
+            </>
+          )}
+
+          {/* ACTIVITY TAB */}
+          {activeTab === "activity" && (
+            <>
+              <h2>Today</h2>
+              <div className="flex gap-3">
+                <img src={dotgreen} className="w-6 h-6 " />
+                <p>Request now In Progress</p>{" "}
+                <img src={dot} className="w-3 h-3" />
+                <p>12:00 PM - December 09, 2024</p>
+              </div>
+              <img src={lineman} className="h-10" />
+              <div className="flex gap-3">
+                <img src={dotgreen} className="w-6 h-6 " />
+                <p>Eva Thompson attached added an Issue</p>{" "}
+                <img src={dot} className="w-3 h-3" />
+                <p>12:00 PM - December 09, 2024</p>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* EDIT MODAL */}
+        {showModal && (
+          <GroupModal
+            title="Edit Group"
+            image={selectedProfile.avatar}
+            step={step}
+            setStep={setStep}
+            steps={steps}
+            nextStep={nextStep}
+            prevStep={prevStep}
+            handleClick={handleClick}
+            handleImageChange={handleImageChange}
+            fileInputRef={fileInputRef}
+            setShowModal={setShowModal}
+          />
+        )}
+      </div>
+    );
+  }
+
+  /* =========================
+     TABLE VIEW
+  ========================= */
+  return (
+    <div className="bg-white text-gray-800 p-6 rounded-xl shadow">
+      {/* HEADER */}
+
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex-col">
+          <h2 className="text-xl text-black">Estimates</h2>
+          <p>100 Estimates</p>
+        </div>
+
+        <button
+          onClick={() => setShowModal(true)}
+          className="flex items-center gap-2 bg-green-500 hover:bg-green-600 px-4 py-2 rounded-md text-black font-normal"
+        >
+          Add Estimate
+        </button>
+      </div>
+
+      <hr className="border-gray-200 mb-6" />
+
+      {/* FILTER BAR */}
+      <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-xl px-3 py-2 text-sm w-80">
+          <FaSearch className="text-gray-400" />
+          <input
+            className="outline-none w-full placeholder-gray-400"
+            placeholder="Search for a request"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        <div className="ml-auto flex items-center gap-2">
+          <button className="flex items-center gap-2 border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white text-gray-600 hover:bg-gray-50">
+            5 <FaChevronDown size={10} />
+          </button>
+          <button className="border border-green-400 text-green-600 rounded-xl px-3 py-2 hover:bg-green-50">
+            <FaEllipsisH size={14} />
+          </button>
+        </div>
+      </div>
+
+      {/* TABLE */}
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="p-3 w-10">
+                <input type="checkbox" />
+              </th>
+
+              <th className="text-left p-3">Estimate ID</th>
+              <th className="text-left p-3">Client</th>
+              <th className="text-left p-3">Status</th>
+              <th className="text-left p-3">Amount</th>
+              <th className="text-left p-3">Project/Service</th>
+              <th className="text-left p-3">Project Type</th>
+              <th className="text-left p-3">Request ID</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {filtered.map((c, i) => (
+              <tr
+                key={c.id}
+                className="border-b hover:bg-gray-50 transition cursor-pointer"
+                onClick={() => openProfile(c, i)}
+              >
+                <td className="p-3">
+                  <input type="checkbox" />
+                </td>
+
+                <td className="p-3 flex items-center gap-3">{c.estimateid}</td>
+
+                <td className="p-3">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={c.avatar}
+                      className="w-9 h-9 rounded-full object-cover border border-gray-200"
+                      alt=""
+                    />
+                    <span className="font-medium text-green-500 group-hover:text-green-700 transition">
+                      {c.client}
+                    </span>
+                  </div>
+                </td>
+                <td className="p-3">
+                  <span
+                    className={`inline-block px-3 py-1 rounded-full border text-sm font-medium bg-white
+      ${
+        c.status === "Draft"
+          ? "border-gray-500 text-gray-500"
+          : c.status === "in Progress"
+            ? "border-orange-500 text-orange-500"
+            : "border-blue-300 text-blue-500"
+      }`}
+                  >
+                    {c.status}
+                  </span>
+                </td>
+
+                <td className="p-3">{c.constraint}</td>
+                <td className="p-3">{c.projectservice}</td>
+                <td className="p-3">{c.projectype}</td>
+                <td className="p-3">{c.requestid}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* PAGINATION */}
+      <div className="flex justify-between items-center mt-6 text-sm text-gray-500">
+        <p>Showing 20 of 100</p>
+
+        <div className="flex gap-2">
+          {[1, 2, 3, 4].map((page) => (
+            <button
+              key={page}
+              className={`border border-gray-300 w-8 h-8 rounded flex items-center justify-center ${
+                page === 1 ? "bg-green-100 text-green-700" : "hover:bg-gray-100"
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {showModal && (
+        <EstimateModal
+          title="Add Estimate"
+          image={image}
+          step={step}
+          setStep={setStep}
+          steps={steps}
+          nextStep={nextStep}
+          prevStep={prevStep}
+          handleClick={handleClick}
+          handleImageChange={handleImageChange}
+          fileInputRef={fileInputRef}
+          setShowModal={setShowModal}
+        />
+      )}
+    </div>
+  );
+}
 const Newcompany = [
   {
     id: 1,
